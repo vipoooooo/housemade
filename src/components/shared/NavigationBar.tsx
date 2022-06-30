@@ -103,7 +103,7 @@ export default function Navigationbar() {
               />
             </Block>
             <Button
-              onClick={() => router.push("/authentication/LoginMain")}
+              onClick={() => router.push("/authentication/Login")}
               kind={KIND.tertiary}
             >
               Login
