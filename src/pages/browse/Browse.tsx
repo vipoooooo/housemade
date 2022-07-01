@@ -8,6 +8,7 @@ export default function Browse() {
   return (
     <Layout hasHeader={true}>
       <HeadingMedium>Browse</HeadingMedium>
+      <Block height={'1000px'} >hi</Block>
     </Layout>
   );
 }

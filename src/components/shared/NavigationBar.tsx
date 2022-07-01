@@ -10,7 +10,7 @@ import Image from "next/image";
 import { Logo } from "../../constants/icon.const";
 import { Button, KIND, SHAPE } from "baseui/button";
 import { IoMenu } from "react-icons/io5";
-import { useStyletron } from "styletron-react";
+import { useStyletron } from "baseui";
 import { Block } from "baseui/block";
 import { Drawer, SIZE, ANCHOR } from "baseui/drawer";
 import { useRouter } from "next/router";
@@ -35,7 +35,7 @@ const options = {
 };
 
 export default function Navigationbar() {
-  const [css] = useStyletron();
+  const [css, theme] = useStyletron();
   const [isOpen, setIsOpen] = React.useState(false);
   const { menus } = useActiveMenu();
   const router = useRouter();
@@ -45,73 +45,81 @@ export default function Navigationbar() {
     <>
       <div
         className={css({
-          display: "flex",
+          position: "sticky",
+          top: 0,
+          backgroundColor: "rgba(255,255,255,0.5)",
+          backdropFilter: "saturate(180%) blur(15px)",
         })}
       >
-        <NavigationList $align={ALIGN.left}>
-          <NavigationItem
-            className={css({
-              paddingLeft: "20px",
-              lineHeight: "0px",
-            })}
-          >
-            <Image src={Logo} height={20} width={20} objectFit={"contain"} />
-          </NavigationItem>
-        </NavigationList>
-        <NavigationList $align={ALIGN.left}>
-          <Block display={["none", "none", "none", "flex"]}>
-            {menus.map((item, key) => (
-              <Navlink
-                key={key}
-                herf={item.href}
-                title={item.title}
-                active={item.active}
-              />
-            ))}
-          </Block>
-        </NavigationList>
-        <NavigationList $align={ALIGN.center} />
-
-        <NavigationList
-          $align={ALIGN.right}
-          className={css({
-            paddingRight: "0px",
-            //   lineHeight: "0px",
-            display: "flex",
-            justifyContent: "flex-end",
-          })}
-        >
-          <NavigationItem
-            className={css({
-              display: "flex",
-              alignItems: "center",
-              paddingLeft: "0px",
-              margin: "0px",
-            })}
-          >
-            <Block width={"300px"} display={["none", "none", "none", "block"]}>
-              <Search
-                {...options}
-                type={TYPE.search}
-                getOptionLabel={(props) =>
-                  props.option && props.option.id ? props.option.id : null
-                }
-                onChange={() => {}}
-              />
-            </Block>
-            <Button
-              onClick={() => router.push("/authentication/LoginMain")}
-              kind={KIND.tertiary}
+        <Block maxWidth={"1200px"} margin={"0 auto"} display={'flex'}>
+          <NavigationList $align={ALIGN.left}>
+            <NavigationItem
+              className={css({
+                paddingLeft: "20px",
+                lineHeight: "0px",
+              })}
             >
-              Login
-            </Button>
-            <Block display={["block", "block", "block", "none"]}>
-              <Button onClick={() => setIsOpen(true)} kind={KIND.tertiary}>
-                <IoMenu size={20} />
-              </Button>
+              <Image src={Logo} height={20} width={20} objectFit={"contain"} />
+            </NavigationItem>
+          </NavigationList>
+          <NavigationList $align={ALIGN.left}>
+            <Block display={["none", "none", "none", "flex"]}>
+              {menus.map((item, key) => (
+                <Navlink
+                  key={key}
+                  herf={item.href}
+                  title={item.title}
+                  active={item.active}
+                />
+              ))}
             </Block>
-          </NavigationItem>
-        </NavigationList>
+          </NavigationList>
+          <NavigationList $align={ALIGN.center} />
+
+          <NavigationList
+            $align={ALIGN.right}
+            className={css({
+              paddingRight: "0px",
+              //   lineHeight: "0px",
+              display: "flex",
+              justifyContent: "flex-end",
+            })}
+          >
+            <NavigationItem
+              className={css({
+                display: "flex",
+                alignItems: "center",
+                paddingLeft: "0px",
+                margin: "0px",
+              })}
+            >
+              <Block
+                width={"300px"}
+                display={["none", "none", "none", "block"]}
+              >
+                <Search
+                  {...options}
+                  type={TYPE.search}
+                  getOptionLabel={(props) =>
+                    props.option && props.option.id ? props.option.id : null
+                  }
+                  onChange={() => {}}
+                />
+              </Block>
+              <Button
+                onClick={() => router.push("/authentication/LoginMain")}
+                kind={KIND.tertiary}
+              >
+                Login
+              </Button>
+              <Block display={["block", "block", "block", "none"]}>
+                <Button onClick={() => setIsOpen(true)} kind={KIND.tertiary}>
+                  <IoMenu size={20} />
+                </Button>
+              </Block>
+            </NavigationItem>
+          </NavigationList>
+        </Block>
       </div>
       <MenuDrawer isOpen={isOpen} setIsOpen={setIsOpen} />
     </>
