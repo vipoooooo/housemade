@@ -51,7 +51,7 @@ export default function Navigationbar() {
           backdropFilter: "saturate(180%) blur(15px)",
         })}
       >
-        <Block maxWidth={"1200px"} margin={"0 auto"} display={'flex'}>
+        <Block maxWidth={"1200px"} margin={"0 auto"} display={"flex"}>
           <NavigationList $align={ALIGN.left}>
             <NavigationItem
               className={css({
