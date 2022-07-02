@@ -10,9 +10,11 @@ const Home: React.FC<{
 }> = ({ children, hasHeader }) => {
   return (
     <HeadingLevel>
-      <Block maxWidth={"1200px"} margin={"0 auto"}>
+      <Block>
         <Navigationbar />
-        {hasHeader && <main>{children}</main>}
+        <Block maxWidth={"1200px"} margin={"0 auto"}>
+          {hasHeader && <main>{children}</main>}
+        </Block>
       </Block>
     </HeadingLevel>
   );
