@@ -39,7 +39,6 @@ export default function Navigationbar() {
   const [isOpen, setIsOpen] = React.useState(false);
   const { menus } = useActiveMenu();
   const router = useRouter();
-  console.log(menus);
 
   return (
     <>
