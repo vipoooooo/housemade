@@ -39,7 +39,6 @@ export default function Navigationbar() {
   const [isOpen, setIsOpen] = React.useState(false);
   const { menus } = useActiveMenu();
   const router = useRouter();
-  console.log(menus);
 
   return (
     <>
@@ -85,20 +84,6 @@ export default function Navigationbar() {
               justifyContent: "flex-end",
             })}
           >
-            <Block width={"300px"} display={["none", "none", "none", "block"]}>
-              <Search
-                {...options}
-                type={TYPE.search}
-                getOptionLabel={(props) =>
-                  props.option && props.option.id ? props.option.id : null
-                }
-                onChange={() => {}}
-              />
-            </Block>
-            <Button
-              onClick={() => router.push("/authentication/Login")}
-              kind={KIND.tertiary}
-            >
               <Block
                 width={"300px"}
                 display={["none", "none", "none", "block"]}
@@ -113,7 +98,7 @@ export default function Navigationbar() {
                 />
               </Block>
               <Button
-                onClick={() => router.push("/authentication/LoginMain")}
+                onClick={() => router.push("/authentication/Login")}
                 kind={KIND.tertiary}
               >
                 Login
@@ -123,7 +108,6 @@ export default function Navigationbar() {
                   <IoMenu size={20} />
                 </Button>
               </Block>
-            </NavigationItem>
           </NavigationList>
         </Block>
       </div>

@@ -13,7 +13,11 @@ const Home: React.FC<{
       <Block>
         <Navigationbar />
         <Block maxWidth={"1200px"} margin={"0 auto"}>
-          {hasHeader && <main>{children}</main>}
+          {hasHeader && (
+            <main>
+              <Block padding={"20px"}>{children}</Block>
+            </main>
+          )}
         </Block>
       </Block>
     </HeadingLevel>
