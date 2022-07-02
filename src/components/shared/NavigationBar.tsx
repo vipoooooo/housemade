@@ -85,13 +85,19 @@ export default function Navigationbar() {
               justifyContent: "flex-end",
             })}
           >
-            <NavigationItem
-              className={css({
-                display: "flex",
-                alignItems: "center",
-                paddingLeft: "0px",
-                margin: "0px",
-              })}
+            <Block width={"300px"} display={["none", "none", "none", "block"]}>
+              <Search
+                {...options}
+                type={TYPE.search}
+                getOptionLabel={(props) =>
+                  props.option && props.option.id ? props.option.id : null
+                }
+                onChange={() => {}}
+              />
+            </Block>
+            <Button
+              onClick={() => router.push("/authentication/Login")}
+              kind={KIND.tertiary}
             >
               <Block
                 width={"300px"}
