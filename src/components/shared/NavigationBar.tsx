@@ -84,14 +84,6 @@ export default function Navigationbar() {
               justifyContent: "flex-end",
             })}
           >
-            <NavigationItem
-              className={css({
-                display: "flex",
-                alignItems: "center",
-                paddingLeft: "0px",
-                margin: "0px",
-              })}
-            >
               <Block
                 width={"300px"}
                 display={["none", "none", "none", "block"]}
@@ -106,7 +98,7 @@ export default function Navigationbar() {
                 />
               </Block>
               <Button
-                onClick={() => router.push("/authentication/LoginMain")}
+                onClick={() => router.push("/authentication/Login")}
                 kind={KIND.tertiary}
               >
                 Login
@@ -116,7 +108,6 @@ export default function Navigationbar() {
                   <IoMenu size={20} />
                 </Button>
               </Block>
-            </NavigationItem>
           </NavigationList>
         </Block>
       </div>
