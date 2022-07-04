@@ -1,9 +1,9 @@
 import * as React from "react";
-import Link from 'next/link'
+import Link from "next/link";
 import { useRouter } from "next/router";
 import Layout from "../../layouts/Default";
 import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
-import { HeadingMedium } from "baseui/typography";
+import { HeadingMedium, HeadingSmall } from "baseui/typography";
 import WorkerCard from "../../components/common/WorkerCard";
 import { StatefulButtonGroup, MODE, SIZE, SHAPE } from "baseui/button-group";
 import { Button } from "baseui/button";
@@ -33,21 +33,18 @@ export default function Worker() {
           item.categoryId.toString() === id
         )
           return item;
-        if (!skillId &&item.categoryId.toString() === id) return item;
+        if (!skillId && item.categoryId.toString() === id) return item;
       });
-      setWorkerData(result)
+      setWorkerData(result);
     }
   }, [id, skillId]);
 
-  console.log(workerData);
-
   return (
     <Layout hasHeader={true}>
-      <HeadingMedium margin={0} marginBottom={"20px"}>
-      <Link href="/browse/Browse">
-          Browse &gt;
-        </Link> {cotegoryData?.title}
-      </HeadingMedium>
+      <HeadingSmall margin={0} marginBottom={"20px"}>
+        {/* <Link href="/browse/Browse">Browse &gt;</Link> */}
+        {cotegoryData?.title}
+      </HeadingSmall>
       <Block marginBottom={"20px"}>
         <StatefulButtonGroup
           size={SIZE.compact}
@@ -81,7 +78,6 @@ export default function Worker() {
         {workerData.map((worker) => {
           return (
             <FlexGridItem>
-              {/* {worker.occupation === "Civil Engineer" ? <WorkerCard data={worker} /> : <></>} */}
               <WorkerCard data={worker} />
             </FlexGridItem>
           );

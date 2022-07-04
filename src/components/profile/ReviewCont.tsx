@@ -7,64 +7,94 @@ import {
   ParagraphXSmall,
 } from "baseui/typography";
 import { Avatar } from "baseui/avatar";
+import { reviews } from "../../constants/review.const";
+import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
+import { Button, KIND, SIZE } from "baseui/button";
+import { useRouter } from "next/router";
 
 export default function ReviewSide() {
   const [css, theme] = useStyletron();
-  const [value, setValue] = React.useState(4);
+  const { query } = useRouter();
+  const review = reviews.filter((item) => item.id.toString() === query.id);
+
   return (
-    <Block
-      width={"100%"}
-      // className={css({ flex: 1})}
-    >
-      <HeadingMedium margin={0} marginBottom={"20px"}>
-        Review
-      </HeadingMedium>
-      <div
-        className={css({
-          display: "flex",
-          flexDirection: "column",
-        })}
+    <Block display={"flex"} flexDirection={"column"}>
+      <Block
+        display={"flex"}
+        justifyContent={"space-between"}
+        alignItems={"center"}
       >
-        <div
-          className={css({
-            display: "flex",
-            gap: "10px",
-          })}
+        <HeadingMedium margin={0} marginBottom={"20px"}>
+          Review
+        </HeadingMedium>
+        <Button
+          onClick={() => alert("click")}
+          kind={KIND.primary}
+          size={SIZE.compact}
         >
-          <Avatar
-            name="Jane Doe"
-            size="40px"
-            src="https://avatars.dicebear.com/api/human/yard.svg?width=285&mood=happy"
-          />
-          <div
-            className={css({
-              display: "flex",
-              flexDirection: "column",
-              gap: "5px",
-            })}
-          >
-            <div
-              className={css({
-                display: "flex",
-                gap: "10px",
-              })}
+          Write a review
+        </Button>
+      </Block>
+      <FlexGrid
+        flexGridColumnCount={[1]}
+        flexGridColumnGap="scale0"
+        flexGridRowGap="scale800"
+      >
+        {reviews.map((reviewItem) => (
+          <FlexGridItem key={reviewItem.id.toString()}>
+            <Block
+              width={"100%"}
+              // className={css({ flex: 1})}
             >
-              <ParagraphSmall margin={0}>Username</ParagraphSmall>
-              <ParagraphXSmall
-                margin={0}
-                color={theme.colors.contentStateDisabled}
+              <div
+                className={css({
+                  display: "flex",
+                  flexDirection: "column",
+                })}
               >
-                &bull; 2 hours ago
-              </ParagraphXSmall>
-            </div>
-            <ParagraphSmall margin={0} color={theme.colors.contentSecondary}>
-              Lorem ipsum dolor sit amet, consectetuasjodnf asodnjflasndf as
-              fdoasndfo asdkf aos dfoa sdfjo aojsd faosj df tetuasjodnf
-              asodnjflasndf as fdoasndfo asdkf aos dfoa sdfjo aojsd faosj df
-            </ParagraphSmall>
-          </div>
-        </div>
-      </div>
+                <div
+                  className={css({
+                    display: "flex",
+                    gap: "10px",
+                  })}
+                >
+                  <Avatar name="Jane Doe" size="40px" src={reviewItem?.pfp} />
+                  <div
+                    className={css({
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "5px",
+                    })}
+                  >
+                    <div
+                      className={css({
+                        display: "flex",
+                        gap: "10px",
+                      })}
+                    >
+                      <ParagraphSmall margin={0}>
+                        {reviewItem?.username}
+                      </ParagraphSmall>
+                      <ParagraphXSmall
+                        margin={0}
+                        color={theme.colors.contentStateDisabled}
+                      >
+                        &bull; {reviewItem?.createdAt}
+                      </ParagraphXSmall>
+                    </div>
+                    <ParagraphSmall
+                      margin={0}
+                      color={theme.colors.contentSecondary}
+                    >
+                      {reviewItem?.description}
+                    </ParagraphSmall>
+                  </div>
+                </div>
+              </div>
+            </Block>
+          </FlexGridItem>
+        ))}
+      </FlexGrid>
     </Block>
   );
 }

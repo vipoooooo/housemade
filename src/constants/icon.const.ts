@@ -28,6 +28,15 @@ export const Leangsuor = "/assets/pfp/Leangsuor.jpeg";
 export const Sambath = "/assets/pfp/Sambath.jpeg";
 export const Seyla = "/assets/pfp/Seyla.jpeg";
 export const Vichea = "/assets/pfp/Vichea.jpeg";
+export const Andrew = "/assets/pfp/andrew.jpg";
+export const cesarr = "/assets/pfp/cesarr.jpg";
+export const charles = "/assets/pfp/charles.jpg";
+export const haitham = "/assets/pfp/haitham.jpg";
+export const kimson = "/assets/pfp/kimson.jpg";
+export const mustafa = "/assets/pfp/mustafa.jpg";
+export const tyler = "/assets/pfp/tyler.jpg";
+export const zulmaury = "/assets/pfp/zulmaury.jpg";
+
 
 // Project Cover
 export const house1 = "/assets/projectCover/house1.jpg";
