@@ -5,91 +5,108 @@ import { Avatar } from "baseui/avatar";
 import { Block } from "baseui/block";
 import {
   HeadingXSmall,
+  ParagraphMedium,
   ParagraphSmall,
   ParagraphXSmall,
 } from "baseui/typography";
 import {
   IoAdd,
   IoAlertOutline,
+  IoBookmark,
+  IoBookmarkOutline,
   IoCheckmark,
   IoCheckmarkCircle,
 } from "react-icons/io5";
 import { StyledLink } from "baseui/link";
-import { Button, KIND } from "baseui/button";
+import { Button, KIND, SHAPE, SIZE } from "baseui/button";
 import { workers } from "../../constants/worker.const";
+import { StarRating } from "baseui/rating";
 
 export default function ProfileSide() {
   const [css, $theme] = useStyletron();
   const { query } = useRouter();
   const [isBookmarked, setIsBookmark] = React.useState(false);
-  console.log(isBookmarked);
   const profile = workers.find((item) => item.id.toString() === query.id);
-  console.log(profile);
   React.useEffect(() => {
     if (profile) setIsBookmark(profile.bookmark);
   }, [profile]);
+  const [value, setValue] = React.useState(4);
 
   if (!profile) return <>Loading ...</>;
   return (
-    <div
+    <Block
+      position={["relative", "relative", "relative", "sticky"]}
+      top={[0, 0, 0, "68px"]}
+      flex={["0 360px"]}
+      width={["100%", "100%", "360px", "360px"]}
+      margin={"0 auto"}
+      // alignItems={"start"}
+      // alignItems={["center", "center", "center", "start"]}
       className={css({
-        position: "sticky",
-        zIndex: "-1",
-        top: "0px",
+        // zIndex: "-1",
+        alignSelf: "flex-start",
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
-        width: "400px",
-        // height: "auto",
-        padding: "20px",
-        border: "2px solid #EEEEEE",
-        gap: "15px",
+        // padding: "20px",
+        // border: "2px solid #EEEEEE",
+        gap: "20px",
       })}
     >
-      <Avatar name={profile.username} size="110px" src={profile.pfp} />
-      <Block display={"flex"} alignItems={"center"}>
-        <HeadingXSmall margin={0} marginRight={"5px"}>
-          {profile.username}
-        </HeadingXSmall>
-        {profile.verify ? (
-          <IoCheckmarkCircle size={"20px"} color={$theme.colors.accent} />
-        ) : (
-          <></>
-        )}
-      </Block>
-      <Block display={"flex"} flexDirection={"column"} alignItems={"center"}>
-        <ParagraphSmall margin={0} color={$theme.colors.contentTertiary}>
-          {profile.occupation}
-        </ParagraphSmall>
-        <ParagraphXSmall margin={0}>
-          <StyledLink
-            href="/"
-            style={{
-              //   textDecoration: "none",
-              color: $theme.colors.contentTertiary,
-            }}
-          >
-            {profile.link}
-          </StyledLink>
-        </ParagraphXSmall>
-      </Block>
+      <div
+        className={css({
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+        })}
+      >
+        <Avatar name={profile.username} size="100px" src={profile.pfp} />
+        <div
+          className={css({
+            display: "flex",
+            flexDirection: "column",
+            gap: "5px",
+          })}
+        >
+          <Block display={"flex"} alignItems={"center"}>
+            <HeadingXSmall margin={0} marginRight={"5px"}>
+              {profile.username}
+            </HeadingXSmall>
+            {profile.verify ? (
+              <IoCheckmarkCircle size={"20px"} color={$theme.colors.accent} />
+            ) : (
+              <></>
+            )}
+          </Block>
+          <ParagraphSmall margin={0} color={$theme.colors.contentTertiary}>
+            {profile.occupation}
+          </ParagraphSmall>
+          <StarRating
+            numItems={5}
+            onChange={(data) => setValue(data.value)}
+            size={15}
+            value={value}
+            readOnly
+          />
+        </div>
+      </div>
       <div
         className={css({
           display: "flex",
           alignItems: "center",
           width: "100%",
-          margin: "10px 0",
-          gap: "10px",
+          gap: "5px",
         })}
       >
         <Button
           onClick={() => alert("click")}
-          //   size={SIZE.compact}
           kind={KIND.primary}
+          shape={SHAPE.square}
+          size={SIZE.compact}
           overrides={{
             Root: {
               style: ({ $theme }) => ({
-                width: "100%",
+                // flex: "0 0 40%",
+                width: "calc((100% - (36px + (5px*2)))/2)",
               }),
             },
           }}
@@ -98,74 +115,57 @@ export default function ProfileSide() {
         </Button>
         <Button
           onClick={() => alert("click")}
-          //   size={SIZE.compact}
           kind={KIND.secondary}
+          shape={SHAPE.square}
+          size={SIZE.compact}
           overrides={{
             Root: {
               style: ({ $theme }) => ({
-                width: "100%",
+                // flex: "0 0 40%",
+                width: "calc((100% - (36px + (5px*2)))/2)",
               }),
             },
           }}
         >
-          Contact Me
+          Book Now
+        </Button>
+        <Button
+          onClick={() => setIsBookmark(!isBookmarked)}
+          kind={KIND.secondary}
+          shape={SHAPE.square}
+          size={SIZE.compact}
+        >
+          {isBookmarked ? <IoCheckmark size={16} /> : <IoAdd size={16} />}
         </Button>
       </div>
-      <ParagraphSmall
-        className={css({
-          margin: 0,
-          color: $theme.colors.contentTertiary,
-          textAlign: "center",
-        })}
-      >
-        {profile.description}
-      </ParagraphSmall>
       <div
         className={css({
-          width: "100%",
           display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
+          flexDirection: "column",
+          gap: "5px",
         })}
       >
-        <div
-          onClick={() => setIsBookmark(!isBookmarked)}
-          className={css({
-            display: "flex",
-            alignItems: "center",
-            color: $theme.colors.negative,
-          })}
-        >
-          <IoAlertOutline size={15} />
-          <ParagraphXSmall margin={0} color={$theme.colors.negative}>
-            Report
-          </ParagraphXSmall>
-        </div>
-
-        <div
-          onClick={() => setIsBookmark(!isBookmarked)}
-          className={css({
-            display: "flex",
-            alignItems: "center",
-            cursor: "pointer",
-          })}
-        >
-          {isBookmarked ? (
-            <IoCheckmark size={15} color={$theme.colors.accent} />
-          ) : (
-            <IoAdd size={15} color={$theme.colors.primary} />
-          )}
-          {isBookmarked ? (
-            <ParagraphXSmall margin={0} color={$theme.colors.accent}>
-              Listed
-            </ParagraphXSmall>
-          ) : (
-            <ParagraphXSmall margin={0} color={$theme.colors.primary}>
-              Add to list
-            </ParagraphXSmall>
-          )}
-        </div>
+        <ParagraphSmall margin={0} color={$theme.colors.contentPrimary}>
+          About
+        </ParagraphSmall>
+        <ParagraphSmall margin={0} color={$theme.colors.contentTertiary}>
+          {profile.description}
+        </ParagraphSmall>
       </div>
-    </div>
+      <ParagraphXSmall margin={0}>
+        <StyledLink
+          href="/"
+          style={{
+            //   textDecoration: "none",
+            color: $theme.colors.accent,
+          }}
+        >
+          {profile.link}
+        </StyledLink>
+      </ParagraphXSmall>
+      <ParagraphXSmall margin={0} color={$theme.colors.contentTertiary}>
+        Report
+      </ParagraphXSmall>
+    </Block>
   );
 }
