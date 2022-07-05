@@ -30,11 +30,11 @@ export default function WorkerCard({ data }: { data: IWorker }) {
             width: "100%",
             display: "flex",
             alignItems: "start",
-            paddingLeft: "0",
-            paddingRight: "0",
-            paddingTop: "0",
-            paddingBottom: "0",
-            padding: "5px 20px",
+            paddingLeft: "20px",
+            paddingRight: "20px",
+            paddingTop: "5px",
+            paddingBottom: "5px",
+            // padding: '5px 20px'
           }),
         },
       }}
@@ -49,8 +49,7 @@ export default function WorkerCard({ data }: { data: IWorker }) {
         >
           <Block display={"flex"} alignItems={"center"}>
             <ParagraphMedium
-              margin={0}
-              marginRight={"5px"}
+              margin={'0 5px 0 0'}
               $style={{ textAlign: "start" }}
             >
               {data.username}

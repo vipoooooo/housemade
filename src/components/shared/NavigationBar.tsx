@@ -9,7 +9,7 @@ import { StatefulSelect as Search, TYPE } from "baseui/select";
 import Image from "next/image";
 import { Logo } from "../../constants/icon.const";
 import { Button, KIND, SHAPE } from "baseui/button";
-import { IoMenu } from "react-icons/io5";
+import { IoClose, IoMenu } from "react-icons/io5";
 import { useStyletron } from "baseui";
 import { Block } from "baseui/block";
 import { Drawer, SIZE, ANCHOR } from "baseui/drawer";
@@ -46,6 +46,7 @@ export default function Navigationbar() {
         className={css({
           position: "sticky",
           top: 0,
+          zIndex: 100,
           backgroundColor: "rgba(255,255,255,0.5)",
           backdropFilter: "saturate(180%) blur(15px)",
         })}
@@ -104,8 +105,8 @@ export default function Navigationbar() {
                 Login
               </Button>
               <Block display={["block", "block", "block", "none"]}>
-                <Button onClick={() => setIsOpen(true)} kind={KIND.tertiary}>
-                  <IoMenu size={20} />
+                <Button onClick={() => setIsOpen(!isOpen)} kind={KIND.tertiary}>
+                  {isOpen ? <IoClose size={20} /> : <IoMenu size={20} />}
                 </Button>
               </Block>
           </NavigationList>
@@ -136,8 +137,10 @@ function MenuDrawer({
       overrides={{
         DrawerBody: {
           style: ({ $theme }) => ({
+            // top: '100px',
+            zIndex: 101,
             margin: "0px 0px 0px 0px",
-            padding: "40px 20px 20px 20px",
+            padding: "60px 20px 20px 20px",
           }),
         },
       }}

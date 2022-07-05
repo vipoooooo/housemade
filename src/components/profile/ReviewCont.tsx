@@ -11,6 +11,7 @@ import { reviews } from "../../constants/review.const";
 import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
 import { Button, KIND, SIZE } from "baseui/button";
 import { useRouter } from "next/router";
+import HeadingTitle from "../shared/HeadingTitle";
 
 export default function ReviewSide() {
   const [css, theme] = useStyletron();
@@ -24,9 +25,7 @@ export default function ReviewSide() {
         justifyContent={"space-between"}
         alignItems={"center"}
       >
-        <HeadingMedium margin={0} marginBottom={"20px"}>
-          Review
-        </HeadingMedium>
+        <HeadingTitle title="Review" />
         <Button
           onClick={() => alert("click")}
           kind={KIND.primary}

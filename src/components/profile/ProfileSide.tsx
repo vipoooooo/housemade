@@ -68,7 +68,7 @@ export default function ProfileSide() {
           })}
         >
           <Block display={"flex"} alignItems={"center"}>
-            <HeadingXSmall margin={0} marginRight={"5px"}>
+            <HeadingXSmall margin={'0 5px 0 0'} >
               {profile.username}
             </HeadingXSmall>
             {profile.verify ? (

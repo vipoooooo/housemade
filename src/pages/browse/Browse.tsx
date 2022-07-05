@@ -5,13 +5,12 @@ import CategoryBtn from "../../components/common/CategoryBtn";
 import { HeadingMedium } from "baseui/typography";
 import Category from "../../constants/category.const";
 import { Block } from "baseui/block";
+import HeadingTitle from "../../components/shared/HeadingTitle";
 
 export default function Browse() {
   return (
     <Layout hasHeader={true}>
-      <HeadingMedium margin={0} marginBottom={"20px"}>
-        Browse
-      </HeadingMedium>
+      <HeadingTitle title="Browse" />
       <FlexGrid
         flexGridColumnCount={[2, 3, 4, 6]}
         flexGridColumnGap="scale200"
@@ -19,8 +18,12 @@ export default function Browse() {
       >
         {Category.map((category) => {
           return (
-            <FlexGridItem>
-              <CategoryBtn id={category.id} icon={category.coverImg} title={category.title} />
+            <FlexGridItem key={category.id.toString()}>
+              <CategoryBtn
+                id={category.id}
+                icon={category.coverImg}
+                title={category.title}
+              />
             </FlexGridItem>
           );
         })}
