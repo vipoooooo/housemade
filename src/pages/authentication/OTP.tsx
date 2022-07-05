@@ -15,7 +15,7 @@ export default function OTP() {
   const [css, theme] = useStyletron();
   const router = useRouter();
   return (
-    <Form title="OTP Verification" hasHeader={true}>
+    <Form title="OTP Verification" hasForm={true}>
       <div
         className={css({
           width: "100%",

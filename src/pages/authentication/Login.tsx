@@ -17,7 +17,7 @@ export default function Login() {
   const [value, setValue] = React.useState("");
   const router = useRouter();
   return (
-    <Form title="Log in to housemade" hasHeader={true}>
+    <Form title="Log in to housemade" hasForm={true}>
       <div
         className={css({
           width: "100%",

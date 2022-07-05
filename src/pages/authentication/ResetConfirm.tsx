@@ -15,7 +15,7 @@ export default function ResetConfirm() {
   const [css, theme] = useStyletron();
   const router = useRouter();
   return (
-    <Form title="Reset Confirmation" hasHeader={true}>
+    <Form title="Reset Confirmation" hasForm={true}>
       <div
         className={css({
           width: "100%",

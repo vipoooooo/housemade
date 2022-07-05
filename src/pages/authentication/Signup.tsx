@@ -17,7 +17,7 @@ export default function Signup() {
   const [value, setValue] = React.useState("");
   const router = useRouter();
   return (
-    <Form title="Sign up to housemade" hasHeader={true}>
+    <Form title="Sign up to housemade" hasForm={true}>
       <div
         className={css({
           width: "100%",

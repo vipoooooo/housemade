@@ -7,9 +7,9 @@ import { useStyletron } from "styletron-react";
 
 const Home: React.FC<{
   children: React.ReactNode;
-  hasHeader: boolean;
+  hasForm: boolean;
   title: string;
-}> = ({ children, hasHeader, title }) => {
+}> = ({ children, hasForm, title }) => {
   const [css] = useStyletron();
   return (
     <HeadingLevel>
@@ -24,7 +24,7 @@ const Home: React.FC<{
         })}
       >
         <FormHeader title={title} />
-        {hasHeader && <main>{children}</main>}
+        {hasForm && <main>{children}</main>}
       </div>
     </HeadingLevel>
   );

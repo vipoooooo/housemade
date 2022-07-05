@@ -11,7 +11,7 @@ import { reviews } from "../../constants/review.const";
 import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
 import { Button, KIND, SIZE } from "baseui/button";
 import { useRouter } from "next/router";
-import HeadingTitle from "../shared/HeadingTitle";
+import { HeadingTitle } from "../shared/HeadingTitle";
 
 export default function ReviewSide() {
   const [css, theme] = useStyletron();
@@ -23,7 +23,7 @@ export default function ReviewSide() {
       <Block
         display={"flex"}
         justifyContent={"space-between"}
-        alignItems={"center"}
+        alignItems={"start"}
       >
         <HeadingTitle title="Review" />
         <Button

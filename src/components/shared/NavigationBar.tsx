@@ -85,30 +85,27 @@ export default function Navigationbar() {
               justifyContent: "flex-end",
             })}
           >
-              <Block
-                width={"300px"}
-                display={["none", "none", "none", "block"]}
-              >
-                <Search
-                  {...options}
-                  type={TYPE.search}
-                  getOptionLabel={(props) =>
-                    props.option && props.option.id ? props.option.id : null
-                  }
-                  onChange={() => {}}
-                />
-              </Block>
-              <Button
-                onClick={() => router.push("/authentication/Login")}
-                kind={KIND.tertiary}
-              >
-                Login
+            <Block width={"300px"} display={["none", "none", "none", "block"]}>
+              <Search
+                {...options}
+                type={TYPE.search}
+                getOptionLabel={(props) =>
+                  props.option && props.option.id ? props.option.id : null
+                }
+                onChange={() => {}}
+              />
+            </Block>
+            <Button
+              onClick={() => router.push("/authentication/Login")}
+              kind={KIND.tertiary}
+            >
+              Login
+            </Button>
+            <Block display={["block", "block", "block", "none"]}>
+              <Button onClick={() => setIsOpen(!isOpen)} kind={KIND.tertiary}>
+                {isOpen ? <IoClose size={20} /> : <IoMenu size={20} />}
               </Button>
-              <Block display={["block", "block", "block", "none"]}>
-                <Button onClick={() => setIsOpen(!isOpen)} kind={KIND.tertiary}>
-                  {isOpen ? <IoClose size={20} /> : <IoMenu size={20} />}
-                </Button>
-              </Block>
+            </Block>
           </NavigationList>
         </Block>
       </div>
