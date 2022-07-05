@@ -9,6 +9,8 @@ import { useRouter } from "next/router";
 import { workers } from "../../constants/worker.const";
 import { Button, KIND } from "baseui/button";
 import { AspectRatioBox, AspectRatioBoxBody } from "baseui/aspect-ratio-box";
+import HeadingTitle from "../shared/HeadingTitle";
+import { StyleObject } from "styletron-standard";
 
 export default function PortfolioCont() {
   const [css, theme] = useStyletron();
@@ -20,9 +22,7 @@ export default function PortfolioCont() {
   return (
     <>
       <Block className={css({})}>
-        <HeadingMedium margin={0} marginBottom={"20px"}>
-          Portfolio
-        </HeadingMedium>
+        <HeadingTitle title="Portfolio" />
         {/* Spacer */}
         <Block />
         <FlexGrid
@@ -37,19 +37,19 @@ export default function PortfolioCont() {
                   display={"flex"}
                   flexDirection={"column"}
                   width={"100%"}
+                  className={css(imageContainer)}
                 >
                   <Image
                     alt={portfolio?.title}
                     src={portfolio ? portfolio.coverImg : ""}
-                    width={"100%"}
-                    height={"100%"}
-                    layout={"responsive"}
                     objectFit={"cover"}
                     priority
+                    layout="fill"
+                    className={css(image)}
                   />
                 </AspectRatioBoxBody>
               </AspectRatioBox>
-              <ParagraphSmall margin={0} marginTop={"10px"}>
+              <ParagraphSmall margin={"10px 0 0 0"}>
                 {portfolio?.title}
               </ParagraphSmall>
             </FlexGridItem>
@@ -59,3 +59,17 @@ export default function PortfolioCont() {
     </>
   );
 }
+
+const imageContainer: StyleObject = {
+  width: "100%",
+  ">div": {
+    position: "unset",
+  },
+};
+
+const image: StyleObject = {
+  objectFit: "contain",
+  width: "100% !important",
+  position: "relative",
+  height: "unset !important",
+};

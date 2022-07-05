@@ -11,6 +11,7 @@ import { Block } from "baseui/block";
 import { IWorker, workers } from "../../constants/worker.const";
 import categories from "../../constants/category.const";
 import { skills } from "../../constants/skill.const";
+import HeadingTitle from "../../components/shared/HeadingTitle";
 
 export default function Worker() {
   const router = useRouter();
@@ -41,10 +42,11 @@ export default function Worker() {
 
   return (
     <Layout hasHeader={true}>
-      <HeadingSmall margin={0} marginBottom={"20px"}>
-        {/* <Link href="/browse/Browse">Browse &gt;</Link> */}
+      {/* <HeadingSmall margin={0} marginBottom={"20px"}>
+        <Link href="/browse/Browse">Browse &gt;</Link>
         {cotegoryData?.title}
-      </HeadingSmall>
+      </HeadingSmall> */}
+      <HeadingTitle title={cotegoryData?.title || ''} />
       <Block marginBottom={"20px"}>
         <StatefulButtonGroup
           size={SIZE.compact}
@@ -61,6 +63,7 @@ export default function Worker() {
           </Button>
           {skillsData.map((skill) => (
             <Button
+              key={skill.id.toString()}
               onClick={() => {
                 router.push(`/browse/Worker?id=${id}&skillId=${skill.id}`);
               }}
@@ -77,7 +80,7 @@ export default function Worker() {
       >
         {workerData.map((worker) => {
           return (
-            <FlexGridItem>
+            <FlexGridItem key={worker.id.toString()}>
               <WorkerCard data={worker} />
             </FlexGridItem>
           );
