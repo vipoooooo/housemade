@@ -14,7 +14,7 @@ import { HeadingModalTitle } from "../components/shared/HeadingTitle";
 import { Block } from "baseui/block";
 import { IoClose } from "react-icons/io5";
 
-export default function ModalTemp({
+export default function ModalW({
   title,
   isOpen,
   setIsOpen,
@@ -50,7 +50,7 @@ export default function ModalTemp({
         },
       }}
     >
-      <ModalBody display={"flex"} flexDirection={"column"} marginBottom={0}>
+      <ModalBody display={"flex"} flexDirection={"column"}>
         <div
           className={css({
             display: "flex",

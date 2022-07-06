@@ -14,6 +14,7 @@ import { StyleObject } from "styletron-standard";
 
 export default function PortfolioCont() {
   const [css, theme] = useStyletron();
+  const router = useRouter();
   const { query } = useRouter();
   const portfolios = projects.filter(
     (item) => item.workerId.toString() === query.id
@@ -34,11 +35,13 @@ export default function PortfolioCont() {
             <FlexGridItem key={portfolio.id.toString()}>
               <AspectRatioBox aspectRatio={16 / 9}>
                 <AspectRatioBoxBody
+                      onClick={() => {
+                        router.push(`/browse/Project?id=${portfolio.id}`);
+                      }}
                   display={"flex"}
                   flexDirection={"column"}
                   width={"100%"}
                   className={css(imageContainer)}
-                  // onClick={() => (modalsetIsOpen(true), modalisOpen(true))}
                   overrides={{
                     Block: {
                       style: {

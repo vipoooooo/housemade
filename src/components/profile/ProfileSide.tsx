@@ -14,20 +14,21 @@ import { Button, KIND, SHAPE, SIZE } from "baseui/button";
 import { workers } from "../../constants/worker.const";
 import { StarRating } from "baseui/rating";
 import { Modal } from "baseui/modal";
-import ModalTemp from "../../layouts/ModalTemp";
+import ModalTemp from "../../layouts/ModalW";
 import ReportModal from "../modals/ReportModal";
+import BookingModal from "../modals/BookingModal";
 
 export default function ProfileSide() {
   const [css, $theme] = useStyletron();
   const { query } = useRouter();
   const [isBookmarked, setIsBookmark] = React.useState(false);
+  const [value, setValue] = React.useState(4);
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpenB, setIsOpenB] = React.useState(false);
   const profile = workers.find((item) => item.id.toString() === query.id);
   React.useEffect(() => {
     if (profile) setIsBookmark(profile.bookmark);
   }, [profile]);
-  const [value, setValue] = React.useState(4);
-
-  const [isOpen, setIsOpen] = React.useState(false);
 
   if (!profile) return <>Loading ...</>;
   return (
@@ -91,7 +92,7 @@ export default function ProfileSide() {
           })}
         >
           <Button
-            onClick={() => alert("click")}
+            onClick={() => setIsOpenB(true)}
             kind={KIND.primary}
             shape={SHAPE.square}
             size={SIZE.compact}
@@ -165,6 +166,7 @@ export default function ProfileSide() {
           Report
         </ParagraphXSmall>
       </Block>
+      <BookingModal isOpenB={isOpenB} setIsOpenB={setIsOpenB} />
       <ReportModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </>
   );

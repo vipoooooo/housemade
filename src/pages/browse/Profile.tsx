@@ -7,7 +7,7 @@ import ProfileSide from "../../components/profile/ProfileSide";
 import ContentSide from "../../components/profile/ContentSide";
 import { wrap } from "module";
 
-export default function ViewWorkerProfile() {
+export default function Profile() {
   const [css, theme] = useStyletron();
   return (
     <Layout hasHeader={true}>
