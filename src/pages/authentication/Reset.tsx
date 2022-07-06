@@ -15,7 +15,7 @@ export default function LoginOTP() {
   const [css, theme] = useStyletron();
   const router = useRouter();
   return (
-    <Form title="Reset Password" hasHeader={true}>
+    <Form title="Reset Password" hasForm={true}>
       <div
         className={css({
           width: "100%",

@@ -5,7 +5,7 @@ import CategoryBtn from "../../components/common/CategoryBtn";
 import { HeadingMedium } from "baseui/typography";
 import Category from "../../constants/category.const";
 import { Block } from "baseui/block";
-import HeadingTitle from "../../components/shared/HeadingTitle";
+import { HeadingTitle } from "../../components/shared/HeadingTitle";
 
 export default function Browse() {
   return (

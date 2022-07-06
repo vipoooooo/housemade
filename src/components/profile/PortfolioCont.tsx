@@ -7,13 +7,14 @@ import { useStyletron } from "baseui";
 import { projects } from "../../constants/project.const";
 import { useRouter } from "next/router";
 import { workers } from "../../constants/worker.const";
-import { Button, KIND } from "baseui/button";
+import { Button, KIND, SIZE } from "baseui/button";
 import { AspectRatioBox, AspectRatioBoxBody } from "baseui/aspect-ratio-box";
-import HeadingTitle from "../shared/HeadingTitle";
+import { HeadingTitle } from "../shared/HeadingTitle";
 import { StyleObject } from "styletron-standard";
 
 export default function PortfolioCont() {
   const [css, theme] = useStyletron();
+  const router = useRouter();
   const { query } = useRouter();
   const portfolios = projects.filter(
     (item) => item.workerId.toString() === query.id
@@ -34,10 +35,20 @@ export default function PortfolioCont() {
             <FlexGridItem key={portfolio.id.toString()}>
               <AspectRatioBox aspectRatio={16 / 9}>
                 <AspectRatioBoxBody
+                      onClick={() => {
+                        router.push(`/browse/Project?id=${portfolio.id}`);
+                      }}
                   display={"flex"}
                   flexDirection={"column"}
                   width={"100%"}
                   className={css(imageContainer)}
+                  overrides={{
+                    Block: {
+                      style: {
+                        cursor: "pointer",
+                      },
+                    },
+                  }}
                 >
                   <Image
                     alt={portfolio?.title}

@@ -11,7 +11,7 @@ import { Block } from "baseui/block";
 import { IWorker, workers } from "../../constants/worker.const";
 import categories from "../../constants/category.const";
 import { skills } from "../../constants/skill.const";
-import HeadingTitle from "../../components/shared/HeadingTitle";
+import { HeadingTitle } from "../../components/shared/HeadingTitle";
 
 export default function Worker() {
   const router = useRouter();
@@ -46,7 +46,7 @@ export default function Worker() {
         <Link href="/browse/Browse">Browse &gt;</Link>
         {cotegoryData?.title}
       </HeadingSmall> */}
-      <HeadingTitle title={cotegoryData?.title || ''} />
+      <HeadingTitle title={cotegoryData?.title || ""} />
       <Block marginBottom={"20px"}>
         <StatefulButtonGroup
           size={SIZE.compact}

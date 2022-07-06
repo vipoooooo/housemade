@@ -1,13 +1,10 @@
 import * as React from "react";
 import {
-  Paragraph1,
   ParagraphMedium,
-  ParagraphSmall,
   ParagraphXSmall,
 } from "baseui/typography";
 import { Block } from "baseui/block";
 import { Avatar } from "baseui/avatar";
-import Image from "next/image";
 import { Button, KIND } from "baseui/button";
 import { IoStar } from "@react-icons/all-files/io5/IoStar";
 import { useRouter } from "next/router";

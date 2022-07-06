@@ -11,23 +11,27 @@ import { reviews } from "../../constants/review.const";
 import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
 import { Button, KIND, SIZE } from "baseui/button";
 import { useRouter } from "next/router";
-import HeadingTitle from "../shared/HeadingTitle";
+import { HeadingTitle } from "../shared/HeadingTitle";
+import ReviewModal from "../modals/ReviewModal";
 
 export default function ReviewSide() {
   const [css, theme] = useStyletron();
   const { query } = useRouter();
   const review = reviews.filter((item) => item.id.toString() === query.id);
 
+  const [isOpen, setIsOpen] = React.useState(false);
+
   return (
+    <>
     <Block display={"flex"} flexDirection={"column"}>
       <Block
         display={"flex"}
         justifyContent={"space-between"}
-        alignItems={"center"}
+        alignItems={"start"}
       >
         <HeadingTitle title="Review" />
         <Button
-          onClick={() => alert("click")}
+          onClick={() => setIsOpen(true)}
           kind={KIND.primary}
           size={SIZE.compact}
         >
@@ -95,5 +99,7 @@ export default function ReviewSide() {
         ))}
       </FlexGrid>
     </Block>
+    <ReviewModal isOpen={isOpen} setIsOpen={setIsOpen} />
+    </>
   );
 }

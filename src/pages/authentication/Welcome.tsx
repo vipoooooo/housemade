@@ -21,7 +21,7 @@ export default function Welcome() {
     },
   };
   return (
-    <Form title="Welcome, <Username>" hasHeader={true}>
+    <Form title="Welcome, <Username>" hasForm={true}>
       <div
         className={css({
           width: "100%",
