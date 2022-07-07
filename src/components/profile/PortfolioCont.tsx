@@ -28,8 +28,8 @@ export default function PortfolioCont() {
         <Block />
         <FlexGrid
           flexGridColumnCount={[1, 2, 3, 2]}
-          flexGridColumnGap={"20px"}
-          flexGridRowGap={"30px"}
+          flexGridColumnGap={["0px", '10px', '10px', '20px']}
+          flexGridRowGap={["30px"]}
         >
           {portfolios.map((portfolio) => (
             <FlexGridItem key={portfolio.id.toString()}>

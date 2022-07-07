@@ -4,7 +4,7 @@ import ModalTemp from "../../layouts/ModalW";
 import { Block } from "baseui/block";
 import { ParagraphMedium, ParagraphSmall } from "baseui/typography";
 import { Textarea } from "baseui/textarea";
-import { Button, KIND } from "baseui/button";
+import { Button, KIND, SIZE } from "baseui/button";
 import { StarRating } from "baseui/rating";
 
 export default function ReviewModal({
@@ -57,6 +57,7 @@ export default function ReviewModal({
           <Textarea
             value={inputvalue}
             onChange={(e) => inputsetValue(e.currentTarget.value)}
+            size={SIZE.compact}
             placeholder={"Review..."}
             overrides={{
               Input: {
