@@ -19,7 +19,7 @@ export default function BookingModal({
 }) {
   const [css, theme] = useStyletron();
   const [inputvalue, inputsetValue] = React.useState("");
-  const [value, setValue] = React.useState("");
+  const [valueL, setValueL] = React.useState("");
   const [valueD, setValueD] = React.useState([new Date()]);
 
   return (
@@ -49,6 +49,7 @@ export default function BookingModal({
             onChange={({ date }) =>
               setValueD(Array.isArray(date) ? date : [date])
             }
+            size={SIZE.compact}
           />
           <ParagraphSmall margin={0} color={theme.colors.contentStateDisabled}>
             When do you want this appointment to happen
@@ -63,7 +64,9 @@ export default function BookingModal({
         >
           <ParagraphMedium margin={0}>Your Location</ParagraphMedium>
           <Input
-            value={value}
+            value={valueL}
+            onChange={(e) => setValueL(e.currentTarget.value)}
+            size={SIZE.compact}
             endEnhancer={<IoLocate size={20} />}
             placeholder="Input your location"
             clearOnEscape
@@ -90,6 +93,7 @@ export default function BookingModal({
           <Textarea
             value={inputvalue}
             onChange={(e) => inputsetValue(e.currentTarget.value)}
+            size={SIZE.compact}
             placeholder={"description"}
             overrides={{
               Input: {

@@ -62,7 +62,7 @@ export default function ModalW({
             <HeadingModalTitle title={title} />
             <Button
               onClick={() => setIsOpen(false)}
-              kind={KIND.secondary}
+              kind={KIND.tertiary}
               size={SIZE.compact}
               shape={SHAPE.square}
             >

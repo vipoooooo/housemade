@@ -4,7 +4,7 @@ import ModalTemp from "../../layouts/ModalW";
 import { Block } from "baseui/block";
 import { ParagraphMedium } from "baseui/typography";
 import { Textarea } from "baseui/textarea";
-import { Button, KIND } from "baseui/button";
+import { Button, KIND, SIZE } from "baseui/button";
 
 export default function ReportModal({
   isOpen,
@@ -46,6 +46,7 @@ export default function ReportModal({
           <Textarea
             value={inputvalue}
             onChange={(e) => inputsetValue(e.currentTarget.value)}
+            size={SIZE.compact}
             placeholder={"report..."}
             overrides={{
               Input: {
