@@ -41,7 +41,7 @@ export const workers: IWorker[] = [
     email: "leanguosr@gmail.com",
     phonenumber: "011222333",
     nationality: "Cambodian",
-    bookmark: true,
+    bookmark: false,
   },
   {
     id: 2,
@@ -146,7 +146,7 @@ export const workers: IWorker[] = [
     email: "leanguosr@gmail.com",
     phonenumber: "011222333",
     nationality: "Cambodian",
-    bookmark: true,
+    bookmark: false,
   },
   {
     id: 7,
