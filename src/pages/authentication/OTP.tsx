@@ -29,7 +29,6 @@ export default function OTP() {
             width: "100%",
             display: "flex",
             flexDirection: "column",
-            gap: "20px",
             padding: "20px",
             border: "2px solid #EEEEEE",
           })}
@@ -45,7 +44,12 @@ export default function OTP() {
             </ParagraphSmall>
             <ParagraphLarge margin={0}>+855 93 759 714</ParagraphLarge>
           </span>
-          <InputOTP title="Enter your code" />
+          <InputOTP
+            label="Enter your code"
+            caption=""
+            positive=""
+            error=""
+          />
           <Button
             onClick={() => router.push("/authentication/Welcome")}
             overrides={{

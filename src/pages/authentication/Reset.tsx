@@ -21,14 +21,16 @@ export default function LoginOTP() {
           width: "100%",
           display: "flex",
           flexDirection: "column",
-          gap: "20px",
           padding: "20px",
           border: "2px solid #EEEEEE",
         })}
       >
         <InputNormal
-          title="Enter your user account's verified email address and we will send you a password reset link."
+          label="Enter your user account's verified email address"
+          caption="and we will send you a password reset link."
           placeholder="enter your email address"
+          positive=""
+          error=""
         />
         <Button
           onClick={() => router.push("/authentication/ResetConfirm")}

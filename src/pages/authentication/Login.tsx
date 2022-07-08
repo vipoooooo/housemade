@@ -1,12 +1,10 @@
 import * as React from "react";
-import { ParagraphMedium } from "baseui/typography";
+import { ParagraphMedium, ParagraphXSmall } from "baseui/typography";
 import Form from "../../layouts/Form";
 import { useStyletron } from "baseui";
 import {
   InputNormal,
-  InputPasswordI,
-  InputPasswordII,
-  InputPhoneNumber,
+  InputPW,
 } from "../../components/common/Input";
 import { Button, KIND, SIZE, SHAPE } from "baseui/button";
 import { StyledLink } from "baseui/link";
@@ -31,21 +29,41 @@ export default function Login() {
             width: "100%",
             display: "flex",
             flexDirection: "column",
-            gap: "20px",
             padding: "20px",
             border: "2px solid #EEEEEE",
           })}
         >
           <InputNormal
-            title="Username or email address"
+            label="Username or email address"
+            caption=""
             placeholder="username or email address"
+            positive=""
+            error=""
           />
-          <InputPasswordII title="Enter your password" placeholder="password" />
+          <InputPW
+            label="Enter your password"
+            caption=""
+            placeholder="password"
+            positive=""
+            error=""
+          />
+          <ParagraphXSmall margin={0}>
+            <StyledLink
+              href="/authentication/Reset"
+              style={{
+                textDecoration: "none",
+                color: theme.colors.accent,
+              }}
+            >
+              Forgot Password
+            </StyledLink>
+          </ParagraphXSmall>
           <Button
-            onClick={() => router.push("/authentication/OTP")}
+            onClick={() => router.push("/authentication/Welcome")}
             overrides={{
               BaseButton: {
                 style: ({ $theme }) => ({
+                  marginTop: "20px",
                   width: "100%",
                 }),
               },
