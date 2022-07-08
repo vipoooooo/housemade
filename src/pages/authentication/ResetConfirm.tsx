@@ -21,12 +21,17 @@ export default function ResetConfirm() {
           width: "100%",
           display: "flex",
           flexDirection: "column",
-          gap: "20px",
           padding: "20px",
           border: "2px solid #EEEEEE",
         })}
       >
-        <InputNormal title="Verification code" placeholder="enter the code" />
+        <InputNormal
+          label="Verification code"
+          caption="and we will send you a password reset link."
+          placeholder="enter the code"
+          positive=""
+          error=""
+        />
         <Button
           onClick={() => router.push("/authentication/Login")}
           overrides={{

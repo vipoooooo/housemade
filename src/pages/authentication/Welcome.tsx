@@ -11,6 +11,7 @@ import { Button } from "baseui/button";
 import { StyledLink } from "baseui/link";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import { IoArrowForward } from "react-icons/io5";
 
 export default function Welcome() {
   const [css, theme] = useStyletron();
@@ -36,7 +37,6 @@ export default function Welcome() {
             display: "flex",
             flexDirection: "column",
             gap: "20px",
-            padding: "20px",
             border: "2px solid #EEEEEE",
           })}
         >
@@ -48,7 +48,8 @@ export default function Welcome() {
             // height={"350px"}
           />
           <Button
-            onClick={() => router.push("/authentication/VerificationCode")}
+            onClick={() => router.push("/browse/Browse")}
+            endEnhancer = {<IoArrowForward />}
             overrides={{
               BaseButton: {
                 style: ({ $theme }) => ({
@@ -57,7 +58,7 @@ export default function Welcome() {
               },
             }}
           >
-            Confirm
+            Get Started
           </Button>
         </div>
       </div>

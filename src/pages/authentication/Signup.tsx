@@ -4,9 +4,8 @@ import Form from "../../layouts/Form";
 import { useStyletron } from "baseui";
 import {
   InputNormal,
-  InputPasswordI,
-  InputPasswordII,
-  InputPhoneNumber,
+  InputPN,
+  InputPW,
 } from "../../components/common/Input";
 import { Button, KIND, SIZE, SHAPE } from "baseui/button";
 import { StyledLink } from "baseui/link";
@@ -31,24 +30,45 @@ export default function Signup() {
             width: "100%",
             display: "flex",
             flexDirection: "column",
-            gap: "20px",
             padding: "20px",
             border: "2px solid #EEEEEE",
           })}
         >
-          <InputNormal title="Enter your username" placeholder="username" />
-          <InputNormal title="Enter your email" placeholder="email" />
-          <InputPasswordI
-            title="Enter your password"
-            placeholder="password"
-            requirment="8 - 24 characters"
+          <InputNormal
+            label="Enter your username"
+            caption=""
+            placeholder="username"
+            positive=""
+            error=""
           />
-          <InputPasswordI
-            title="Confirm your password"
-            placeholder="password"
-            requirment=""
+          <InputNormal
+            label="Enter your email"
+            caption=""
+            placeholder="email"
+            positive=""
+            error=""
           />
-          <InputPhoneNumber title="Enter your Phonenumber" />
+          <InputPW
+            label="Enter your password"
+            placeholder="password"
+            caption="8 - 24 characters"
+            positive=""
+            error=""
+          />
+          <InputPW
+            label="Confirm your password"
+            placeholder="password"
+            caption=""
+            positive=""
+            error=""
+          />
+          <InputPN
+            label="Enter your phone number"
+            caption=""
+            placeholder="email"
+            positive=""
+            error=""
+          />
           <Button
             onClick={() => router.push("/authentication/OTP")}
             overrides={{
