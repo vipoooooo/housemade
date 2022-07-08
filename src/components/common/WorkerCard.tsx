@@ -27,11 +27,7 @@ export default function WorkerCard({ data }: { data: IWorker }) {
             width: "100%",
             display: "flex",
             alignItems: "start",
-            paddingLeft: "20px",
-            paddingRight: "20px",
-            paddingTop: "5px",
-            paddingBottom: "5px",
-            // padding: '5px 20px'
+            padding: '5px 20px'
           }),
         },
       }}
