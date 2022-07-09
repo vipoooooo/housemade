@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useStyletron } from "baseui";
-import ModalTemp from "../../layouts/ModalW";
+import ModalTemp from "../../../../layouts/ModalW";
 import { Block } from "baseui/block";
 import { ParagraphMedium, ParagraphSmall } from "baseui/typography";
 import { Textarea } from "baseui/textarea";

@@ -7,17 +7,17 @@ import {
   ParagraphXSmall,
 } from "baseui/typography";
 import { Avatar } from "baseui/avatar";
-import { reviews } from "../../constants/review.const";
 import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
 import { Button, KIND, SIZE } from "baseui/button";
 import { useRouter } from "next/router";
-import { HeadingTitle } from "../shared/HeadingTitle";
 import ReviewModal from "../modals/ReviewModal";
+import { HeadingTitle } from "../../../../components/shared/HeadingTitle";
+import { reviews } from "../../../../mocks/review.const";
 
 export default function ReviewSide() {
   const [css, theme] = useStyletron();
   const { query } = useRouter();
-  const review = reviews.filter((item) => item.id.toString() === query.id);
+  const review = reviews.filter((item) => item.workerId.toString() === query.id);
 
   const [isOpen, setIsOpen] = React.useState(false);
 
@@ -43,7 +43,7 @@ export default function ReviewSide() {
         flexGridColumnGap="scale0"
         flexGridRowGap="scale800"
       >
-        {reviews.map((reviewItem) => (
+        {review.map((reviewItem) => (
           <FlexGridItem key={reviewItem.id.toString()}>
             <Block
               width={"100%"}

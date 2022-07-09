@@ -13,6 +13,7 @@ import { Button, KIND, SHAPE, SIZE } from "baseui/button";
 import { HeadingModalTitle } from "../components/shared/HeadingTitle";
 import { Block } from "baseui/block";
 import { IoClose } from "react-icons/io5";
+import { relative } from "path";
 
 export default function ModalW({
   title,

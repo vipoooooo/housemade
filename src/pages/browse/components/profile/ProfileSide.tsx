@@ -11,12 +11,11 @@ import {
 import { IoAdd, IoCheckmark, IoCheckmarkCircle } from "react-icons/io5";
 import { StyledLink } from "baseui/link";
 import { Button, KIND, SHAPE, SIZE } from "baseui/button";
-import { workers } from "../../constants/worker.const";
 import { StarRating } from "baseui/rating";
-import { Modal } from "baseui/modal";
-import ModalTemp from "../../layouts/ModalW";
 import ReportModal from "../modals/ReportModal";
 import BookingModal from "../modals/BookingModal";
+import { workers } from "../../../../mocks/worker.const";
+import { Ireview, reviews } from "../../../../mocks/review.const";
 
 export default function ProfileSide() {
   const [css, $theme] = useStyletron();
@@ -29,6 +28,12 @@ export default function ProfileSide() {
   React.useEffect(() => {
     if (profile) setIsBookmark(profile.bookmark);
   }, [profile]);
+
+  const rater = reviews.filter((item) => item.workerId.toString() === query.id);
+  const rating = rater.reduce(
+    (previousValue: number, currentValue: Ireview) => previousValue + currentValue.rating,
+0
+  ) / rater.length;
 
   if (!profile) return <>Loading ...</>;
   return (
@@ -78,7 +83,7 @@ export default function ProfileSide() {
               numItems={5}
               onChange={(data) => setValue(data.value)}
               size={15}
-              value={value}
+              value={rating}
               readOnly
             />
           </div>

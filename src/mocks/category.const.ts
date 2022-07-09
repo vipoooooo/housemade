@@ -19,7 +19,7 @@ import {
   SmartHome,
   Solar,
   Windowsndoors,
-} from "./icon.const";
+} from "../constants/icon.const";
 
 export default [
   {

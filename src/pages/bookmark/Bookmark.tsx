@@ -10,7 +10,7 @@ import {
 import Default from "../../layouts/Default";
 import { Block } from "baseui/block";
 import { HeadingTitle } from "../../components/shared/HeadingTitle";
-import { workers } from "../../constants/worker.const";
+import { workers } from "../../mocks/worker.const";
 import WorkerCard from "../../components/common/WorkerCard";
 import { useStyletron } from "baseui";
 

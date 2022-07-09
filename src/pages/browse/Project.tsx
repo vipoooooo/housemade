@@ -2,21 +2,14 @@ import * as React from "react";
 import Layout from "../../layouts/Default";
 import { Block } from "baseui/block";
 import { useStyletron } from "baseui";
-import ReviewSide from "../../components/profile/ReviewCont";
-import ProfileSide from "../../components/profile/ProfileSide";
-import ContentSide from "../../components/profile/ContentSide";
-import { wrap } from "module";
-import { projects } from "../../constants/project.const";
+import { projects } from "../../mocks/project.const";
 import { useRouter } from "next/router";
 import { AspectRatioBox, AspectRatioBoxBody } from "baseui/aspect-ratio-box";
 import Image from "next/image";
 import { StyleObject } from "styletron-standard";
-import { HeadingTitle } from "../../components/shared/HeadingTitle";
 import {
-  Display,
   DisplaySmall,
   DisplayXSmall,
-  ParagraphLarge,
   ParagraphMedium,
   ParagraphSmall,
 } from "baseui/typography";

@@ -25,6 +25,12 @@ export const menuItems: MenuItem[] = [
     icon: <IoHome size={20} />,
   },
   {
+    title: "Portfolio",
+    href: "/portfolio/Portfolio",
+    active: false,
+    icon: <IoChatbubble size={20} />,
+  },
+  {
     title: "Chat",
     href: "/chat/Chat",
     active: false,
