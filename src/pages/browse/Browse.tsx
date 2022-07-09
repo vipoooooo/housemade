@@ -3,7 +3,7 @@ import Layout from "../../layouts/Default";
 import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
 import CategoryBtn from "../../components/common/CategoryBtn";
 import { HeadingMedium } from "baseui/typography";
-import Category from "../../constants/category.const";
+import Category from "../../mocks/category.const";
 import { Block } from "baseui/block";
 import { HeadingTitle } from "../../components/shared/HeadingTitle";
 

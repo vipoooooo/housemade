@@ -7,7 +7,10 @@ export interface Ireview {
   pfp: string;
   username: string;
   description: string;
+  rating: number;
 }
+
+const ratingValue = Math.floor((Math.random() * 5) + 1);
 
 export const reviews: Ireview[] = [
   {
@@ -16,6 +19,7 @@ export const reviews: Ireview[] = [
     createdAt: "12 minutes ago",
     pfp: Leangsuor,
     username: "Reviewr A",
+    rating: ratingValue,
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad",
   },
@@ -25,15 +29,17 @@ export const reviews: Ireview[] = [
     createdAt: "1 hour ago",
     pfp: Leangsuor,
     username: "Reviewr B",
+    rating: ratingValue,
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad",
   },
   {
     id: 3,
-    workerId: 1,
+    workerId: 2,
     createdAt: "1 day ago",
     pfp: Leangsuor,
     username: "Reviewr C",
+    rating: ratingValue,
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad",
   },
@@ -43,6 +49,7 @@ export const reviews: Ireview[] = [
     createdAt: "2 days ago",
     pfp: Leangsuor,
     username: "Reviewr D",
+    rating: ratingValue,
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad",
   },
@@ -52,6 +59,7 @@ export const reviews: Ireview[] = [
     createdAt: "3 days ago",
     pfp: Leangsuor,
     username: "Reviewr E",
+    rating: ratingValue,
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad",
   },
@@ -61,6 +69,7 @@ export const reviews: Ireview[] = [
     createdAt: "4 days ago",
     pfp: Leangsuor,
     username: "Reviewr F",
+    rating: ratingValue,
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad",
   },
@@ -70,6 +79,7 @@ export const reviews: Ireview[] = [
     createdAt: "12 minutes ago",
     pfp: Leangsuor,
     username: "Reviewr A",
+    rating: ratingValue,
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad",
   },
@@ -79,6 +89,7 @@ export const reviews: Ireview[] = [
     createdAt: "1 hour ago",
     pfp: Leangsuor,
     username: "Reviewr B",
+    rating: ratingValue,
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad",
   },
@@ -88,6 +99,7 @@ export const reviews: Ireview[] = [
     createdAt: "1 day ago",
     pfp: Leangsuor,
     username: "Reviewr C",
+    rating: ratingValue,
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad",
   },
@@ -97,6 +109,7 @@ export const reviews: Ireview[] = [
     createdAt: "2 days ago",
     pfp: Leangsuor,
     username: "Reviewr D",
+    rating: ratingValue,
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad",
   },
@@ -106,6 +119,7 @@ export const reviews: Ireview[] = [
     createdAt: "3 days ago",
     pfp: Leangsuor,
     username: "Reviewr E",
+    rating: ratingValue,
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad",
   },
@@ -115,6 +129,7 @@ export const reviews: Ireview[] = [
     createdAt: "4 days ago",
     pfp: Leangsuor,
     username: "Reviewr F",
+    rating: ratingValue,
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad",
   },

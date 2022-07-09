@@ -1,10 +1,6 @@
 import * as React from "react";
 import { useStyletron } from "baseui";
 import { Block } from "baseui/block";
-import { HeadingMedium } from "baseui/typography";
-import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
-import { projects } from "../../constants/project.const";
-import Image from "next/image";
 import ReviewSide from "./ReviewCont";
 import PortfolioCont from "./PortfolioCont";
 

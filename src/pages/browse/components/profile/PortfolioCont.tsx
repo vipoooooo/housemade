@@ -4,13 +4,11 @@ import { HeadingMedium, ParagraphSmall } from "baseui/typography";
 import Image from "next/image";
 import * as React from "react";
 import { useStyletron } from "baseui";
-import { projects } from "../../constants/project.const";
 import { useRouter } from "next/router";
-import { workers } from "../../constants/worker.const";
-import { Button, KIND, SIZE } from "baseui/button";
 import { AspectRatioBox, AspectRatioBoxBody } from "baseui/aspect-ratio-box";
-import { HeadingTitle } from "../shared/HeadingTitle";
 import { StyleObject } from "styletron-standard";
+import { HeadingTitle } from "../../../../components/shared/HeadingTitle";
+import { projects } from "../../../../mocks/project.const";
 
 export default function PortfolioCont() {
   const [css, theme] = useStyletron();

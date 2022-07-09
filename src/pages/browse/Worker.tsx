@@ -8,9 +8,9 @@ import WorkerCard from "../../components/common/WorkerCard";
 import { StatefulButtonGroup, MODE, SIZE, SHAPE } from "baseui/button-group";
 import { Button } from "baseui/button";
 import { Block } from "baseui/block";
-import { IWorker, workers } from "../../constants/worker.const";
-import categories from "../../constants/category.const";
-import { skills } from "../../constants/skill.const";
+import categories from "../../mocks/category.const";
+import { IWorker, workers } from "../../mocks/worker.const";
+import { skills } from "../../mocks/skill.const";
 import { HeadingTitle } from "../../components/shared/HeadingTitle";
 
 export default function Worker() {

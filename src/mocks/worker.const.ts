@@ -1,4 +1,10 @@
-import { Leangsuor, Sambath, Seyla, Vichea, zulmaury } from "../constants/icon.const";
+import {
+  Leangsuor,
+  Sambath,
+  Seyla,
+  Vichea,
+  zulmaury,
+} from "../constants/icon.const";
 
 export interface IWorker {
   id: number;
@@ -30,8 +36,7 @@ export const workers: IWorker[] = [
     username: "Leangsuor Kim",
     occupation: "Architech",
     verify: true,
-    description:
-      "Im leangsuor",
+    description: "Im leangsuor",
     stats: {
       rating: 4.7,
       reviewCount: 69,
@@ -51,8 +56,7 @@ export const workers: IWorker[] = [
     username: "Ratanaksambath Sok",
     occupation: "Architech",
     verify: false,
-    description:
-      "Im sambath",
+    description: "Im sambath",
     stats: {
       rating: 2.9,
       reviewCount: 49,
@@ -233,3 +237,24 @@ export const workers: IWorker[] = [
     bookmark: false,
   },
 ];
+
+export const currentUser: IWorker = {
+  id: 1,
+  categoryId: 3,
+  skillId: 5,
+  pfp: Leangsuor,
+  username: "Leangsuor Kim",
+  occupation: "Architech",
+  verify: true,
+  description: "Im leangsuor",
+  stats: {
+    rating: 4.7,
+    reviewCount: 69,
+  },
+  link: "https://www.facebook.com/leangsuor.kim",
+  time: "September 2021",
+  email: "leanguosr@gmail.com",
+  phonenumber: "011222333",
+  nationality: "Cambodian",
+  bookmark: false,
+};
