@@ -2,8 +2,8 @@ import * as React from "react";
 import Layout from "../../layouts/Default";
 import { Block } from "baseui/block";
 import { useStyletron } from "baseui";
-import { wrap } from "module";
 import ProfileSide from "./components/ProfileSide";
+import ContentSide from "./components/ContentSide";
 
 export default function Profile() {
   const [css, theme] = useStyletron();
@@ -18,7 +18,7 @@ export default function Profile() {
         <ProfileSide />
 
         {/* Content */}
-        {/* <ContentSide /> */}
+        <ContentSide />
       </Block>
     </Layout>
   );
