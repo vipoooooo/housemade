@@ -7,6 +7,7 @@ import { PinCode } from "baseui/pin-code";
 import { Block } from "baseui/block";
 import { StyledLink } from "baseui/link";
 import { FormControl } from "baseui/form-control";
+import { Textarea } from "baseui/textarea";
 
 export function InputNormal({
   label,
@@ -144,6 +145,37 @@ export function InputOTP({
         values={values}
         onChange={({ values }) => setValues(values)}
         clearOnEscape
+      />
+    </FormControl>
+  );
+}
+
+export function InputTextArea({
+  label,
+  caption,
+  placeholder,
+  positive,
+  error,
+}: {
+  label: string;
+  caption: string;
+  placeholder: string;
+  positive: string;
+  error: string;
+}) {
+  const [css] = useStyletron();
+  const [value, setValue] = React.useState("");
+  return (
+    <FormControl
+      label={label}
+      caption={caption}
+      positive={positive}
+      error={error}
+    >
+      <Textarea
+        value={value}
+        onChange={(e) => setValue(e.currentTarget.value)}
+        placeholder={placeholder}
       />
     </FormControl>
   );

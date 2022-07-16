@@ -85,41 +85,18 @@ export default function ProfileSide() {
         >
           <Button
             onClick={() => setIsOpenB(true)}
-            kind={KIND.primary}
-            shape={SHAPE.square}
-            size={SIZE.compact}
-            overrides={{
-              Root: {
-                style: ({ $theme }) => ({
-                  width: "calc((100% - (36px + (5px*2)))/2)",
-                }),
-              },
-            }}
-          >
-            Book Now
-          </Button>
-          <Button
-            onClick={() => alert("click")}
             kind={KIND.secondary}
             shape={SHAPE.square}
             size={SIZE.compact}
             overrides={{
               Root: {
                 style: ({ $theme }) => ({
-                  width: "calc((100% - (36px + (5px*2)))/2)",
+                  width: "100%",
                 }),
               },
             }}
           >
-            Contact Me
-          </Button>
-          <Button
-            onClick={() => setIsBookmark(!isBookmarked)}
-            kind={KIND.secondary}
-            shape={SHAPE.square}
-            size={SIZE.compact}
-          >
-            {isBookmarked ? <IoCheckmark size={16} /> : <IoAdd size={16} />}
+            Edit Profile
           </Button>
         </div>
         <div
@@ -146,16 +123,6 @@ export default function ProfileSide() {
           >
             {currentUser.link}
           </StyledLink>
-        </ParagraphXSmall>
-        <ParagraphXSmall
-          margin={0}
-          color={$theme.colors.contentTertiary}
-          onClick={() => setIsOpen(true)}
-          className={css({
-            cursor: "pointer",
-          })}
-        >
-          Report
         </ParagraphXSmall>
       </Block>
     </>
