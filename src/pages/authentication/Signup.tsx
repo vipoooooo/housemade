@@ -2,97 +2,179 @@ import * as React from "react";
 import { ParagraphMedium } from "baseui/typography";
 import Form from "../../layouts/Form";
 import { useStyletron } from "baseui";
-import {
-  InputNormal,
-  InputPN,
-  InputPW,
-} from "../../components/common/Input";
-import { Button, KIND, SIZE, SHAPE } from "baseui/button";
+import { Button } from "baseui/button";
 import { StyledLink } from "baseui/link";
 import { useRouter } from "next/router";
+import { FormControl } from "baseui/form-control";
+import { Input } from "baseui/input";
+import { Alert } from "baseui/icon";
+import {
+  COUNTRIES,
+  Country,
+  PhoneInput,
+  PhoneInputNext,
+} from "baseui/phone-input";
+import { StyleObject } from "styletron-standard";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
+
+export function Negative() {
+  const [css, theme] = useStyletron();
+  return (
+    <div
+      className={css({
+        display: "flex",
+        alignItems: "center",
+        paddingRight: theme.sizing.scale500,
+        color: theme.colors.negative400,
+      })}
+    >
+      <Alert size="18px" />
+    </div>
+  );
+}
+
+interface IFormSignup {
+  username: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  phoneNumber: string;
+}
+const phoneRegExp =
+  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 export default function Signup() {
   const [css, theme] = useStyletron();
-  const [value, setValue] = React.useState("");
   const router = useRouter();
+
+  const [country, setCountry] = React.useState(COUNTRIES.KH);
+  const onCountryChange = (event: any) => setCountry(event.option);
+
+  const onSubmit: SubmitHandler<IFormSignup> = (data) => {
+    console.log(data, country);
+  };
+
+  const formSchema = Yup.object().shape({
+    username: Yup.string()
+      .required("Username is required.")
+      .max(30, "Username must below 30 char long"),
+    email: Yup.string().email().required("Email is required."),
+    password: Yup.string()
+      .required("Password is required.")
+      .min(8, "Password must be at 8 char long"),
+    confirmPassword: Yup.string()
+      .required("Password is required.")
+      .oneOf([Yup.ref("password")], "Passwords does not match"),
+    phoneNumber: Yup.string()
+      .required("Phone number is required")
+      .matches(phoneRegExp, "Phone number is not valid"),
+  });
+
+  const formOptions = { resolver: yupResolver(formSchema) };
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<IFormSignup>(formOptions);
+  console.log(errors);
+
   return (
-    <Form title="Sign up to housemade" hasForm={true}>
-      <div
-        className={css({
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          gap: "20px",
-        })}
-      >
-        <div
-          className={css({
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            padding: "20px",
-            border: "2px solid #EEEEEE",
-          })}
-        >
-          <InputNormal
-            label="Enter your username"
+    <Form
+      title="Sign up to housemade"
+      hasForm={true}
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <div className={css(style.formWrapper as StyleObject)}>
+        <div className={css(style.cardWrapper as StyleObject)}>
+          <FormControl
+            label="Username"
             caption=""
-            placeholder="username"
-            positive=""
-            error=""
-          />
-          <InputNormal
-            label="Enter your email"
+            positive={!errors.username}
+            error={errors.username ? errors.username.message : null}
+          >
+            <Controller
+              name="username"
+              control={control}
+              defaultValue=""
+              render={({ field }) => <Input {...field} ref={null} />}
+            />
+          </FormControl>
+          <FormControl
+            label="Email"
             caption=""
-            placeholder="email"
-            positive=""
-            error=""
-          />
-          <InputPW
-            label="Enter your password"
-            placeholder="password"
-            caption="8 - 24 characters"
-            positive=""
-            error=""
-          />
-          <InputPW
+            positive={!errors.email}
+            error={errors.email ? errors.email.message : null}
+          >
+            <Controller
+              name="email"
+              control={control}
+              defaultValue=""
+              render={({ field }) => <Input {...field} ref={null} />}
+            />
+          </FormControl>
+          <FormControl
+            label="Password"
+            caption=""
+            positive={!errors.password}
+            error={errors.password ? errors.password.message : null}
+          >
+            <Controller
+              name="password"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <Input {...field} type="password" ref={null} />
+              )}
+            />
+          </FormControl>
+          <FormControl
             label="Confirm your password"
-            placeholder="password"
-            caption=""
-            positive=""
-            error=""
-          />
-          <InputPN
+            caption="match your password above"
+            positive={!errors.confirmPassword}
+            error={
+              errors.confirmPassword ? errors.confirmPassword.message : null
+            }
+          >
+            <Controller
+              name="confirmPassword"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <Input {...field} type="password" ref={null} />
+              )}
+            />
+          </FormControl>
+          <FormControl
             label="Enter your phone number"
-            caption=""
-            placeholder="email"
-            positive=""
-            error=""
-          />
+            positive={!errors.phoneNumber}
+            error={errors.phoneNumber ? errors.phoneNumber.message : null}
+          >
+            <Controller
+              name="phoneNumber"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <PhoneInput
+                  {...field}
+                  country={country}
+                  onCountryChange={onCountryChange}
+                />
+              )}
+            />
+          </FormControl>
           <Button
-            onClick={() => router.push("/authentication/OTP")}
+            type="submit"
+            // disabled={}
             overrides={{
-              BaseButton: {
-                style: ({ $theme }) => ({
-                  width: "100%",
-                }),
-              },
+              BaseButton: { style: ({ $theme }) => ({ width: "100%" }) },
             }}
           >
-            Login
+            Sign up
           </Button>
         </div>
-        <div
-          className={css({
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "20px",
-            padding: "10px 20px",
-            border: "2px solid #EEEEEE",
-          })}
-        >
+        <div className={css(style.footWrapper as StyleObject)}>
           <ParagraphMedium margin={0}>
             <span>
               Already have an account?{" "}
@@ -112,3 +194,28 @@ export default function Signup() {
     </Form>
   );
 }
+
+const style = {
+  formWrapper: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    gap: "20px",
+  },
+  cardWrapper: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    padding: "20px",
+    border: "2px solid #EEEEEE",
+  },
+  footWrapper: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: "20px",
+    padding: "10px 20px",
+    border: "2px solid #EEEEEE",
+  },
+};

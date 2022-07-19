@@ -6,7 +6,7 @@ import {
 } from "baseui/typography";
 import Form from "../../layouts/Form";
 import { useStyletron } from "baseui";
-import { InputNormal } from "../../components/common/Input";
+import { InputEmail } from "../../components/common/Input";
 import { Button } from "baseui/button";
 import { StyledLink } from "baseui/link";
 import { useRouter } from "next/router";
@@ -25,10 +25,10 @@ export default function LoginOTP() {
           border: "2px solid #EEEEEE",
         })}
       >
-        <InputNormal
+        <InputEmail
           label="Enter your user account's verified email address"
           caption="and we will send you a password reset link."
-          placeholder="enter your email address"
+          placeholder=""
           positive=""
           error=""
         />

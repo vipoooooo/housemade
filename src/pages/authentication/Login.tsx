@@ -2,20 +2,19 @@ import * as React from "react";
 import { ParagraphMedium, ParagraphXSmall } from "baseui/typography";
 import Form from "../../layouts/Form";
 import { useStyletron } from "baseui";
-import {
-  InputNormal,
-  InputPW,
-} from "../../components/common/Input";
-import { Button, KIND, SIZE, SHAPE } from "baseui/button";
+import { Button } from "baseui/button";
 import { StyledLink } from "baseui/link";
 import { useRouter } from "next/router";
+import { FormControl } from "baseui/form-control";
+import { Input } from "baseui/input";
+import { Negative } from "./Signup";
 
 export default function Login() {
   const [css, theme] = useStyletron();
-  const [value, setValue] = React.useState("");
   const router = useRouter();
+
   return (
-    <Form title="Log in to housemade" hasForm={true}>
+    <Form title="Sign up to housemade" hasForm={true} >
       <div
         className={css({
           width: "100%",
@@ -33,20 +32,32 @@ export default function Login() {
             border: "2px solid #EEEEEE",
           })}
         >
-          <InputNormal
-            label="Username or email address"
+          <FormControl
+            label="Enter your email"
             caption=""
-            placeholder="username or email address"
             positive=""
-            error=""
-          />
-          <InputPW
+          >
+            <Input
+              required
+              id="inputEmail-id"
+              // onBlur={() => setIsVisited(true)}
+              // placeholder=""
+              // overrides={shouldShowError ? { After: Negative } : {}}
+            />
+          </FormControl>
+          <FormControl
             label="Enter your password"
+            // caption="8 - 24 characters"
             caption=""
-            placeholder="password"
             positive=""
             error=""
-          />
+          >
+            <Input
+              id="inputPassword-id"
+              required
+              type="password"
+            />
+          </FormControl>
           <ParagraphXSmall margin={0}>
             <StyledLink
               href="/authentication/Reset"
@@ -59,17 +70,16 @@ export default function Login() {
             </StyledLink>
           </ParagraphXSmall>
           <Button
-            onClick={() => router.push("/authentication/Welcome")}
+            type="submit"
             overrides={{
               BaseButton: {
                 style: ({ $theme }) => ({
-                  marginTop: "20px",
                   width: "100%",
                 }),
               },
             }}
           >
-            Sign Up
+            Log in
           </Button>
         </div>
         <div

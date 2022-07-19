@@ -6,7 +6,13 @@ import { ParagraphMedium, ParagraphSmall } from "baseui/typography";
 import { Textarea } from "baseui/textarea";
 import { Button, KIND, SIZE } from "baseui/button";
 import { FileUploader } from "baseui/file-uploader";
-import { InputNormal, InputPW, InputTextArea } from "../../../components/common/Input";
+import {
+  InputEmail,
+  InputPW,
+  InputTextArea,
+} from "../../../components/common/Input";
+import { FormControl } from "baseui/form-control";
+import { Input } from "baseui/input";
 
 // https://overreacted.io/making-setinterval-declarative-with-react-hooks/
 function useInterval(callback: any, delay: number | null) {
@@ -61,7 +67,9 @@ export default function AddProjectModal({
   setIsOpen: (val: boolean) => void;
 }) {
   const [css, theme] = useStyletron();
-  const [inputvalue, inputsetValue] = React.useState("");
+  const [title, setTitle] = React.useState("");
+  const [clientName, setClientName] = React.useState("");
+  const [desc, setDesc] = React.useState("");
   const [value, setValue] = React.useState(0);
   const [progressAmount, startFakeProgress, stopFakeProgress] =
     useFakeProgress();
@@ -73,19 +81,7 @@ export default function AddProjectModal({
       title="Add Project"
       hasModal={true}
     >
-      <div
-        className={css({
-          display: "flex",
-          flexDirection: "column",
-        })}
-      >
-        <div
-          className={css({
-            display: "flex",
-            flexDirection: "column",
-            gap: "8px",
-          })}
-        >
+        <FormControl label="Cover">
           <FileUploader
             onCancel={stopFakeProgress}
             onDrop={(acceptedFiles, rejectedFiles) => {
@@ -113,32 +109,60 @@ export default function AddProjectModal({
               },
             }}
           />
-          <InputNormal
-            label="Project Title"
-            caption=""
-            placeholder="Enter your project title"
-            positive=""
-            error=""
+        </FormControl>
+        <FormControl label="Title" caption="your project title">
+          <Input
+            required
+            id="inputTitle-id"
+            value={title}
+            onChange={(event) => setTitle(event.currentTarget.value)}
+            size={SIZE.compact}
           />
-          <InputNormal
-            label="Client's name of the project"
-            caption=""
-            placeholder="Enter your project's client's name"
-            positive=""
-            error=""
+        </FormControl>
+        <FormControl
+          label="Client's name"
+          caption="what is the name of the project's client?"
+        >
+          <Input
+            required
+            id="inputClientName-id"
+            value={clientName}
+            onChange={(event) => setClientName(event.currentTarget.value)}
+            size={SIZE.compact}
           />
-          <InputTextArea
-            label="Description"
-            caption=""
-            placeholder="Describe your problem"
-            positive=""
-            error=""
+        </FormControl>
+        <FormControl
+          label="Description"
+          caption="Description your problem in details"
+        >
+          <Textarea
+            value={desc}
+            onChange={(e) => setDesc(e.currentTarget.value)}
+            size={SIZE.compact}
+            placeholder={""}
+            overrides={{
+              Input: {
+                style: {
+                  maxHeight: "300px",
+                  minHeight: "100px",
+                  minWidth: "300px",
+                  width: "100vw", // fill all available space up to parent max-width
+                  resize: "both",
+                },
+              },
+              InputContainer: {
+                style: {
+                  maxWidth: "100%",
+                  width: "min-content",
+                },
+              },
+            }}
           />
-        </div>
+        </FormControl>
         <Button onClick={() => alert("click")} kind={KIND.primary}>
           Submit
         </Button>
-      </div>
+      {/* </div> */}
     </ModalTemp>
   );
 }
