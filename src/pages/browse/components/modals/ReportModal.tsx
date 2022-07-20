@@ -1,10 +1,11 @@
 import * as React from "react";
 import { useStyletron } from "baseui";
-import ModalTemp from "../../../../layouts/ModalW";
+import ModalW from "../../../../layouts/ModalW";
 import { Block } from "baseui/block";
 import { ParagraphMedium } from "baseui/typography";
 import { Textarea } from "baseui/textarea";
 import { Button, KIND, SIZE } from "baseui/button";
+import { FormControl } from "baseui/form-control";
 
 export default function ReportModal({
   isOpen,
@@ -17,7 +18,7 @@ export default function ReportModal({
   const [inputvalue, inputsetValue] = React.useState("");
 
   return (
-    <ModalTemp
+    <ModalW
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       title="Report"
@@ -27,22 +28,11 @@ export default function ReportModal({
         className={css({
           display: "flex",
           flexDirection: "column",
-          gap: "20px",
         })}
       >
-        <div
-          className={css({
-            display: "flex",
-            flexDirection: "column",
-            gap: "8px",
-          })}
+        <FormControl
+          label="Write your report here"
         >
-          <Block display={"flex"} justifyContent={"space-between"}>
-            <ParagraphMedium margin={0}>Write your report here</ParagraphMedium>
-            <ParagraphMedium margin={0} color={theme.colors.contentTertiary}>
-              0 / 150
-            </ParagraphMedium>
-          </Block>
           <Textarea
             value={inputvalue}
             onChange={(e) => inputsetValue(e.currentTarget.value)}
@@ -66,11 +56,11 @@ export default function ReportModal({
               },
             }}
           />
-        </div>
+        </FormControl>
         <Button onClick={() => alert("click")} kind={KIND.primary}>
           Submit
         </Button>
       </div>
-    </ModalTemp>
+    </ModalW>
   );
 }

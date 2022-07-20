@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useStyletron } from "baseui";
-import ModalTemp from "../../../../layouts/ModalW";
+import ModalW from "../../../../layouts/ModalW";
 import { Block } from "baseui/block";
 import { ParagraphMedium, ParagraphSmall } from "baseui/typography";
 import { Textarea } from "baseui/textarea";
@@ -9,6 +9,7 @@ import { Input } from "baseui/input";
 import { IoLocate } from "react-icons/io5";
 import { DatePicker, ORIENTATION } from "baseui/datepicker";
 import { SIZE } from "baseui/input";
+import { FormControl } from "baseui/form-control";
 
 export default function BookingModal({
   isOpenB,
@@ -18,12 +19,12 @@ export default function BookingModal({
   setIsOpenB: (val: boolean) => void;
 }) {
   const [css, theme] = useStyletron();
-  const [inputvalue, inputsetValue] = React.useState("");
-  const [valueL, setValueL] = React.useState("");
-  const [valueD, setValueD] = React.useState([new Date()]);
+  const [date, setDate] = React.useState([new Date()]);
+  const [location, setLocation] = React.useState("");
+  const [desc, setDesc] = React.useState("");
 
   return (
-    <ModalTemp
+    <ModalW
       isOpen={isOpenB}
       setIsOpen={setIsOpenB}
       title="Booking"
@@ -33,66 +34,39 @@ export default function BookingModal({
         className={css({
           display: "flex",
           flexDirection: "column",
-          gap: "20px",
         })}
       >
-        <div
-          className={css({
-            display: "flex",
-            flexDirection: "column",
-            gap: "8px",
-          })}
+        <FormControl
+          label="Appointment Date"
+          caption="When do you want this appointment to happen"
         >
-          <ParagraphMedium margin={0}>Date</ParagraphMedium>
           <DatePicker
-            value={valueD}
+            value={date}
             onChange={({ date }) =>
-              setValueD(Array.isArray(date) ? date : [date])
+              setDate(Array.isArray(date) ? date : [date])
             }
             size={SIZE.compact}
           />
-          <ParagraphSmall margin={0} color={theme.colors.contentStateDisabled}>
-            When do you want this appointment to happen
-          </ParagraphSmall>
-        </div>
-        <div
-          className={css({
-            display: "flex",
-            flexDirection: "column",
-            gap: "8px",
-          })}
+        </FormControl>
+        <FormControl
+          label="Your Location"
+          caption="Where do you want this appointment to happen"
         >
-          <ParagraphMedium margin={0}>Your Location</ParagraphMedium>
           <Input
-            value={valueL}
-            onChange={(e) => setValueL(e.currentTarget.value)}
+            required
+            id="inputUsername-id"
+            value={location}
+            onChange={(event) => setLocation(event.currentTarget.value)}
             size={SIZE.compact}
-            endEnhancer={<IoLocate size={20} />}
-            placeholder="Input your location"
-            clearOnEscape
           />
-          <ParagraphSmall margin={0} color={theme.colors.contentStateDisabled}>
-            Where do you want this appointment to happen
-          </ParagraphSmall>
-        </div>
-        <div
-          className={css({
-            display: "flex",
-            flexDirection: "column",
-            gap: "8px",
-          })}
+        </FormControl>
+        <FormControl
+          label="Description"
+          caption="When do you want this appointment to happen"
         >
-          <Block display={"flex"} justifyContent={"space-between"}>
-            <ParagraphMedium margin={0}>
-              Write your description here
-            </ParagraphMedium>
-            <ParagraphMedium margin={0} color={theme.colors.contentTertiary}>
-              0 / 150
-            </ParagraphMedium>
-          </Block>
           <Textarea
-            value={inputvalue}
-            onChange={(e) => inputsetValue(e.currentTarget.value)}
+            value={desc}
+            onChange={(e) => setDesc(e.currentTarget.value)}
             size={SIZE.compact}
             placeholder={"description"}
             overrides={{
@@ -113,14 +87,11 @@ export default function BookingModal({
               },
             }}
           />
-          <ParagraphSmall margin={0} color={theme.colors.contentStateDisabled}>
-            Tell more about your problems
-          </ParagraphSmall>
-        </div>
+        </FormControl>
         <Button onClick={() => alert("click")} kind={KIND.primary}>
           Book
         </Button>
       </div>
-    </ModalTemp>
+    </ModalW>
   );
 }

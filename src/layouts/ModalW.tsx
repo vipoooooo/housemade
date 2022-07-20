@@ -21,12 +21,14 @@ export default function ModalW({
   setIsOpen,
   children,
   hasModal,
+  onSubmit
 }: {
   title: string;
   isOpen: boolean;
   setIsOpen: (val: boolean) => void;
   children: React.ReactNode;
   hasModal: boolean;
+  onSubmit?: React.FormEventHandler<HTMLFormElement>;
 }) {
   const [css, theme] = useStyletron();
   return (
@@ -52,7 +54,8 @@ export default function ModalW({
       }}
     >
       <ModalBody display={"flex"} flexDirection={"column"}>
-        <div
+        <form
+          onSubmit={onSubmit}
           className={css({
             display: "flex",
             flexDirection: "column",
@@ -70,8 +73,8 @@ export default function ModalW({
               <IoClose size={16} />
             </Button>
           </Block>
-          {hasModal && <main>{children}</main>}
-        </div>
+          {hasModal && <>{children}</>}
+        </form>
       </ModalBody>
     </Modal>
   );

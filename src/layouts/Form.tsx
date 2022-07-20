@@ -9,11 +9,13 @@ const Home: React.FC<{
   children: React.ReactNode;
   hasForm: boolean;
   title: string;
-}> = ({ children, hasForm, title }) => {
+  onSubmit?: React.FormEventHandler<HTMLFormElement>;
+}> = ({ children, hasForm, title, onSubmit }) => {
   const [css] = useStyletron();
   return (
     <HeadingLevel>
-      <div
+      <form
+        onSubmit={onSubmit}
         className={css({
           maxWidth: "414px",
           margin: "auto",
@@ -24,8 +26,8 @@ const Home: React.FC<{
         })}
       >
         <FormHeader title={title} />
-        {hasForm && <main>{children}</main>}
-      </div>
+        {hasForm && <>{children}</>}
+      </form>
     </HeadingLevel>
   );
 };

@@ -1,11 +1,12 @@
 import * as React from "react";
 import { useStyletron } from "baseui";
-import ModalTemp from "../../../../layouts/ModalW";
+import ModalW from "../../../../layouts/ModalW";
 import { Block } from "baseui/block";
 import { ParagraphMedium, ParagraphSmall } from "baseui/typography";
 import { Textarea } from "baseui/textarea";
 import { Button, KIND, SIZE } from "baseui/button";
 import { StarRating } from "baseui/rating";
+import { FormControl } from "baseui/form-control";
 
 export default function ReviewModal({
   isOpen,
@@ -19,7 +20,7 @@ export default function ReviewModal({
   const [value, setValue] = React.useState(0);
 
   return (
-    <ModalTemp
+    <ModalW
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       title="Review Submission"
@@ -29,14 +30,12 @@ export default function ReviewModal({
         className={css({
           display: "flex",
           flexDirection: "column",
-          gap: "20px",
         })}
       >
         <div
           className={css({
             display: "flex",
             flexDirection: "column",
-            gap: "8px",
           })}
         >
           <Block display={"flex"} justifyContent={"space-between"}>
@@ -48,40 +47,36 @@ export default function ReviewModal({
               value={value}
             />
           </Block>
-          <Block display={"flex"} justifyContent={"space-between"}>
-            <ParagraphMedium margin={0}>Write your review here</ParagraphMedium>
-            <ParagraphMedium margin={0} color={theme.colors.contentTertiary}>
-              0 / 150
-            </ParagraphMedium>
-          </Block>
-          <Textarea
-            value={inputvalue}
-            onChange={(e) => inputsetValue(e.currentTarget.value)}
-            size={SIZE.compact}
-            placeholder={"Review..."}
-            overrides={{
-              Input: {
-                style: {
-                  maxHeight: "300px",
-                  minHeight: "100px",
-                  minWidth: "300px",
-                  width: "100vw", // fill all available space up to parent max-width
-                  resize: "both",
+          <FormControl label="Write your review here">
+            <Textarea
+              value={inputvalue}
+              onChange={(e) => inputsetValue(e.currentTarget.value)}
+              size={SIZE.compact}
+              placeholder={"Review..."}
+              overrides={{
+                Input: {
+                  style: {
+                    maxHeight: "300px",
+                    minHeight: "100px",
+                    minWidth: "300px",
+                    width: "100vw", // fill all available space up to parent max-width
+                    resize: "both",
+                  },
                 },
-              },
-              InputContainer: {
-                style: {
-                  maxWidth: "100%",
-                  width: "min-content",
+                InputContainer: {
+                  style: {
+                    maxWidth: "100%",
+                    width: "min-content",
+                  },
                 },
-              },
-            }}
-          />
+              }}
+            />
+          </FormControl>
         </div>
         <Button onClick={() => alert("click")} kind={KIND.primary}>
           Submit
         </Button>
       </div>
-    </ModalTemp>
+    </ModalW>
   );
 }
