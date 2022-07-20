@@ -2,38 +2,17 @@ import * as React from "react";
 import { ParagraphMedium } from "baseui/typography";
 import Form from "../../layouts/Form";
 import { useStyletron } from "baseui";
-import { Button } from "baseui/button";
+import { Button, SIZE } from "baseui/button";
 import { StyledLink } from "baseui/link";
 import { useRouter } from "next/router";
 import { FormControl } from "baseui/form-control";
 import { Input } from "baseui/input";
 import { Alert } from "baseui/icon";
-import {
-  COUNTRIES,
-  Country,
-  PhoneInput,
-  PhoneInputNext,
-} from "baseui/phone-input";
+import { COUNTRIES, PhoneInput } from "baseui/phone-input";
 import { StyleObject } from "styletron-standard";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-
-export function Negative() {
-  const [css, theme] = useStyletron();
-  return (
-    <div
-      className={css({
-        display: "flex",
-        alignItems: "center",
-        paddingRight: theme.sizing.scale500,
-        color: theme.colors.negative400,
-      })}
-    >
-      <Alert size="18px" />
-    </div>
-  );
-}
 
 interface IFormSignup {
   username: string;
@@ -78,7 +57,6 @@ export default function Signup() {
     control,
     formState: { errors },
   } = useForm<IFormSignup>(formOptions);
-  console.log(errors);
 
   return (
     <Form
@@ -98,7 +76,9 @@ export default function Signup() {
               name="username"
               control={control}
               defaultValue=""
-              render={({ field }) => <Input {...field} ref={null} />}
+              render={({ field }) => (
+                <Input {...field} ref={null} size={SIZE.compact} />
+              )}
             />
           </FormControl>
           <FormControl
@@ -111,13 +91,15 @@ export default function Signup() {
               name="email"
               control={control}
               defaultValue=""
-              render={({ field }) => <Input {...field} ref={null} />}
+              render={({ field }) => (
+                <Input {...field} ref={null} size={SIZE.compact} />
+              )}
             />
           </FormControl>
           <FormControl
             label="Password"
-            caption=""
-            positive={!errors.password}
+            caption="password must be at least 8 characters long"
+            positive={!errors.password ? "valid password" : null}
             error={errors.password ? errors.password.message : null}
           >
             <Controller
@@ -125,7 +107,12 @@ export default function Signup() {
               control={control}
               defaultValue=""
               render={({ field }) => (
-                <Input {...field} type="password" ref={null} />
+                <Input
+                  {...field}
+                  type="password"
+                  ref={null}
+                  size={SIZE.compact}
+                />
               )}
             />
           </FormControl>
@@ -142,7 +129,12 @@ export default function Signup() {
               control={control}
               defaultValue=""
               render={({ field }) => (
-                <Input {...field} type="password" ref={null} />
+                <Input
+                  {...field}
+                  type="password"
+                  ref={null}
+                  size={SIZE.compact}
+                />
               )}
             />
           </FormControl>
@@ -160,6 +152,7 @@ export default function Signup() {
                   {...field}
                   country={country}
                   onCountryChange={onCountryChange}
+                  size={SIZE.compact}
                 />
               )}
             />
@@ -192,6 +185,22 @@ export default function Signup() {
         </div>
       </div>
     </Form>
+  );
+}
+
+export function Negative() {
+  const [css, theme] = useStyletron();
+  return (
+    <div
+      className={css({
+        display: "flex",
+        alignItems: "center",
+        paddingRight: theme.sizing.scale500,
+        color: theme.colors.negative400,
+      })}
+    >
+      <Alert size="18px" />
+    </div>
   );
 }
 
