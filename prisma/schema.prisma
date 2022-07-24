@@ -144,7 +144,6 @@ enum Role {
 
 enum Status {
     request
-    inbox
     upcoming
     completed
 }
