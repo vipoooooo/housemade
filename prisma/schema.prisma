@@ -1,35 +1,37 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// // This is your Prisma schema file,
+// // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+    provider        = "prisma-client-js"
+    previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
-    provider = "sqlite"
-    url      = "file:./db.sqlite"
-    // url      = env("DATABASE_URL")
+    provider             = "mysql"
+    url                  = env("DATABASE_URL")
+    shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
+    referentialIntegrity = "prisma"
 }
 
-model Example {
-    id String @id @default(cuid())
-}
-
-// Neccessary for Next auth
 model Account {
-    id                String  @id @default(cuid())
-    userId            String
-    type              String
-    provider          String
-    providerAccountId String
-    refresh_token     String?
-    access_token      String?
-    expires_at        Int?
-    token_type        String?
-    scope             String?
-    id_token          String?
-    session_state     String?
-    user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    id                       String   @id @default(cuid())
+    createdAt                DateTime @default(now())
+    updatedAt                DateTime @updatedAt
+    userId                   String
+    type                     String
+    provider                 String
+    providerAccountId        String
+    refresh_token            String?  @db.VarChar(500)
+    access_token             String?  @db.VarChar(500)
+    refresh_token_expires_in Int?
+    expires_at               Int?
+    token_type               String?
+    scope                    String?
+    id_token                 String?  @db.Text
+    session_state            String?
+    oauth_token_secret       String?
+    oauth_token              String?
+    user                     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@unique([provider, providerAccountId])
 }
@@ -37,19 +39,26 @@ model Account {
 model Session {
     id           String   @id @default(cuid())
     sessionToken String   @unique
-    userId       String
     expires      DateTime
-    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    user         User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId       String?
 }
 
 model User {
-    id            String    @id @default(cuid())
+    id            String        @id @default(cuid())
+    createdAt     DateTime      @default(now())
+    updatedAt     DateTime      @updatedAt
     name          String?
-    email         String?   @unique
+    email         String?       @unique
+    password      String
     emailVerified DateTime?
     image         String?
+    role          Role          @default(user)
     accounts      Account[]
     sessions      Session[]
+    worker        Worker?
+    review        Review[]
+    appointment   Appointment[]
 }
 
 model VerificationToken {
@@ -58,4 +67,83 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Category {
+    id            Int           @id @default(autoincrement())
+    coverImg      String
+    title         String
+    subcategories SubCategory[]
+}
+
+model SubCategory {
+    id         Int      @id @default(autoincrement())
+    title      String
+    category   Category @relation(fields: [categoryId], references: [id])
+    categoryId Int
+    workers    Worker[]
+}
+
+model Worker {
+    id            Int           @id @default(autoincrement())
+    link          String
+    description   String
+    bookmark      Boolean
+    verify        Boolean
+    user          User          @relation(fields: [userID], references: [id])
+    userID        String        @unique
+    review        Review[]
+    subCategories SubCategory[]
+    appointment   Appointment[]
+    project       Project[]
+}
+
+model Appointment {
+    id              Int      @id @default(autoincrement())
+    appointmentDate DateTime
+    location        String
+    description     String
+    status          Status
+    worker          Worker   @relation(fields: [workerId], references: [id])
+    workerId        Int
+    user            User     @relation(fields: [userId], references: [id])
+    userId          String
+    createdAt       DateTime @default(now())
+}
+
+model Project {
+    id          Int      @id @default(autoincrement())
+    coverImg    String
+    title       String
+    client      String
+    description String
+    worker      Worker   @relation(fields: [workerId], references: [id])
+    workerId    Int
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
+
+model Review {
+    id          Int      @id @default(autoincrement())
+    rating      Float
+    description String
+    worker      Worker   @relation(fields: [workerId], references: [id])
+    workerId    Int
+    user        User     @relation(fields: [userId], references: [id])
+    userId      String
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
+
+enum Role {
+    admin
+    user
+    worker
+}
+
+enum Status {
+    request
+    inbox
+    upcoming
+    completed
 }
