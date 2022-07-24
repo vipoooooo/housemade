@@ -89,7 +89,8 @@ model Worker {
     link          String
     description   String
     bookmark      Boolean
-    verify        Boolean
+    verify        Boolean       
+    role          Role          @default(worker)
     user          User          @relation(fields: [userID], references: [id])
     userID        String        @unique
     review        Review[]
