@@ -2,15 +2,18 @@
 // // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider        = "prisma-client-js"
-    previewFeatures = ["referentialIntegrity"]
+  provider = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+datasource db {
+  provider = "mysql"
+  url = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
 }
 
-datasource db {
-    provider             = "mysql"
-    url                  = env("DATABASE_URL")
-    shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
-    referentialIntegrity = "prisma"
+model Example {
+    id                       String   @id @default(cuid())
+    create                   String
 }
 
 model Account {
@@ -48,8 +51,8 @@ model User {
     id            String        @id @default(cuid())
     createdAt     DateTime      @default(now())
     updatedAt     DateTime      @updatedAt
-    name          String?
-    email         String?       @unique
+    username      String        
+    email         String        @unique
     password      String
     emailVerified DateTime?
     image         String?
@@ -79,8 +82,8 @@ model Category {
 model SubCategory {
     id         Int      @id @default(autoincrement())
     title      String
-    category   Category @relation(fields: [categoryId], references: [id])
-    categoryId Int
+    category   Category? @relation(fields: [categoryId], references: [id])
+    categoryId Int?
     workers    Worker[]
 }
 

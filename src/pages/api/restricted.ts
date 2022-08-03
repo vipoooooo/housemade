@@ -1,19 +1,27 @@
 // Example of a restricted endpoint that only authenticated users can access from https://next-auth.js.org/getting-started/example
 
-import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "next-auth/react";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { unstable_getServerSession as getServerSession } from "next-auth";
+import { nextAuthOptions } from "./auth/[...nextauth]";
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const session = await getSession({ req });
+const restricted =
+  (func: GetServerSideProps) => async (ctx: GetServerSidePropsContext) => {
+    const session = await getServerSession(
+      ctx.req,
+      ctx.res,
+      nextAuthOptions
+    );
 
-  if (session) {
-    res.send({
-      content:
-        "This is protected content. You can access this content because you are signed in.",
-    });
-  } else {
-    res.send({
-      error: "You must be sign in to view the protected content on this page.",
-    });
-  }
-};
+    if (!session) {
+      return {
+        redirect: {
+          destination: "/", // login path
+          permanent: false,
+        },
+      };
+    }
+
+    return await func(ctx);
+  };
+
+export default restricted;

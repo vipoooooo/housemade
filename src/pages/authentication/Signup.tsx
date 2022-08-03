@@ -1,230 +1,92 @@
-import * as React from "react";
-import { ParagraphMedium } from "baseui/typography";
-import Form from "../../layouts/Form";
-import { useStyletron } from "baseui";
-import { Button, SIZE } from "baseui/button";
-import { StyledLink } from "baseui/link";
-import { useRouter } from "next/router";
-import { FormControl } from "baseui/form-control";
-import { Input } from "baseui/input";
-import { Alert } from "baseui/icon";
-import { COUNTRIES, PhoneInput } from "baseui/phone-input";
-import { StyleObject } from "styletron-standard";
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import Link from 'next/link';
+import { useCallback, useState } from 'react';
+import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-interface IFormSignup {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  phoneNumber: string;
-}
-const phoneRegExp =
-  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
-export default function Signup() {
-  const [css, theme] = useStyletron();
+import { trpc } from '../../utils/trpc';
+import { useSession } from 'next-auth/react';
+import { ISignUp, signUpSchema } from '../../utils/auth-validation';
+
+const SignUp: NextPage = () => {
   const router = useRouter();
-
-  const [country, setCountry] = React.useState(COUNTRIES.KH);
-  const onCountryChange = (event: any) => setCountry(event.option);
-
-  const onSubmit: SubmitHandler<IFormSignup> = (data) => {
-    console.log(data, country);
-  };
-
-  const formSchema = Yup.object().shape({
-    username: Yup.string()
-      .required("Username is required.")
-      .max(30, "Username must below 30 char long"),
-    email: Yup.string().email().required("Email is required."),
-    password: Yup.string()
-      .required("Password is required.")
-      .min(8, "Password must be at 8 char long"),
-    confirmPassword: Yup.string()
-      .required("Password is required.")
-      .oneOf([Yup.ref("password")], "Passwords does not match"),
-    phoneNumber: Yup.string()
-      .required("Phone number is required")
-      .matches(phoneRegExp, "Phone number is not valid"),
+  const { register, handleSubmit } = useForm<ISignUp>({
+    resolver: zodResolver(signUpSchema),
   });
+  const { status } = useSession();
 
-  const formOptions = { resolver: yupResolver(formSchema) };
-  const {
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm<IFormSignup>(formOptions);
+  if(status === 'authenticated') {
+    router.push('/dashboard')
+  }
 
-  return (
-    <Form
-      title="Sign up to housemade"
-      hasForm={true}
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <div className={css(style.formWrapper as StyleObject)}>
-        <div className={css(style.cardWrapper as StyleObject)}>
-          <FormControl
-            label="Username"
-            caption=""
-            positive={!errors.username}
-            error={errors.username ? errors.username.message : null}
-          >
-            <Controller
-              name="username"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <Input {...field} ref={null} size={SIZE.compact} />
-              )}
-            />
-          </FormControl>
-          <FormControl
-            label="Email"
-            caption=""
-            positive={!errors.email}
-            error={errors.email ? errors.email.message : null}
-          >
-            <Controller
-              name="email"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <Input {...field} ref={null} size={SIZE.compact} />
-              )}
-            />
-          </FormControl>
-          <FormControl
-            label="Password"
-            caption="password must be at least 8 characters long"
-            positive={!errors.password ? "valid password" : null}
-            error={errors.password ? errors.password.message : null}
-          >
-            <Controller
-              name="password"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  type="password"
-                  ref={null}
-                  size={SIZE.compact}
-                />
-              )}
-            />
-          </FormControl>
-          <FormControl
-            label="Confirm your password"
-            caption="match your password above"
-            positive={!errors.confirmPassword}
-            error={
-              errors.confirmPassword ? errors.confirmPassword.message : null
-            }
-          >
-            <Controller
-              name="confirmPassword"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  type="password"
-                  ref={null}
-                  size={SIZE.compact}
-                />
-              )}
-            />
-          </FormControl>
-          <FormControl
-            label="Enter your phone number"
-            positive={!errors.phoneNumber}
-            error={errors.phoneNumber ? errors.phoneNumber.message : null}
-          >
-            <Controller
-              name="phoneNumber"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <PhoneInput
-                  {...field}
-                  country={country}
-                  onCountryChange={onCountryChange}
-                  size={SIZE.compact}
-                />
-              )}
-            />
-          </FormControl>
-          <Button
-            type="submit"
-            // disabled={}
-            overrides={{
-              BaseButton: { style: ({ $theme }) => ({ width: "100%" }) },
-            }}
-          >
-            Sign up
-          </Button>
-        </div>
-        <div className={css(style.footWrapper as StyleObject)}>
-          <ParagraphMedium margin={0}>
-            <span>
-              Already have an account?{" "}
-              <StyledLink
-                href="/authentication/Login"
-                style={{
-                  textDecoration: "none",
-                  color: theme.colors.accent,
-                }}
-              >
-                Log in
-              </StyledLink>
-            </span>
-          </ParagraphMedium>
-        </div>
-      </div>
-    </Form>
+  const { mutateAsync, error } = trpc.useMutation(['auth.signup']);
+  console.log(error, 'signup eror');
+  const onSubmit = useCallback(
+    async (data: ISignUp) => {
+      try {
+        const result = await mutateAsync(data);
+        if (result.status === 201) {
+          router.push('/');
+        }
+      } catch (err) {}
+    },
+    [mutateAsync, router]
   );
-}
 
-export function Negative() {
-  const [css, theme] = useStyletron();
   return (
-    <div
-      className={css({
-        display: "flex",
-        alignItems: "center",
-        paddingRight: theme.sizing.scale500,
-        color: theme.colors.negative400,
-      })}
-    >
-      <Alert size="18px" />
+    <div>
+      <Head>
+        <title>Next App - Register</title>
+        <meta name="description" content="Generated by create next app" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <main>
+        <form
+          className="flex items-center justify-center h-screen w-full"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <div className="card w-96 bg-base-100 shadow-xl">
+            <div className="card-body bg-neutral-focus">
+              <h2 className="card-title">Create an account!</h2>
+              {error && (
+                <span className="alert alert-error">{error.message}</span>
+              )}
+              <input
+                type="text"
+                placeholder="Type your username..."
+                className="input input-bordered w-full max-w-xs my-2"
+                {...register('username')}
+              />
+              <input
+                type="email"
+                placeholder="Type your email..."
+                className="input input-bordered w-full max-w-xs"
+                {...register('email')}
+              />
+              <input
+                type="password"
+                placeholder="Type your password..."
+                className="input input-bordered w-full max-w-xs my-2"
+                {...register('password')}
+              />
+              <div className="card-actions items-center justify-between">
+                <Link href="/authentication/Login" className="link">
+                  Go to login
+                </Link>
+                <button className="btn btn-secondary" type="submit">
+                  Sign Up
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </main>
     </div>
   );
-}
-
-const style = {
-  formWrapper: {
-    width: "100%",
-    display: "flex",
-    flexDirection: "column",
-    gap: "20px",
-  },
-  cardWrapper: {
-    width: "100%",
-    display: "flex",
-    flexDirection: "column",
-    padding: "20px",
-    border: "2px solid #EEEEEE",
-  },
-  footWrapper: {
-    width: "100%",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: "20px",
-    padding: "10px 20px",
-    border: "2px solid #EEEEEE",
-  },
 };
+
+export default SignUp;

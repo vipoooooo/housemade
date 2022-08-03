@@ -101,20 +101,6 @@ export default function ProfileSetting() {
           flexDirection: "column",
         })}
       >
-        <InputNormal
-          label="Username"
-          caption=""
-          placeholder="username"
-          positive=""
-          error=""
-        />
-        <InputNormal
-          label="Email"
-          caption=""
-          placeholder="email"
-          positive=""
-          error=""
-        />
         <InputPW
           label="Password"
           placeholder="password"
