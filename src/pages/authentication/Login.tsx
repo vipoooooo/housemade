@@ -1,17 +1,29 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
+import Image from "next/image";
 import { useCallback, useState } from "react";
 import { signIn, SignInResponse, useSession } from "next-auth/react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { loginSchema, ILogin } from "../../utils/auth-validation";
 import { useRouter } from "next/router";
+import { useStyletron } from "baseui";
+import Form from "../../layouts/Form";
+import { FormControl } from "baseui/form-control";
+import { Input } from "baseui/input";
+import { Button, SIZE } from "baseui/button";
+import { ParagraphMedium, ParagraphXSmall } from "baseui/typography";
+import { StyledLink } from "baseui/link";
+import {Notification, KIND} from 'baseui/notification';
 
 const LogIn: NextPage = () => {
   const router = useRouter();
-  const { register, handleSubmit } = useForm<ILogin>({
+  const [css, theme] = useStyletron();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ILogin>({
     resolver: zodResolver(loginSchema),
   });
   const [error, setError] = useState<SignInResponse["error"]>();
@@ -25,14 +37,13 @@ const LogIn: NextPage = () => {
   const onSubmit = useCallback(async (data: ILogin) => {
     await signIn("credentials", {
       ...data,
-      callbackUrl: "/dashboard",
+      callbackUrl: "/browse/Browse",
       redirect: false,
     }).then((res) => {
-      console.log(res, "logooin")
       if (res?.ok) {
-        router.push("/dashboard");
+        router.push("/browse/Browse");
       } else {
-        setError('Invalid credentials!');
+        setError("Invalid credentials!");
       }
     });
   }, []);
@@ -46,38 +57,119 @@ const LogIn: NextPage = () => {
       </Head>
 
       <main>
-        <form
-          className="flex items-center justify-center h-screen w-full"
+        <Form
+          title="Sign up to housemade"
+          hasForm={true}
           onSubmit={handleSubmit(onSubmit)}
         >
-          <div className="card w-96 bg-base-100 shadow-xl">
-            <div className="card-body bg-neutral-focus">
-              <h2 className="card-title">Welcome back!</h2>
-              {error && <span className="alert alert-error">{error}</span>}
-              <input
-                type="email"
-                placeholder="Type your email..."
-                className="input input-bordered w-full max-w-xs mt-2"
-                {...register("email")}
-              />
-              <input
-                type="password"
-                placeholder="Type your password..."
-                className="input input-bordered w-full max-w-xs my-2"
-                {...register("password")}
-              />
-              <input type="submit" hidden />
-              <div className="card-actions items-center justify-between">
-                <Link href="/authentication/Signup" className="link">
-                  Go to sign up
-                </Link>
-                <button className="btn btn-secondary" type="submit">
-                  Login
-                </button>
-              </div>
+          <div
+            className={css({
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              gap: "20px",
+            })}
+          >
+            <div
+              className={css({
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+
+                padding: "20px",
+                border: "2px solid #EEEEEE",
+              })}
+            >
+              {error && <Notification  kind={KIND.negative}>{() => "Authenticaion Error"}</Notification>}
+              <FormControl
+                label="Email"
+                caption=""
+                positive={!errors.email}
+                error={errors.email ? errors.email.message : null}
+              >
+                <Controller
+                  name="email"
+                  control={control}
+                  defaultValue=""
+                  render={({ field }) => (
+                    <Input {...field} ref={null} size={SIZE.compact} />
+                  )}
+                />
+              </FormControl>
+              <FormControl
+                label="Password"
+                caption=""
+                positive={!errors.password}
+                error={errors.password ? errors.password.message : null}
+              >
+                <Controller
+                  name="password"
+                  control={control}
+                  defaultValue=""
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      type="password"
+                      ref={null}
+                      size={SIZE.compact}
+                    />
+                  )}
+                />
+              </FormControl>
+              <Button
+                type="submit"
+                overrides={{
+                  BaseButton: {
+                    style: ({ $theme }) => ({
+                      marginBottom: "20px",
+                      width: "100%",
+                    }),
+                  },
+                }}
+              >
+                Log in
+              </Button>
+              <ParagraphXSmall margin={"0 auto"}>
+                <StyledLink
+                  onClick={() => alert("This feature is in development")}
+                  // href="/authentication/Reset"
+                  style={{
+                    textDecoration: "none",
+                    color: theme.colors.contentStateDisabled,
+                  }}
+                >
+                  Forgot Password
+                </StyledLink>
+              </ParagraphXSmall>
+            </div>
+            <div
+              className={css({
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "20px",
+                padding: "10px 20px",
+                border: "2px solid #EEEEEE",
+              })}
+            >
+              <ParagraphMedium margin={0}>
+                <span>
+                  New to housemade?{" "}
+                  <StyledLink
+                    href="/authentication/Signup"
+                    style={{
+                      textDecoration: "none",
+                      color: theme.colors.accent,
+                    }}
+                  >
+                    Create an account
+                  </StyledLink>
+                </span>
+              </ParagraphMedium>
             </div>
           </div>
-        </form>
+        </Form>
       </main>
     </div>
   );

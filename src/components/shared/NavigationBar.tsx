@@ -99,7 +99,7 @@ export default function Navigationbar() {
               onClick={() => router.push("/authentication/Login")}
               kind={KIND.tertiary}
             >
-              Login
+              Become a worker
             </Button>
             <Block display={["block", "block", "block", "none"]}>
               <Button onClick={() => setIsOpen(!isOpen)} kind={KIND.tertiary}>
