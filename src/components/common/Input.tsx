@@ -6,7 +6,6 @@ import { PinCode } from "baseui/pin-code";
 import { FormControl } from "baseui/form-control";
 import { Textarea } from "baseui/textarea";
 import { Alert } from "baseui/icon";
-import { validate as validateEmail } from "email-validator"; // add this package to your repo: `$ yarn add email-validator`
 
 function Negative() {
   const [css, theme] = useStyletron();
@@ -24,48 +23,48 @@ function Negative() {
   );
 }
 
-export function InputEmail({
-  label,
-  caption,
-  placeholder,
-  positive,
-  error,
-}: {
-  label: string;
-  caption: string;
-  placeholder: string;
-  positive: string;
-  error: string;
-}) {
-  const [css, theme] = useStyletron();
-  const [value, setValue] = React.useState("");
-  const [isValid, setIsValid] = React.useState(false);
-  const [isVisited, setIsVisited] = React.useState(false);
-  const shouldShowError = !isValid && isVisited;
-  const onChange = (event: React.FormEvent<HTMLInputElement>) => {
-    const { value } = event.currentTarget;
-    setIsValid(validateEmail(value));
-    setValue(value);
-  };
-  return (
-    <FormControl
-      label={label}
-      caption={caption}
-      positive={positive}
-      error={shouldShowError ? "Please input a valid email address" : null}
-    >
-      <Input
-        id="input-id"
-        value={value}
-        onChange={onChange}
-        onBlur={() => setIsVisited(true)}
-        error={shouldShowError}
-        placeholder={placeholder}
-        overrides={shouldShowError ? {After: Negative} : {}}
-      />
-    </FormControl>
-  );
-}
+// export function InputEmail({
+//   label,
+//   caption,
+//   placeholder,
+//   positive,
+//   error,
+// }: {
+//   label: string;
+//   caption: string;
+//   placeholder: string;
+//   positive: string;
+//   error: string;
+// }) {
+//   const [css, theme] = useStyletron();
+//   const [value, setValue] = React.useState("");
+//   const [isValid, setIsValid] = React.useState(false);
+//   const [isVisited, setIsVisited] = React.useState(false);
+//   const shouldShowError = !isValid && isVisited;
+//   const onChange = (event: React.FormEvent<HTMLInputElement>) => {
+//     const { value } = event.currentTarget;
+//     setIsValid(validateEmail(value));
+//     setValue(value);
+//   };
+//   return (
+//     <FormControl
+//       label={label}
+//       caption={caption}
+//       positive={positive}
+//       error={shouldShowError ? "Please input a valid email address" : null}
+//     >
+//       <Input
+//         id="input-id"
+//         value={value}
+//         onChange={onChange}
+//         onBlur={() => setIsVisited(true)}
+//         error={shouldShowError}
+//         placeholder={placeholder}
+//         overrides={shouldShowError ? {After: Negative} : {}}
+//       />
+//     </FormControl>
+//   );
+// }
 
 export function InputNormal({
   label,

@@ -6,6 +6,11 @@ import { HeadingMedium } from "baseui/typography";
 import Category from "../../mocks/category.const";
 import { Block } from "baseui/block";
 import { HeadingTitle } from "../../components/shared/HeadingTitle";
+import restricted from "../api/restricted";
+
+export const getServerSideProps = restricted(async ctx => {
+  return { props: {} };
+});
 
 export default function Browse() {
   return (

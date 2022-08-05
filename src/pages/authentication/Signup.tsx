@@ -1,192 +1,151 @@
-import * as React from "react";
-import { ParagraphMedium } from "baseui/typography";
-import Form from "../../layouts/Form";
-import { useStyletron } from "baseui";
-import { Button, SIZE } from "baseui/button";
-import { StyledLink } from "baseui/link";
+import type { NextPage } from "next";
+import Head from "next/head";
+import { useCallback } from "react";
 import { useRouter } from "next/router";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Form from "../../layouts/Form";
+
+import { trpc } from "../../utils/trpc";
+import { useSession } from "next-auth/react";
+import { ISignUp, signUpSchema } from "../../utils/auth-validation";
 import { FormControl } from "baseui/form-control";
 import { Input } from "baseui/input";
+import { useStyletron } from "baseui";
 import { Alert } from "baseui/icon";
-import { COUNTRIES, PhoneInput } from "baseui/phone-input";
+import { ParagraphMedium } from "baseui/typography";
+import { StyledLink } from "baseui/link";
+import { Button, SIZE } from "baseui/button";
 import { StyleObject } from "styletron-standard";
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
 
-interface IFormSignup {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  phoneNumber: string;
-}
-const phoneRegExp =
-  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-
-export default function Signup() {
-  const [css, theme] = useStyletron();
+const SignUp: NextPage = () => {
   const router = useRouter();
-
-  const [country, setCountry] = React.useState(COUNTRIES.KH);
-  const onCountryChange = (event: any) => setCountry(event.option);
-
-  const onSubmit: SubmitHandler<IFormSignup> = (data) => {
-    console.log(data, country);
-  };
-
-  const formSchema = Yup.object().shape({
-    username: Yup.string()
-      .required("Username is required.")
-      .max(30, "Username must below 30 char long"),
-    email: Yup.string().email().required("Email is required."),
-    password: Yup.string()
-      .required("Password is required.")
-      .min(8, "Password must be at 8 char long"),
-    confirmPassword: Yup.string()
-      .required("Password is required.")
-      .oneOf([Yup.ref("password")], "Passwords does not match"),
-    phoneNumber: Yup.string()
-      .required("Phone number is required")
-      .matches(phoneRegExp, "Phone number is not valid"),
-  });
-
-  const formOptions = { resolver: yupResolver(formSchema) };
+  const [css, theme] = useStyletron()
   const {
-    handleSubmit,
     control,
+    handleSubmit,
     formState: { errors },
-  } = useForm<IFormSignup>(formOptions);
+  } = useForm<ISignUp>({
+    resolver: zodResolver(signUpSchema),
+  });
+  const { status } = useSession();
+
+  if (status === "authenticated") {
+    router.push("//browse/Browse");
+  }
+
+  const { mutateAsync, error } = trpc.useMutation(["auth.signup"]);
+  console.log(error, "signup eror");
+  const onSubmit = useCallback(
+    async (data: ISignUp) => {
+      try {
+        const result = await mutateAsync(data);
+        if (result.status === 201) {
+          router.push("/authentication/Login");
+        }
+      } catch (err) {}
+    },
+    [mutateAsync, router]
+  );
 
   return (
-    <Form
-      title="Sign up to housemade"
-      hasForm={true}
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <div className={css(style.formWrapper as StyleObject)}>
-        <div className={css(style.cardWrapper as StyleObject)}>
-          <FormControl
-            label="Username"
-            caption=""
-            positive={!errors.username}
-            error={errors.username ? errors.username.message : null}
-          >
-            <Controller
-              name="username"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <Input {...field} ref={null} size={SIZE.compact} />
-              )}
-            />
-          </FormControl>
-          <FormControl
-            label="Email"
-            caption=""
-            positive={!errors.email}
-            error={errors.email ? errors.email.message : null}
-          >
-            <Controller
-              name="email"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <Input {...field} ref={null} size={SIZE.compact} />
-              )}
-            />
-          </FormControl>
-          <FormControl
-            label="Password"
-            caption="password must be at least 8 characters long"
-            positive={!errors.password ? "valid password" : null}
-            error={errors.password ? errors.password.message : null}
-          >
-            <Controller
-              name="password"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  type="password"
-                  ref={null}
-                  size={SIZE.compact}
+    <div>
+      <Head>
+        <title>Next App - Register</title>
+        <meta name="description" content="Generated by create next app" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <main>
+        <Form
+          title="Sign up to housemade"
+          hasForm={true}
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <div className={css(style.formWrapper as StyleObject)}>
+            <div className={css(style.cardWrapper as StyleObject)}>
+              <FormControl
+                label="Username"
+                caption=""
+                positive={!errors.username}
+                error={errors.username ? errors.username.message : null}
+              >
+                <Controller
+                  name="username"
+                  control={control}
+                  defaultValue=""
+                  render={({ field }) => (
+                    <Input {...field} ref={null} size={SIZE.compact} />
+                  )}
                 />
-              )}
-            />
-          </FormControl>
-          <FormControl
-            label="Confirm your password"
-            caption="match your password above"
-            positive={!errors.confirmPassword}
-            error={
-              errors.confirmPassword ? errors.confirmPassword.message : null
-            }
-          >
-            <Controller
-              name="confirmPassword"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  type="password"
-                  ref={null}
-                  size={SIZE.compact}
+              </FormControl>
+              <FormControl
+                label="Email"
+                caption=""
+                positive={!errors.email}
+                error={errors.email ? errors.email.message : null}
+              >
+                <Controller
+                  name="email"
+                  control={control}
+                  defaultValue=""
+                  render={({ field }) => (
+                    <Input {...field} ref={null} size={SIZE.compact} />
+                  )}
                 />
-              )}
-            />
-          </FormControl>
-          <FormControl
-            label="Enter your phone number"
-            positive={!errors.phoneNumber}
-            error={errors.phoneNumber ? errors.phoneNumber.message : null}
-          >
-            <Controller
-              name="phoneNumber"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <PhoneInput
-                  {...field}
-                  country={country}
-                  onCountryChange={onCountryChange}
-                  size={SIZE.compact}
+              </FormControl>
+              <FormControl
+                label="Password"
+                caption="password must be at least 8 characters long"
+                positive={!errors.password ? "valid password" : null}
+                error={errors.password ? errors.password.message : null}
+              >
+                <Controller
+                  name="password"
+                  control={control}
+                  defaultValue=""
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      type="password"
+                      ref={null}
+                      size={SIZE.compact}
+                    />
+                  )}
                 />
-              )}
-            />
-          </FormControl>
-          <Button
-            type="submit"
-            // disabled={}
-            overrides={{
-              BaseButton: { style: ({ $theme }) => ({ width: "100%" }) },
-            }}
-          >
-            Sign up
-          </Button>
-        </div>
-        <div className={css(style.footWrapper as StyleObject)}>
-          <ParagraphMedium margin={0}>
-            <span>
-              Already have an account?{" "}
-              <StyledLink
-                href="/authentication/Login"
-                style={{
-                  textDecoration: "none",
-                  color: theme.colors.accent,
+              </FormControl>
+              <Button
+                type="submit"
+                // disabled={}
+                overrides={{
+                  BaseButton: { style: ({ $theme }) => ({ width: "100%" }) },
                 }}
               >
-                Log in
-              </StyledLink>
-            </span>
-          </ParagraphMedium>
-        </div>
-      </div>
-    </Form>
+                Sign up
+              </Button>
+            </div>
+            <div className={css(style.footWrapper as StyleObject)}>
+              <ParagraphMedium margin={0}>
+                <span>
+                  Already have an account?{" "}
+                  <StyledLink
+                    href="/authentication/Login"
+                    style={{
+                      textDecoration: "none",
+                      color: theme.colors.accent,
+                    }}
+                  >
+                    Log in
+                  </StyledLink>
+                </span>
+              </ParagraphMedium>
+            </div>
+          </div>
+        </Form>
+      </main>
+    </div>
   );
-}
+};
 
 export function Negative() {
   const [css, theme] = useStyletron();
@@ -228,3 +187,5 @@ const style = {
     border: "2px solid #EEEEEE",
   },
 };
+
+export default SignUp;

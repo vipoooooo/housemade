@@ -4,6 +4,7 @@ import { HeadingTitle } from "../../components/shared/HeadingTitle";
 import { Tabs, Tab, FILL } from "baseui/tabs-motion";
 import ProfileSetting from "./ProfileSetting";
 import AppearenceSetting from "./AppearenceSetting";
+import Account from "./Account";
 
 export default function Setting() {
   const [activeKey, setActiveKey] = React.useState<React.Key>(
@@ -19,8 +20,9 @@ export default function Setting() {
       }}
       activateOnFocus
     >
-      <Tab key="0" title="Account Infomation"><ProfileSetting /></Tab>
+      <Tab key="0" title="Basic Info"><ProfileSetting /></Tab>
       <Tab key="1" title="Appearence"><AppearenceSetting /></Tab>
+      <Tab key="2" title="Account"><Account /></Tab>
     </Tabs>
     </Default>
   );
