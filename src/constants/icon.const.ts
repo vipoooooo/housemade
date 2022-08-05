@@ -44,3 +44,6 @@ export const house2 = "/assets/projectCover/house2.jpg";
 export const house3 = "/assets/projectCover/house3.jpg";
 export const house4 = "/assets/projectCover/house4.jpg";
 export const house5 = "/assets/projectCover/house5.jpg";
+
+// Landing Page
+export const CoverLanding = "/assets/landing/CoverLanding.jpg"
