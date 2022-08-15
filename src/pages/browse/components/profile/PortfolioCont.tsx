@@ -1,6 +1,6 @@
 import { Block } from "baseui/block";
 import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
-import { HeadingMedium, ParagraphSmall } from "baseui/typography";
+import { ParagraphSmall } from "baseui/typography";
 import Image from "next/image";
 import * as React from "react";
 import { useStyletron } from "baseui";
@@ -8,63 +8,95 @@ import { useRouter } from "next/router";
 import { AspectRatioBox, AspectRatioBoxBody } from "baseui/aspect-ratio-box";
 import { StyleObject } from "styletron-standard";
 import { HeadingTitle } from "../../../../components/shared/HeadingTitle";
-import { projects } from "../../../../mocks/project.const";
+import { trpc } from "../../../../utils/trpc";
+import { Skeleton } from "baseui/skeleton";
 
 export default function PortfolioCont() {
-  const [css, theme] = useStyletron();
+  const [css] = useStyletron();
   const router = useRouter();
-  const { query } = useRouter();
-  const portfolios = projects.filter(
-    (item) => item.workerId.toString() === query.id
+  const { id } = router.query;
+  // const portfolios = projects.filter(
+  //   (item) => item.workerId.toString() === query.id
+  // );
+
+  const { data, isLoading } = trpc.useQuery(
+    ["project.projects", { id: id as string }],
+    {
+      retry: false,
+    }
   );
 
   return (
     <>
-      <Block className={css({})}>
-        <HeadingTitle title="Portfolio" />
-        {/* Spacer */}
-        <Block />
-        <FlexGrid
-          flexGridColumnCount={[1, 2, 3, 2]}
-          flexGridColumnGap={["0px", '10px', '10px', '20px']}
-          flexGridRowGap={["30px"]}
-        >
-          {portfolios.map((portfolio) => (
-            <FlexGridItem key={portfolio.id.toString()}>
-              <AspectRatioBox aspectRatio={16 / 9}>
-                <AspectRatioBoxBody
+      {isLoading ? (
+        <>
+          <Block className={css({})}>
+            <HeadingTitle title="Portfolio" />
+            {/* Spacer */}
+            <Block />
+            <FlexGrid
+              flexGridColumnCount={[1, 2, 3, 2]}
+              flexGridColumnGap={["0px", "10px", "10px", "20px"]}
+              flexGridRowGap={["30px"]}
+            >
+              <FlexGridItem>
+                <ProjectSkeleton />
+              </FlexGridItem>
+              <FlexGridItem>
+                <ProjectSkeleton />
+              </FlexGridItem>
+            </FlexGrid>
+          </Block>
+        </>
+      ) : (
+        <>
+          <Block className={css({})}>
+            <HeadingTitle title="Portfolio" />
+            {/* Spacer */}
+            <Block />
+            <FlexGrid
+              flexGridColumnCount={[1, 2, 3, 2]}
+              flexGridColumnGap={["0px", "10px", "10px", "20px"]}
+              flexGridRowGap={["30px"]}
+            >
+              {data?.projects.map((project) => (
+                <FlexGridItem key={project.id.toString()}>
+                  <AspectRatioBox aspectRatio={16 / 9}>
+                    <AspectRatioBoxBody
                       onClick={() => {
-                        router.push(`/browse/Project?id=${portfolio.id}`);
+                        router.push(`/browse/Project?id=${project.id}`);
                       }}
-                  display={"flex"}
-                  flexDirection={"column"}
-                  width={"100%"}
-                  className={css(imageContainer)}
-                  overrides={{
-                    Block: {
-                      style: {
-                        cursor: "pointer",
-                      },
-                    },
-                  }}
-                >
-                  <Image
-                    alt={portfolio?.title}
-                    src={portfolio ? portfolio.coverImg : ""}
-                    objectFit={"cover"}
-                    priority
-                    layout="fill"
-                    className={css(image)}
-                  />
-                </AspectRatioBoxBody>
-              </AspectRatioBox>
-              <ParagraphSmall margin={"10px 0 0 0"}>
-                {portfolio?.title}
-              </ParagraphSmall>
-            </FlexGridItem>
-          ))}
-        </FlexGrid>
-      </Block>
+                      display={"flex"}
+                      flexDirection={"column"}
+                      width={"100%"}
+                      className={css(imageContainer)}
+                      overrides={{
+                        Block: {
+                          style: {
+                            cursor: "pointer",
+                          },
+                        },
+                      }}
+                    >
+                      <Image
+                        alt={project?.title}
+                        src={project ? project.coverImg : ""}
+                        objectFit={"cover"}
+                        priority
+                        layout="fill"
+                        className={css(image)}
+                      />
+                    </AspectRatioBoxBody>
+                  </AspectRatioBox>
+                  <ParagraphSmall margin={"10px 0 0 0"}>
+                    {project?.title}
+                  </ParagraphSmall>
+                </FlexGridItem>
+              ))}
+            </FlexGrid>
+          </Block>
+        </>
+      )}
     </>
   );
 }
@@ -82,3 +114,41 @@ const image: StyleObject = {
   position: "relative",
   height: "unset !important",
 };
+
+function ProjectSkeleton() {
+  const [css] = useStyletron();
+  return (
+    <>
+      <AspectRatioBox aspectRatio={16 / 9}>
+        <AspectRatioBoxBody
+          display={"flex"}
+          flexDirection={"column"}
+          width={"100%"}
+          marginBottom="20px"
+          className={css(imageContainer)}
+          overrides={{
+            Block: {
+              style: {
+                cursor: "pointer",
+              },
+            },
+          }}
+        >
+          <Skeleton rows={0} height="100%" width="100%" animation />
+        </AspectRatioBoxBody>
+      </AspectRatioBox>
+      <Skeleton
+        width="100px"
+        height="15px"
+        overrides={{
+          Root: {
+            style: {
+              borderRadius: "15px",
+            },
+          },
+        }}
+        animation
+      />
+    </>
+  );
+}

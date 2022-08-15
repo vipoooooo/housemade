@@ -2,7 +2,6 @@ import * as React from "react";
 import Layout from "../../layouts/Default";
 import { Block } from "baseui/block";
 import { useStyletron } from "baseui";
-import { projects } from "../../mocks/project.const";
 import { useRouter } from "next/router";
 import { AspectRatioBox, AspectRatioBoxBody } from "baseui/aspect-ratio-box";
 import Image from "next/image";
@@ -13,83 +12,89 @@ import {
   ParagraphMedium,
   ParagraphSmall,
 } from "baseui/typography";
+import { trpc } from "../../utils/trpc";
 
 export default function Project() {
   const [css, theme] = useStyletron();
   const router = useRouter();
-  const { query } = useRouter();
-  const projectFilters = projects.filter(
-    (item) => item.id.toString() === query.id
+  const { id } = router.query;
+  // const { query } = useRouter();
+  // const projectFilters = projects.filter(
+  //   (item) => item.id.toString() === query.id
+  // );
+  const { data, isLoading } = trpc.useQuery(
+    ["project.project", { id: id as string }],
+    { retry: false }
   );
   return (
     <Layout hasHeader={true}>
-      {projectFilters.map((project) => (
-        <>
-          <AspectRatioBox aspectRatio={16 / 9}>
-            <AspectRatioBoxBody
-              onClick={() => {
-                router.push(`/browse/Project?id=${project.id}`);
-              }}
-              display={"flex"}
-              flexDirection={"column"}
-              width={"100%"}
-              className={css(imageContainer)}
-              overrides={{
-                Block: {
-                  style: {
-                    cursor: "pointer",
-                  },
-                },
-              }}
-            >
-              <Image
-                alt={project?.title}
-                src={project ? project.coverImg : ""}
-                objectFit={"cover"}
-                priority
-                layout="fill"
-                className={css(image)}
-              />
-            </AspectRatioBoxBody>
-          </AspectRatioBox>
-          <Block
+      <>
+        <AspectRatioBox aspectRatio={16 / 9}>
+          <AspectRatioBoxBody
+            onClick={() => {
+              router.push(`/browse/Project?id=${data?.project?.id}`);
+            }}
             display={"flex"}
-            flexDirection={["column", "column", "row", "row"]}
-            padding={["20px 0", "30px 0", "40px 0", "50px 0"]}
+            flexDirection={"column"}
+            width={"100%"}
+            className={css(imageContainer)}
+            overrides={{
+              Block: {
+                style: {
+                  cursor: "pointer",
+                },
+              },
+            }}
+          >
+            <Image
+              alt={data?.project?.title}
+              src={data?.project ? data?.project?.coverImg : ""}
+              objectFit={"cover"}
+              priority
+              layout="fill"
+              className={css(image)}
+            />
+          </AspectRatioBoxBody>
+        </AspectRatioBox>
+        <Block
+          display={"flex"}
+          flexDirection={["column", "column", "row", "row"]}
+          padding={["20px 0", "30px 0", "40px 0", "50px 0"]}
+          className={css({
+            gap: "5%",
+          })}
+        >
+          <Block
+            flex={"0 30%"}
+            display={"flex"}
+            flexDirection={"column"}
             className={css({
-              gap: "5%",
+              gap: "10px",
             })}
           >
-            <Block
-              flex={"0 30%"}
-              display={"flex"}
-              flexDirection={"column"}
-              className={css({
-                gap: "10px",
-              })}
+            <DisplayXSmall
+              margin={0}
+              display={["block", "block", "none", "none"]}
             >
-              <DisplayXSmall
-                margin={0}
-                display={["block", "block", "none", "none"]}
-              >
-                {project.title}
-              </DisplayXSmall>
-              <DisplaySmall
-                margin={0}
-                display={["none", "none", "block", "block"]}
-              >
-                {project.title}
-              </DisplaySmall>
-              <ParagraphMedium margin={['0 0 20px 0', '0 0 20px 0', 0, 0, ]}>
-                Client : {project.client}
-              </ParagraphMedium>
-            </Block>
-            <Block flex={"0 65%"}>
-              <ParagraphSmall margin={0}>{project.description}</ParagraphSmall>
-            </Block>
+              {data?.project?.title}
+            </DisplayXSmall>
+            <DisplaySmall
+              margin={0}
+              display={["none", "none", "block", "block"]}
+            >
+              {data?.project?.title}
+            </DisplaySmall>
+            <ParagraphMedium margin={["0 0 20px 0", "0 0 20px 0", 0, 0]}>
+              Client : {data?.project?.client}
+            </ParagraphMedium>
           </Block>
-        </>
-      ))}
+          <Block flex={"0 65%"}>
+            <ParagraphSmall margin={0}>
+              {data?.project?.description}
+            </ParagraphSmall>
+          </Block>
+        </Block>
+      </>
     </Layout>
   );
 }

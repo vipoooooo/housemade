@@ -2,17 +2,20 @@ import * as React from "react";
 import Layout from "../../layouts/Default";
 import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
 import CategoryBtn from "../../components/common/CategoryBtn";
-import { HeadingMedium } from "baseui/typography";
-import Category from "../../mocks/category.const";
-import { Block } from "baseui/block";
 import { HeadingTitle } from "../../components/shared/HeadingTitle";
 import restricted from "../api/restricted";
+import { trpc } from "../../utils/trpc";
+import { KIND, Notification } from "baseui/notification";
 
-export const getServerSideProps = restricted(async ctx => {
+// FOR RESTRICTED AUTH PURPOSE
+export const getServerSideProps = restricted(async (ctx) => {
   return { props: {} };
 });
 
 export default function Browse() {
+  const { data, error, isLoading } = trpc.useQuery(["category.categories"], {
+    retry: false,
+  });
   return (
     <Layout hasHeader={true}>
       <HeadingTitle title="Browse" />
@@ -21,17 +24,26 @@ export default function Browse() {
         flexGridColumnGap="scale200"
         flexGridRowGap="scale200"
       >
-        {Category.map((category) => {
-          return (
-            <FlexGridItem key={category.id.toString()}>
-              <CategoryBtn
-                id={category.id}
-                icon={category.coverImg}
-                title={category.title}
-              />
-            </FlexGridItem>
-          );
-        })}
+        {error && (
+          <Notification kind={KIND.negative}>
+            {() => "404 not found"}
+          </Notification>
+        )}
+        {isLoading ? (
+          <span>Loading...</span>
+        ) : (
+          data?.categories.map((category) => {
+            return (
+              <FlexGridItem key={category.id.toString()}>
+                <CategoryBtn
+                  id={category.id}
+                  icon={category.coverImg}
+                  title={category.title}
+                />
+              </FlexGridItem>
+            );
+          })
+        )}
       </FlexGrid>
     </Layout>
   );

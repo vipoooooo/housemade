@@ -10,7 +10,7 @@ import { IoStar } from "@react-icons/all-files/io5/IoStar";
 import { useRouter } from "next/router";
 import { useStyletron } from "baseui";
 import { IoCheckmarkCircle } from "react-icons/io5";
-import { IWorker } from "../../constants/worker.const";
+import { IWorker } from "../../mocks/worker.const";
 
 export default function WorkerCard({ data }: { data: IWorker }) {
   const [css, theme] = useStyletron();
@@ -27,7 +27,10 @@ export default function WorkerCard({ data }: { data: IWorker }) {
             width: "100%",
             display: "flex",
             alignItems: "start",
-            padding: '5px 20px'
+            paddingTop: '5px',
+            paddingBottom: '5px',
+            paddingLeft: "20px",
+            paddingRight: "20px"
           }),
         },
       }}
@@ -59,7 +62,7 @@ export default function WorkerCard({ data }: { data: IWorker }) {
               <IoStar size={"15px"} color={theme.colors.backgroundWarning} />
             </Block>
             <ParagraphXSmall margin={0}>
-              {data.stats.rating} ({data.stats.reviewCount} review)
+              {data.stats?.rating} ({data.stats?.reviewCount} review)
             </ParagraphXSmall>
           </Block>
         </Block>
