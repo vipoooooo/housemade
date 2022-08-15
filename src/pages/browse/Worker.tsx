@@ -1,52 +1,27 @@
 import * as React from "react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import Layout from "../../layouts/Default";
 import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
-import { HeadingMedium, HeadingSmall } from "baseui/typography";
 import WorkerCard from "../../components/common/WorkerCard";
 import { StatefulButtonGroup, MODE, SIZE, SHAPE } from "baseui/button-group";
 import { Button } from "baseui/button";
 import { Block } from "baseui/block";
-import categories from "../../mocks/category.const";
-import { IWorker, workers } from "../../mocks/worker.const";
-import { skills } from "../../mocks/skill.const";
-import { HeadingTitle } from "../../components/shared/HeadingTitle";
+import { trpc } from "../../utils/trpc";
 
 export default function Worker() {
   const router = useRouter();
   const { id, skillId } = router.query;
-
-  const cotegoryData = categories.find((categ) => categ.id.toString() === id);
-
-  const skillsData = skills.filter(
-    (skill) => skill.categoryId.toString() === id
+  const subcategoryQuery = trpc.useQuery(
+    ["subcategory.subcategories", { id: id as string }],
+    { retry: false }
   );
-
-  const [workerData, setWorkerData] = React.useState<IWorker[]>([]);
-
-  React.useEffect(() => {
-    if (id) {
-      const result = workers.filter((item) => {
-        if (
-          skillId &&
-          item.skillId.toString() === skillId &&
-          item.categoryId.toString() === id
-        )
-          return item;
-        if (!skillId && item.categoryId.toString() === id) return item;
-      });
-      setWorkerData(result);
-    }
-  }, [id, skillId]);
+  const workerQuery = trpc.useQuery(
+    ["worker.workers", { id: (skillId as string) || (id as string) }],
+    { retry: false }
+  );
 
   return (
     <Layout hasHeader={true}>
-      {/* <HeadingSmall margin={0} marginBottom={"20px"}>
-        <Link href="/browse/Browse">Browse &gt;</Link>
-        {cotegoryData?.title}
-      </HeadingSmall> */}
-      <HeadingTitle title={cotegoryData?.title || ""} />
       <Block marginBottom={"20px"}>
         <StatefulButtonGroup
           size={SIZE.compact}
@@ -61,7 +36,7 @@ export default function Worker() {
           >
             All
           </Button>
-          {skillsData.map((skill) => (
+          {subcategoryQuery.data?.subcategories.map((skill) => (
             <Button
               key={skill.id.toString()}
               onClick={() => {
@@ -78,7 +53,7 @@ export default function Worker() {
         flexGridColumnGap="scale500"
         flexGridRowGap="scale500"
       >
-        {workerData.map((worker) => {
+        {workerQuery.data?.workers.map((worker) => {
           return (
             <FlexGridItem key={worker.id.toString()}>
               <WorkerCard data={worker} />

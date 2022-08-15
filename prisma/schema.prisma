@@ -2,18 +2,19 @@
 // // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
-  previewFeatures = ["referentialIntegrity"]
+    provider        = "prisma-client-js"
+    previewFeatures = ["referentialIntegrity"]
 }
+
 datasource db {
-  provider = "mysql"
-  url = env("DATABASE_URL")
-  referentialIntegrity = "prisma"
+    provider             = "mysql"
+    url                  = env("DATABASE_URL")
+    referentialIntegrity = "prisma"
 }
 
 model Example {
-    id                       String   @id @default(cuid())
-    create                   String
+    id     String @id @default(cuid())
+    create String
 }
 
 model Account {
@@ -51,7 +52,7 @@ model User {
     id            String        @id @default(cuid())
     createdAt     DateTime      @default(now())
     updatedAt     DateTime      @updatedAt
-    username      String        
+    username      String
     email         String        @unique
     password      String
     emailVerified DateTime?
@@ -73,66 +74,70 @@ model VerificationToken {
 }
 
 model Category {
-    id            Int           @id @default(autoincrement())
+    id            String        @id @default(cuid())
     coverImg      String
     title         String
     subcategories SubCategory[]
+    workers       Worker[]
 }
 
 model SubCategory {
-    id         Int      @id @default(autoincrement())
+    id         String    @id @default(cuid())
     title      String
     category   Category? @relation(fields: [categoryId], references: [id])
-    categoryId Int?
+    categoryId String?
     workers    Worker[]
 }
 
 model Worker {
-    id            Int           @id @default(autoincrement())
+    id            String        @id @default(cuid())
     link          String
     description   String
     bookmark      Boolean
-    verify        Boolean       
+    verify        Boolean
     role          Role          @default(worker)
     user          User          @relation(fields: [userID], references: [id])
     userID        String        @unique
     review        Review[]
-    subCategories SubCategory[]
+    categoryId    String?
+    category      Category?     @relation(fields: [categoryId], references: [id])
+    subcategoryId String?
+    subcategory   SubCategory?  @relation(fields: [subcategoryId], references: [id])
     appointment   Appointment[]
     project       Project[]
 }
 
 model Appointment {
-    id              Int      @id @default(autoincrement())
+    id              String   @id @default(cuid())
     appointmentDate DateTime
     location        String
     description     String
     status          Status
     worker          Worker   @relation(fields: [workerId], references: [id])
-    workerId        Int
+    workerId        String
     user            User     @relation(fields: [userId], references: [id])
     userId          String
     createdAt       DateTime @default(now())
 }
 
 model Project {
-    id          Int      @id @default(autoincrement())
+    id          String   @id @default(cuid())
     coverImg    String
     title       String
     client      String
     description String
     worker      Worker   @relation(fields: [workerId], references: [id])
-    workerId    Int
+    workerId    String
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
 }
 
 model Review {
-    id          Int      @id @default(autoincrement())
+    id          String   @id @default(cuid())
     rating      Float
     description String
     worker      Worker   @relation(fields: [workerId], references: [id])
-    workerId    Int
+    workerId    String
     user        User     @relation(fields: [userId], references: [id])
     userId      String
     createdAt   DateTime @default(now())
