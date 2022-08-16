@@ -34,7 +34,7 @@ export default function Browse() {
         ) : (
           data?.categories.map((category) => {
             return (
-              <FlexGridItem key={category.id.toString()}>
+              <FlexGridItem key={category.id}>
                 <CategoryBtn
                   id={category.id}
                   icon={category.coverImg}

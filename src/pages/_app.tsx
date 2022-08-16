@@ -5,11 +5,11 @@ import type { AppType } from "next/dist/shared/lib/utils";
 import superjson from "superjson";
 import { SessionProvider } from "next-auth/react";
 import "../styles/globals.css";
-import React from 'react';
-import App from 'next/app';
-import {Provider as StyletronProvider} from 'styletron-react';
-import {LightTheme, BaseProvider} from 'baseui';
-import {styletron} from '../helpers/styletron';
+import React from "react";
+import App from "next/app";
+import { Provider as StyletronProvider } from "styletron-react";
+import { LightTheme, BaseProvider } from "baseui";
+import { styletron } from "../helpers/styletron";
 
 const MyApp: AppType = ({
   Component,
@@ -47,11 +47,11 @@ export default withTRPC<AppRouter>({
     return {
       url,
       transformer: superjson,
-// headers: {
-//         'x-ssr': '1',
-//         'Content-Type': 'application/json',
-//         'Accept': 'application/json'
-//       },
+      // headers: {
+      //         'x-ssr': '1',
+      //         'Content-Type': 'application/json',
+      //         'Accept': 'application/json'
+      //       },
       /**
        * @link https://react-query.tanstack.com/reference/QueryClient
        */
@@ -61,5 +61,5 @@ export default withTRPC<AppRouter>({
   /**
    * @link https://trpc.io/docs/ssr
    */
-  ssr: false,
+  ssr: true,
 })(MyApp);

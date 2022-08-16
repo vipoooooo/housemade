@@ -18,83 +18,73 @@ export default function Project() {
   const [css, theme] = useStyletron();
   const router = useRouter();
   const { id } = router.query;
-  // const { query } = useRouter();
-  // const projectFilters = projects.filter(
-  //   (item) => item.id.toString() === query.id
-  // );
-  const { data, isLoading } = trpc.useQuery(
+  const { data, isLoading, isSuccess } = trpc.useQuery(
     ["project.project", { id: id as string }],
-    { retry: false }
+    { retry: false, enabled: Boolean(id) }
   );
+  const proj = data && data.project;
+
   return (
     <Layout hasHeader={true}>
-      <>
-        <AspectRatioBox aspectRatio={16 / 9}>
-          <AspectRatioBoxBody
-            onClick={() => {
-              router.push(`/browse/Project?id=${data?.project?.id}`);
-            }}
-            display={"flex"}
-            flexDirection={"column"}
-            width={"100%"}
-            className={css(imageContainer)}
-            overrides={{
-              Block: {
-                style: {
-                  cursor: "pointer",
-                },
-              },
-            }}
-          >
-            <Image
-              alt={data?.project?.title}
-              src={data?.project ? data?.project?.coverImg : ""}
-              objectFit={"cover"}
-              priority
-              layout="fill"
-              className={css(image)}
-            />
-          </AspectRatioBoxBody>
-        </AspectRatioBox>
-        <Block
-          display={"flex"}
-          flexDirection={["column", "column", "row", "row"]}
-          padding={["20px 0", "30px 0", "40px 0", "50px 0"]}
-          className={css({
-            gap: "5%",
-          })}
-        >
+      {proj === undefined || isLoading ? (
+        <>is loading...</>
+      ) : (
+        <>
+          <AspectRatioBox aspectRatio={16 / 9}>
+            <AspectRatioBoxBody
+              display={"flex"}
+              flexDirection={"column"}
+              width={"100%"}
+              className={css(imageContainer)}
+            >
+              <Image
+                alt={proj.title}
+                src={proj.coverImg}
+                objectFit={"cover"}
+                priority
+                layout="fill"
+                className={css(image)}
+              />
+            </AspectRatioBoxBody>
+          </AspectRatioBox>
           <Block
-            flex={"0 30%"}
             display={"flex"}
-            flexDirection={"column"}
+            flexDirection={["column", "column", "row", "row"]}
+            padding={["20px 0", "30px 0", "40px 0", "50px 0"]}
             className={css({
-              gap: "10px",
+              gap: "5%",
             })}
           >
-            <DisplayXSmall
-              margin={0}
-              display={["block", "block", "none", "none"]}
+            <Block
+              flex={"0 30%"}
+              display={"flex"}
+              flexDirection={"column"}
+              className={css({
+                gap: "10px",
+              })}
             >
-              {data?.project?.title}
-            </DisplayXSmall>
-            <DisplaySmall
-              margin={0}
-              display={["none", "none", "block", "block"]}
-            >
-              {data?.project?.title}
-            </DisplaySmall>
-            <ParagraphMedium margin={["0 0 20px 0", "0 0 20px 0", 0, 0]}>
-              Client : {data?.project?.client}
-            </ParagraphMedium>
+              <DisplayXSmall
+                margin={0}
+                display={["block", "block", "none", "none"]}
+              >
+                {proj.title}
+              </DisplayXSmall>
+              <DisplaySmall
+                margin={0}
+                display={["none", "none", "block", "block"]}
+              >
+                {proj.title}
+              </DisplaySmall>
+              <ParagraphMedium margin={["0 0 20px 0", "0 0 20px 0", 0, 0]}>
+                Client : {proj.client}
+              </ParagraphMedium>
+            </Block>
+            <Block flex={"0 65%"}>
+              <ParagraphSmall margin={0}>{proj.description}</ParagraphSmall>
+            </Block>
           </Block>
-          <Block flex={"0 65%"}>
-            <ParagraphSmall margin={0}>
-              {data?.project?.description}
-            </ParagraphSmall>
-          </Block>
-        </Block>
-      </>
+        </>
+      )}
     </Layout>
   );
 }
