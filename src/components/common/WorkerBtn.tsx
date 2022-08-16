@@ -1,8 +1,5 @@
 import * as React from "react";
-import {
-  ParagraphMedium,
-  ParagraphXSmall,
-} from "baseui/typography";
+import { ParagraphMedium, ParagraphXSmall } from "baseui/typography";
 import { Block } from "baseui/block";
 import { Avatar } from "baseui/avatar";
 import { Button, KIND } from "baseui/button";
@@ -10,15 +7,29 @@ import { IoStar } from "@react-icons/all-files/io5/IoStar";
 import { useRouter } from "next/router";
 import { useStyletron } from "baseui";
 import { IoCheckmarkCircle } from "react-icons/io5";
-import { IWorker } from "../../mocks/worker.const";
+import { Worker } from "@prisma/client";
 
-export default function WorkerCard({ data }: { data: IWorker }) {
+interface ActiveLinkProps {
+  id: string;
+  pfp: string;
+  username: string;
+  verify: boolean;
+  skill: string;
+}
+
+export default function WorkerBtn({
+  id,
+  pfp,
+  username,
+  verify,
+  skill,
+}: ActiveLinkProps) {
   const [css, theme] = useStyletron();
   const router = useRouter();
   return (
     <Button
       onClick={() => {
-        router.push(`/browse/Profile?id=${data.id}`);
+        router.push(`/browse/Profile?id=${id}`);
       }}
       kind={KIND.tertiary}
       overrides={{
@@ -27,16 +38,16 @@ export default function WorkerCard({ data }: { data: IWorker }) {
             width: "100%",
             display: "flex",
             alignItems: "start",
-            paddingTop: '5px',
-            paddingBottom: '5px',
+            paddingTop: "5px",
+            paddingBottom: "5px",
             paddingLeft: "20px",
-            paddingRight: "20px"
+            paddingRight: "20px",
           }),
         },
       }}
     >
       <Block width={"100%"} display={"flex"}>
-        <Avatar name="leangsuor" size="scale1600" src={data.pfp} />
+        <Avatar name={username} size="scale1600" src={pfp} />
         <Block
           display={"flex"}
           flexDirection={"column"}
@@ -45,25 +56,25 @@ export default function WorkerCard({ data }: { data: IWorker }) {
         >
           <Block display={"flex"} alignItems={"center"}>
             <ParagraphMedium
-              margin={'0 5px 0 0'}
+              margin={"0 5px 0 0"}
               $style={{ textAlign: "start" }}
             >
-              {data.username}
+              {username}
             </ParagraphMedium>
-            {data.verify ? (
+            {verify ? (
               <IoCheckmarkCircle size={"15px"} color={theme.colors.accent} />
             ) : (
               <></>
             )}
           </Block>
-          <ParagraphXSmall margin={0}>{data.occupation}</ParagraphXSmall>
+          <ParagraphXSmall margin={0}>{skill}</ParagraphXSmall>
           <Block display={"flex"}>
             <Block marginRight={"5px"}>
               <IoStar size={"15px"} color={theme.colors.backgroundWarning} />
             </Block>
-            <ParagraphXSmall margin={0}>
+            {/* <ParagraphXSmall margin={0}>
               {data.stats?.rating} ({data.stats?.reviewCount} review)
-            </ParagraphXSmall>
+            </ParagraphXSmall> */}
           </Block>
         </Block>
       </Block>

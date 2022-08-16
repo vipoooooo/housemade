@@ -2,11 +2,11 @@ import * as React from "react";
 import { useRouter } from "next/router";
 import Layout from "../../layouts/Default";
 import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
-import WorkerCard from "../../components/common/WorkerCard";
 import { StatefulButtonGroup, MODE, SIZE, SHAPE } from "baseui/button-group";
 import { Button } from "baseui/button";
 import { Block } from "baseui/block";
 import { trpc } from "../../utils/trpc";
+import WorkerBtn from "../../components/common/WorkerBtn";
 
 export default function Worker() {
   const router = useRouter();
@@ -15,7 +15,7 @@ export default function Worker() {
     ["subcategory.subcategories", { id: id as string }],
     { retry: false }
   );
-  const workerQuery = trpc.useQuery(
+  const { data, isLoading } = trpc.useQuery(
     ["worker.workers", { id: (skillId as string) || (id as string) }],
     { retry: false }
   );
@@ -53,10 +53,23 @@ export default function Worker() {
         flexGridColumnGap="scale500"
         flexGridRowGap="scale500"
       >
-        {workerQuery.data?.workers.map((worker) => {
+        {/* {workerQuery.data?.workers.map((worker) => {
           return (
             <FlexGridItem key={worker.id.toString()}>
               <WorkerCard data={worker} />
+            </FlexGridItem>
+          );
+        })} */}
+        {data?.workers.map((worker) => {
+          return (
+            <FlexGridItem key={worker.id.toString()}>
+              <WorkerBtn
+                id={worker.id}
+                pfp={worker.user.image || ""}
+                username={worker.user.username}
+                verify={worker.verify}
+                skill={worker.subcategory?.title || ""}
+              />
             </FlexGridItem>
           );
         })}

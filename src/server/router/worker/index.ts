@@ -1,5 +1,5 @@
 import * as trpc from "@trpc/server";
-import { z } from "zod";
+import { tuple, z } from "zod";
 import { createRouter } from "../context";
 import { profileSchema, workersSchema } from "./work.type";
 
@@ -8,14 +8,15 @@ export const workerRouter = createRouter()
     input: workersSchema,
     resolve: async ({ input, ctx }) => {
       const workers = await ctx.prisma.worker.findMany({
-        // where: {
-        //   OR: [
-        //     { categoryId: { equals: input.id } },
-        //     { subcategoryId: { equals: input.id } },
-        //   ],
-        // },
         where: {
-          categoryId: input.id,
+          OR: [
+            { categoryId: { equals: input.id } },
+            { subcategoryId: { equals: input.id } },
+          ],
+        },
+        include: {
+          user: true,
+          subcategory: true,
         },
       });
       console.log(workers);

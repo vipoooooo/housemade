@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import { Block } from "baseui/block";
 
 interface ActiveLinkProps {
-  id: number;
+  id: string;
   title: string;
   icon: string;
 }

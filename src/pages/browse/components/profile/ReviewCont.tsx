@@ -103,7 +103,7 @@ export default function ReviewSide() {
                         })}
                       >
                         <Avatar
-                          name="Jane Doe"
+                          name={review?.user.username}
                           size="40px"
                           src={review?.user.image || ""}
                         />

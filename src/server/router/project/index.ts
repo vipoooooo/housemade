@@ -1,6 +1,6 @@
 import * as trpc from "@trpc/server";
 import { createRouter } from "../context";
-import { projectSchema } from "./project.type";
+import { oneProjectSchema, projectSchema } from "./project.type";
 
 export const projectRouter = createRouter()
   .query("projects", {
@@ -25,11 +25,18 @@ export const projectRouter = createRouter()
     },
   })
   .query("project", {
-    input: projectSchema,
+    input: oneProjectSchema,
     resolve: async ({ ctx, input }) => {
       const project = await ctx.prisma.project.findFirst({
         where: { id: input.id },
       });
+
+      if (!project) {
+        throw new trpc.TRPCError({
+          code: "NOT_FOUND",
+          message: "project not found.",
+        });
+      }
 
       return {
         status: 200,

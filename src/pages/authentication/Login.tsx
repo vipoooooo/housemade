@@ -14,7 +14,7 @@ import { Input } from "baseui/input";
 import { Button, SIZE } from "baseui/button";
 import { ParagraphMedium, ParagraphXSmall } from "baseui/typography";
 import { StyledLink } from "baseui/link";
-import {Notification, KIND} from 'baseui/notification';
+import { Notification, KIND } from "baseui/notification";
 
 const LogIn: NextPage = () => {
   const router = useRouter();
@@ -80,7 +80,11 @@ const LogIn: NextPage = () => {
                 border: "2px solid #EEEEEE",
               })}
             >
-              {error && <Notification  kind={KIND.negative}>{() => "Authenticaion Error"}</Notification>}
+              {error && (
+                <Notification kind={KIND.negative}>
+                  {() => "Authenticaion Error"}
+                </Notification>
+              )}
               <FormControl
                 label="Email"
                 caption=""
