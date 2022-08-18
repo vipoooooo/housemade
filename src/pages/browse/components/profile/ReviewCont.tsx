@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useStyletron } from "baseui";
 import { Block } from "baseui/block";
-import { ParagraphSmall } from "baseui/typography";
+import { ParagraphSmall, ParagraphXSmall } from "baseui/typography";
 import { Avatar } from "baseui/avatar";
 import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
 import { Button, KIND, SIZE } from "baseui/button";
@@ -21,7 +21,7 @@ export default function ReviewSide() {
   const router = useRouter();
   const { id } = router.query;
 
-  const { data, isLoading } = trpc.useQuery(
+  const { data, isLoading, isFetching } = trpc.useQuery(
     ["review.reviews", { id: id as string }],
     {
       retry: false,
@@ -30,7 +30,7 @@ export default function ReviewSide() {
 
   return (
     <>
-      {isLoading ? (
+      {isLoading || isFetching ? (
         <>
           <Block display={"flex"} flexDirection={"column"}>
             <Block
@@ -64,7 +64,11 @@ export default function ReviewSide() {
         </>
       ) : (
         <>
-          <Block display={"flex"} flexDirection={"column"}>
+          <Block
+            display={"flex"}
+            flexDirection={"column"}
+            paddingBottom={"20px"}
+          >
             <Block
               display={"flex"}
               justifyContent={"space-between"}
@@ -103,9 +107,9 @@ export default function ReviewSide() {
                         })}
                       >
                         <Avatar
-                          name={review?.user.username}
+                          name={review?.client?.username || ""}
                           size="40px"
-                          src={review?.user.image || ""}
+                          src={review?.client?.image || ""}
                         />
                         <div
                           className={css({
@@ -121,14 +125,14 @@ export default function ReviewSide() {
                             })}
                           >
                             <ParagraphSmall margin={0}>
-                              {review?.user.username}
+                              {review?.client?.username}
                             </ParagraphSmall>
-                            {/* <ParagraphXSmall
-                        margin={0}
-                        color={theme.colors.contentStateDisabled}
-                      >
-                        &bull; {review?.createdAt}
-                      </ParagraphXSmall> */}
+                            <ParagraphXSmall
+                              margin={0}
+                              color={theme.colors.contentStateDisabled}
+                            >
+                              &bull; {review?.createdAt.toDateString()}
+                            </ParagraphXSmall>
                           </div>
                           <ParagraphSmall
                             margin={0}

@@ -29,73 +29,69 @@ export default function PortfolioCont() {
   return (
     <>
       {isLoading ? (
-        <>
-          <Block className={css({})}>
-            <HeadingTitle title="Portfolio" />
-            {/* Spacer */}
-            <Block />
-            <FlexGrid
-              flexGridColumnCount={[1, 2, 3, 2]}
-              flexGridColumnGap={["0px", "10px", "10px", "20px"]}
-              flexGridRowGap={["30px"]}
-            >
-              <FlexGridItem>
-                <ProjectSkeleton />
-              </FlexGridItem>
-              <FlexGridItem>
-                <ProjectSkeleton />
-              </FlexGridItem>
-            </FlexGrid>
-          </Block>
-        </>
+        <Block>
+          <HeadingTitle title="Portfolio" />
+          {/* Spacer */}
+          <Block />
+          <FlexGrid
+            flexGridColumnCount={[1, 2, 3, 2]}
+            flexGridColumnGap={["0px", "10px", "10px", "20px"]}
+            flexGridRowGap={["30px"]}
+          >
+            <FlexGridItem>
+              <ProjectSkeleton />
+            </FlexGridItem>
+            <FlexGridItem>
+              <ProjectSkeleton />
+            </FlexGridItem>
+          </FlexGrid>
+        </Block>
       ) : (
-        <>
-          <Block className={css({})}>
-            <HeadingTitle title="Portfolio" />
-            {/* Spacer */}
-            <Block />
-            <FlexGrid
-              flexGridColumnCount={[1, 2, 3, 2]}
-              flexGridColumnGap={["0px", "10px", "10px", "20px"]}
-              flexGridRowGap={["30px"]}
-            >
-              {data?.projects.map((project) => (
-                <FlexGridItem key={project.id.toString()}>
-                  <AspectRatioBox aspectRatio={16 / 9}>
-                    <AspectRatioBoxBody
-                      onClick={() => {
-                        router.push(`/browse/Project?id=${project.id}`);
-                      }}
-                      display={"flex"}
-                      flexDirection={"column"}
-                      width={"100%"}
-                      className={css(imageContainer)}
-                      overrides={{
-                        Block: {
-                          style: {
-                            cursor: "pointer",
-                          },
+        <Block>
+          <HeadingTitle title="Portfolio" />
+          {/* Spacer */}
+          <Block />
+          <FlexGrid
+            flexGridColumnCount={[1, 2, 3, 2]}
+            flexGridColumnGap={["0px", "10px", "10px", "20px"]}
+            flexGridRowGap={["30px"]}
+          >
+            {data?.projects.map((project) => (
+              <FlexGridItem key={project.id.toString()}>
+                <AspectRatioBox aspectRatio={16 / 9}>
+                  <AspectRatioBoxBody
+                    onClick={() => {
+                      router.push(`/browse/Project?id=${project.id}`);
+                    }}
+                    display={"flex"}
+                    flexDirection={"column"}
+                    width={"100%"}
+                    className={css(imageContainer)}
+                    overrides={{
+                      Block: {
+                        style: {
+                          cursor: "pointer",
                         },
-                      }}
-                    >
-                      <Image
-                        alt={project?.title}
-                        src={project ? project.coverImg : ""}
-                        objectFit={"cover"}
-                        priority
-                        layout="fill"
-                        className={css(image)}
-                      />
-                    </AspectRatioBoxBody>
-                  </AspectRatioBox>
-                  <ParagraphSmall margin={"10px 0 0 0"}>
-                    {project?.title}
-                  </ParagraphSmall>
-                </FlexGridItem>
-              ))}
-            </FlexGrid>
-          </Block>
-        </>
+                      },
+                    }}
+                  >
+                    <Image
+                      alt={project?.title}
+                      src={project ? project.coverImg : ""}
+                      objectFit={"cover"}
+                      priority
+                      layout="fill"
+                      className={css(image)}
+                    />
+                  </AspectRatioBoxBody>
+                </AspectRatioBox>
+                <ParagraphSmall margin={"10px 0 0 0"}>
+                  {project?.title}
+                </ParagraphSmall>
+              </FlexGridItem>
+            ))}
+          </FlexGrid>
+        </Block>
       )}
     </>
   );
