@@ -7,6 +7,7 @@ export const workerRouter = createRouter()
   .query("workers", {
     input: workersSchema,
     resolve: async ({ input, ctx }) => {
+      // .user
       const workers = await ctx.prisma.worker.findMany({
         where: {
           OR: [
@@ -14,6 +15,7 @@ export const workerRouter = createRouter()
             { subcategoryId: { equals: input.id } },
           ],
         },
+        // include worker
         include: {
           user: true,
           subcategory: true,

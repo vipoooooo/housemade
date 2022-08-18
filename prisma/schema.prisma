@@ -49,20 +49,28 @@ model Session {
 }
 
 model User {
-    id            String        @id @default(cuid())
-    createdAt     DateTime      @default(now())
-    updatedAt     DateTime      @updatedAt
+    id            String    @id @default(cuid())
+    createdAt     DateTime  @default(now())
+    updatedAt     DateTime  @updatedAt
     username      String
-    email         String        @unique
+    email         String    @unique
     password      String
     emailVerified DateTime?
     image         String?
-    role          Role          @default(user)
+    role          Role      @default(user)
     accounts      Account[]
     sessions      Session[]
-    worker        Worker?
-    review        Review[]
-    appointment   Appointment[]
+
+    report_client Report[] @relation("ReportSend")
+    report_worker Report[] @relation("ReportRecieve")
+
+    review_client Review[] @relation("ReviewSend")
+    review_worker Review[] @relation("ReviewRecieve")
+
+    appointment_client Appointment[] @relation("AppointmentSend")
+    appointment_worker Appointment[] @relation("AppointmentRecieve")
+
+    worker Worker?
 }
 
 model VerificationToken {
@@ -90,20 +98,17 @@ model SubCategory {
 }
 
 model Worker {
-    id            String        @id @default(cuid())
+    id            String       @id @default(cuid())
     link          String
     description   String
     bookmark      Boolean
     verify        Boolean
-    role          Role          @default(worker)
-    user          User          @relation(fields: [userID], references: [id])
-    userID        String        @unique
-    review        Review[]
+    userId        String?      @unique
+    user          User?        @relation(fields: [userId], references: [id])
     categoryId    String?
-    category      Category?     @relation(fields: [categoryId], references: [id])
+    category      Category?    @relation(fields: [categoryId], references: [id])
     subcategoryId String?
-    subcategory   SubCategory?  @relation(fields: [subcategoryId], references: [id])
-    appointment   Appointment[]
+    subcategory   SubCategory? @relation(fields: [subcategoryId], references: [id])
     project       Project[]
 }
 
@@ -113,10 +118,10 @@ model Appointment {
     location        String
     description     String
     status          Status
-    worker          Worker   @relation(fields: [workerId], references: [id])
-    workerId        String
-    user            User     @relation(fields: [userId], references: [id])
-    userId          String
+    client          User?    @relation("AppointmentSend", fields: [clientId], references: [id])
+    clientId        String?
+    worker          User?    @relation("AppointmentRecieve", fields: [workerId], references: [id])
+    workerId        String?
     createdAt       DateTime @default(now())
 }
 
@@ -136,12 +141,22 @@ model Review {
     id          String   @id @default(cuid())
     rating      Float
     description String
-    worker      Worker   @relation(fields: [workerId], references: [id])
-    workerId    String
-    user        User     @relation(fields: [userId], references: [id])
-    userId      String
+    client      User?    @relation("ReviewSend", fields: [clientId], references: [id])
+    clientId    String?
+    worker      User?    @relation("ReviewRecieve", fields: [workerId], references: [id])
+    workerId    String?
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
+}
+
+model Report {
+    id          String   @id @default(cuid())
+    description String
+    client      User?    @relation("ReportSend", fields: [clientId], references: [id])
+    clientId    String?
+    worker      User?    @relation("ReportRecieve", fields: [workerId], references: [id])
+    workerId    String?
+    createdAt   DateTime @default(now())
 }
 
 enum Role {
@@ -152,7 +167,6 @@ enum Role {
 
 enum Status {
     request
-    inbox
     upcoming
     completed
 }

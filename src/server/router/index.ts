@@ -9,6 +9,7 @@ import { subcategoryRouter } from "./subcategory";
 import { workerRouter } from "./worker";
 import { reviewRouter } from "./review";
 import { projectRouter } from "./project";
+import { reportRouter } from "./report";
 
 export const appRouter = createRouter()
   .transformer(superjson)
@@ -17,6 +18,7 @@ export const appRouter = createRouter()
   .merge("worker.", workerRouter)
   .merge("review.", reviewRouter)
   .merge("project.", projectRouter)
+  .merge("report.", reportRouter)
   .merge("auth.", authRouter);
 
 // export type definition of API

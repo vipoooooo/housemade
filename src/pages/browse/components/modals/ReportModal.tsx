@@ -5,7 +5,19 @@ import { Block } from "baseui/block";
 import { ParagraphMedium } from "baseui/typography";
 import { Textarea } from "baseui/textarea";
 import { Button, KIND, SIZE } from "baseui/button";
-import { FormControl } from "baseui/form-control";
+import { FormControl, FormControlOverrides } from "baseui/form-control";
+import { Controller, useForm } from "react-hook-form";
+import { useRouter } from "next/router";
+import {
+  IWriteReport,
+  writeReportSchema,
+} from "../../../../server/router/report/report.type";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Input } from "baseui/input";
+import { useSession } from "next-auth/react";
+import { trpc } from "../../../../utils/trpc";
+import { Notification } from "baseui/notification";
+import { Toast } from "baseui/toast";
 
 export default function ReportModal({
   isOpen,
@@ -14,8 +26,29 @@ export default function ReportModal({
   isOpen: boolean;
   setIsOpen: (val: boolean) => void;
 }) {
-  const [css, theme] = useStyletron();
-  const [inputvalue, inputsetValue] = React.useState("");
+  const [css] = useStyletron();
+  const router = useRouter();
+  const { data } = useSession();
+  const { id } = router.query;
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IWriteReport>({
+    resolver: zodResolver(writeReportSchema),
+  });
+  console.log("errors", errors);
+
+  const { mutateAsync, error } = trpc.useMutation(["report.report"]);
+  console.log(error, "adfs eror");
+
+  const onSubmit = React.useCallback(async (data: IWriteReport) => {
+    try {
+      console.log(data, "data12121");
+      const result = await mutateAsync(data);
+      setIsOpen(false);
+    } catch (err) {}
+  }, []);
 
   return (
     <ModalW
@@ -23,6 +56,7 @@ export default function ReportModal({
       setIsOpen={setIsOpen}
       title="Report"
       hasModal={true}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <div
         className={css({
@@ -30,37 +64,69 @@ export default function ReportModal({
           flexDirection: "column",
         })}
       >
-        <FormControl
-          label="Write your report here"
-        >
-          <Textarea
-            value={inputvalue}
-            onChange={(e) => inputsetValue(e.currentTarget.value)}
-            size={SIZE.compact}
-            placeholder={"report..."}
-            overrides={{
-              Input: {
-                style: {
-                  maxHeight: "300px",
-                  minHeight: "100px",
-                  minWidth: "300px",
-                  width: "100vw", // fill all available space up to parent max-width
-                  resize: "both",
-                },
-              },
-              InputContainer: {
-                style: {
-                  maxWidth: "100%",
-                  width: "min-content",
-                },
-              },
-            }}
+        <FormControl overrides={hide}>
+          <Controller
+            name="userId"
+            control={control}
+            defaultValue={data?.id as string}
+            render={({ field }) => (
+              <Input {...field} type="hidden" ref={field.ref} />
+            )}
           />
         </FormControl>
-        <Button onClick={() => alert("click")} kind={KIND.primary}>
+        <FormControl overrides={hide}>
+          <Controller
+            name="workerId"
+            control={control}
+            defaultValue={id as string}
+            render={({ field }) => (
+              <Input {...field} type="hidden" ref={field.ref} />
+            )}
+          />
+        </FormControl>
+        <FormControl label="Write your report here">
+          <Controller
+            name="description"
+            control={control}
+            render={({ field }) => (
+              <Textarea
+                {...field}
+                ref={field.ref}
+                size={SIZE.compact}
+                placeholder={"report..."}
+                overrides={{
+                  Input: {
+                    style: {
+                      maxHeight: "300px",
+                      minHeight: "100px",
+                      minWidth: "300px",
+                      width: "100vw", // fill all available space up to parent max-width
+                      resize: "both",
+                    },
+                  },
+                  InputContainer: {
+                    style: {
+                      maxWidth: "100%",
+                      width: "min-content",
+                    },
+                  },
+                }}
+              />
+            )}
+          />
+        </FormControl>
+        <Button type="submit" kind={KIND.primary}>
           Submit
         </Button>
       </div>
     </ModalW>
   );
 }
+
+export const hide: FormControlOverrides = {
+  ControlContainer: {
+    style: ({ $theme }) => ({
+      display: "none",
+    }),
+  },
+};

@@ -41,7 +41,11 @@ export default function ModalW({
       overrides={{
         Dialog: {
           style: ({ $theme }) => ({
-            borderRadius: 0,
+            // borderRadius: 0,
+            borderTopLeftRadius: 0,
+            borderTopRightRadius: 0,
+            borderBottomLeftRadius: 0,
+            borderBottomRightRadius: 0,
             // padding: 0
           }),
         },
@@ -73,7 +77,7 @@ export default function ModalW({
               <IoClose size={16} />
             </Button>
           </Block>
-          {hasModal && <>{children}</>}
+          {hasModal && children}
         </form>
       </ModalBody>
     </Modal>

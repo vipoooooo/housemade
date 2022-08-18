@@ -6,11 +6,6 @@ import { ParagraphMedium, ParagraphSmall } from "baseui/typography";
 import { Textarea } from "baseui/textarea";
 import { Button, KIND, SIZE } from "baseui/button";
 import { FileUploader } from "baseui/file-uploader";
-import {
-  InputEmail,
-  InputPW,
-  InputTextArea,
-} from "../../../components/common/Input";
 import { FormControl } from "baseui/form-control";
 import { Input } from "baseui/input";
 
@@ -81,87 +76,87 @@ export default function AddProjectModal({
       title="Add Project"
       hasModal={true}
     >
-        <FormControl label="Cover">
-          <FileUploader
-            onCancel={stopFakeProgress}
-            onDrop={(acceptedFiles, rejectedFiles) => {
-              // handle file upload...
-              console.log(acceptedFiles, rejectedFiles);
-              startFakeProgress();
-            }}
-            // progressAmount is a number from 0 - 100 which indicates the percent of file transfer completed
-            progressAmount={progressAmount}
-            progressMessage={
-              progressAmount ? `Uploading... ${progressAmount}% of 100%` : ""
-            }
-            overrides={{
-              FileDragAndDrop: {
-                style: ({ $theme }) => ({
-                  // width: "200px",
-                  height: "200px",
-                  padding: "60px 20px",
-                }),
+      <FormControl label="Cover">
+        <FileUploader
+          onCancel={stopFakeProgress}
+          onDrop={(acceptedFiles, rejectedFiles) => {
+            // handle file upload...
+            console.log(acceptedFiles, rejectedFiles);
+            startFakeProgress();
+          }}
+          // progressAmount is a number from 0 - 100 which indicates the percent of file transfer completed
+          progressAmount={progressAmount}
+          progressMessage={
+            progressAmount ? `Uploading... ${progressAmount}% of 100%` : ""
+          }
+          overrides={{
+            FileDragAndDrop: {
+              style: ({ $theme }) => ({
+                // width: "200px",
+                height: "200px",
+                padding: "60px 20px",
+              }),
+            },
+            ContentMessage: {
+              style: ({ $theme }) => ({
+                textAlign: "center",
+              }),
+            },
+          }}
+        />
+      </FormControl>
+      <FormControl label="Title" caption="your project title">
+        <Input
+          required
+          id="inputTitle-id"
+          value={title}
+          onChange={(event) => setTitle(event.currentTarget.value)}
+          size={SIZE.compact}
+        />
+      </FormControl>
+      <FormControl
+        label="Client's name"
+        caption="what is the name of the project's client?"
+      >
+        <Input
+          required
+          id="inputClientName-id"
+          value={clientName}
+          onChange={(event) => setClientName(event.currentTarget.value)}
+          size={SIZE.compact}
+        />
+      </FormControl>
+      <FormControl
+        label="Description"
+        caption="Description your problem in details"
+      >
+        <Textarea
+          value={desc}
+          onChange={(e) => setDesc(e.currentTarget.value)}
+          size={SIZE.compact}
+          placeholder={""}
+          overrides={{
+            Input: {
+              style: {
+                maxHeight: "300px",
+                minHeight: "100px",
+                minWidth: "300px",
+                width: "100vw", // fill all available space up to parent max-width
+                resize: "both",
               },
-              ContentMessage: {
-                style: ({ $theme }) => ({
-                  textAlign: "center",
-                }),
+            },
+            InputContainer: {
+              style: {
+                maxWidth: "100%",
+                width: "min-content",
               },
-            }}
-          />
-        </FormControl>
-        <FormControl label="Title" caption="your project title">
-          <Input
-            required
-            id="inputTitle-id"
-            value={title}
-            onChange={(event) => setTitle(event.currentTarget.value)}
-            size={SIZE.compact}
-          />
-        </FormControl>
-        <FormControl
-          label="Client's name"
-          caption="what is the name of the project's client?"
-        >
-          <Input
-            required
-            id="inputClientName-id"
-            value={clientName}
-            onChange={(event) => setClientName(event.currentTarget.value)}
-            size={SIZE.compact}
-          />
-        </FormControl>
-        <FormControl
-          label="Description"
-          caption="Description your problem in details"
-        >
-          <Textarea
-            value={desc}
-            onChange={(e) => setDesc(e.currentTarget.value)}
-            size={SIZE.compact}
-            placeholder={""}
-            overrides={{
-              Input: {
-                style: {
-                  maxHeight: "300px",
-                  minHeight: "100px",
-                  minWidth: "300px",
-                  width: "100vw", // fill all available space up to parent max-width
-                  resize: "both",
-                },
-              },
-              InputContainer: {
-                style: {
-                  maxWidth: "100%",
-                  width: "min-content",
-                },
-              },
-            }}
-          />
-        </FormControl>
-        <Button onClick={() => alert("click")} kind={KIND.primary}>
-          Submit
-        </Button>
+            },
+          }}
+        />
+      </FormControl>
+      <Button onClick={() => alert("click")} kind={KIND.primary}>
+        Submit
+      </Button>
       {/* </div> */}
     </ModalTemp>
   );

@@ -14,8 +14,6 @@ import { Button, KIND, SHAPE, SIZE } from "baseui/button";
 import { StarRating } from "baseui/rating";
 import ReportModal from "../modals/ReportModal";
 import BookingModal from "../modals/BookingModal";
-import { workers } from "../../../../mocks/worker.const";
-import { Ireview, reviews } from "../../../../mocks/review.const";
 import { trpc } from "../../../../utils/trpc";
 import { Skeleton } from "baseui/skeleton";
 
@@ -47,7 +45,6 @@ export default function ProfileSide() {
   return (
     <>
       {isLoading ? (
-        // <>Loading ...</>
         <>
           <Block
             position={["relative", "relative", "relative", "sticky"]}
@@ -172,9 +169,9 @@ export default function ProfileSide() {
               })}
             >
               <Avatar
-                name={data?.profile?.user.username || ""}
+                name={data?.profile?.user?.username || ""}
                 size="100px"
-                src={data?.profile?.user.image || ""}
+                src={data?.profile?.user?.image || ""}
               />
               <div
                 className={css({
@@ -185,7 +182,7 @@ export default function ProfileSide() {
               >
                 <Block display={"flex"} alignItems={"center"}>
                   <HeadingXSmall margin={"0 5px 0 0"}>
-                    {data?.profile?.user.username}
+                    {data?.profile?.user?.username}
                   </HeadingXSmall>
                   {data?.profile?.verify ? (
                     <IoCheckmarkCircle
