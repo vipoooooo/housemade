@@ -15,6 +15,8 @@ interface ActiveLinkProps {
   username: string;
   verify: boolean;
   skill: string;
+  rating: number;
+  reviewer: number;
 }
 
 export default function WorkerBtn({
@@ -23,6 +25,8 @@ export default function WorkerBtn({
   username,
   verify,
   skill,
+  rating,
+  reviewer,
 }: ActiveLinkProps) {
   const [css, theme] = useStyletron();
   const router = useRouter();
@@ -72,9 +76,9 @@ export default function WorkerBtn({
             <Block marginRight={"5px"}>
               <IoStar size={"15px"} color={theme.colors.backgroundWarning} />
             </Block>
-            {/* <ParagraphXSmall margin={0}>
-              {data.stats?.rating} ({data.stats?.reviewCount} review)
-            </ParagraphXSmall> */}
+            <ParagraphXSmall margin={0}>
+              {rating} ({reviewer} review)
+            </ParagraphXSmall>
           </Block>
         </Block>
       </Block>

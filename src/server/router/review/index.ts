@@ -13,7 +13,6 @@ export const reviewRouter = createRouter()
         },
         orderBy: { createdAt: "desc" },
       });
-
       if (!reviews.length) {
         throw new trpc.TRPCError({
           code: "NOT_FOUND",
@@ -28,19 +27,12 @@ export const reviewRouter = createRouter()
       };
     },
   })
+
   .mutation("review", {
     input: writeReviewSchema,
     resolve: async ({ ctx, input }) => {
       console.log("input", input);
 
-      // const result = await ctx.prisma.review.create({
-      //   data: {
-      //     description: input.description,
-      //     rating: input.rating,
-      //     userId: input.userId,
-      //     workerId: input.workerId,
-      //   },
-      // });
       const result = await ctx.prisma.review.upsert({
         where: {
           id: input.reviewId,

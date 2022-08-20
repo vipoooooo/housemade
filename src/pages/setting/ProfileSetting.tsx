@@ -2,7 +2,6 @@ import { useStyletron } from "baseui";
 import { Input } from "baseui/input";
 import { ParagraphMedium } from "baseui/typography";
 import * as React from "react";
-import { InputNormal, InputPN, InputPW } from "../../components/common/Input";
 import { Button, KIND, SIZE, SHAPE } from "baseui/button";
 import { FileUploader } from "baseui/file-uploader";
 import { Block } from "baseui/block";
@@ -59,8 +58,8 @@ export default function ProfileSetting() {
 
   return (
     <Block
-    display={'flex'}
-    flexDirection={['column', 'column', 'row', 'row']}
+      display={"flex"}
+      flexDirection={["column", "column", "row", "row"]}
       className={css({
         maxWidth: "700px",
         margin: "0 auto",
@@ -101,7 +100,7 @@ export default function ProfileSetting() {
           flexDirection: "column",
         })}
       >
-        <InputPW
+        {/* <InputPW
           label="Password"
           placeholder="password"
           caption=""
@@ -114,7 +113,7 @@ export default function ProfileSetting() {
           caption=""
           positive=""
           error=""
-        />
+        /> */}
         <Button onClick={() => alert("click")} kind={KIND.primary}>
           Save Changes
         </Button>

@@ -20,6 +20,8 @@ export default function Worker() {
     { retry: false }
   );
 
+  console.log(data);
+
   return (
     <Layout hasHeader={true}>
       <Block marginBottom={"20px"}>
@@ -53,22 +55,17 @@ export default function Worker() {
         flexGridColumnGap="scale500"
         flexGridRowGap="scale500"
       >
-        {/* {workerQuery.data?.workers.map((worker) => {
-          return (
-            <FlexGridItem key={worker.id.toString()}>
-              <WorkerCard data={worker} />
-            </FlexGridItem>
-          );
-        })} */}
         {data?.workers.map((worker) => {
           return (
             <FlexGridItem key={worker.id.toString()}>
               <WorkerBtn
                 id={worker.id}
-                pfp={worker.user.image || ""}
-                username={worker.user.username}
+                pfp={worker.user?.image || ""}
+                username={worker.user?.username || ""}
                 verify={worker.verify}
                 skill={worker.subcategory?.title || ""}
+                rating={worker.rating}
+                reviewer={worker.reviewer}
               />
             </FlexGridItem>
           );

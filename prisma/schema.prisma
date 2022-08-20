@@ -12,6 +12,22 @@ datasource db {
     referentialIntegrity = "prisma"
 }
 
+model VerificationToken {
+    identifier String
+    token      String   @unique
+    expires    DateTime
+
+    @@unique([identifier, token])
+}
+
+model Session {
+    id           String   @id @default(cuid())
+    sessionToken String   @unique
+    expires      DateTime
+    user         User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId       String?
+}
+
 model Example {
     id     String @id @default(cuid())
     create String
@@ -40,14 +56,6 @@ model Account {
     @@unique([provider, providerAccountId])
 }
 
-model Session {
-    id           String   @id @default(cuid())
-    sessionToken String   @unique
-    expires      DateTime
-    user         User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId       String?
-}
-
 model User {
     id            String    @id @default(cuid())
     createdAt     DateTime  @default(now())
@@ -73,12 +81,19 @@ model User {
     worker Worker?
 }
 
-model VerificationToken {
-    identifier String
-    token      String   @unique
-    expires    DateTime
-
-    @@unique([identifier, token])
+model Worker {
+    id            String       @id @default(cuid())
+    link          String
+    description   String
+    bookmark      Boolean
+    verify        Boolean
+    userId        String?      @unique
+    user          User?        @relation(fields: [userId], references: [id])
+    categoryId    String?
+    category      Category?    @relation(fields: [categoryId], references: [id])
+    subcategoryId String?
+    subcategory   SubCategory? @relation(fields: [subcategoryId], references: [id])
+    project       Project[]
 }
 
 model Category {
@@ -95,21 +110,6 @@ model SubCategory {
     category   Category? @relation(fields: [categoryId], references: [id])
     categoryId String?
     workers    Worker[]
-}
-
-model Worker {
-    id            String       @id @default(cuid())
-    link          String
-    description   String
-    bookmark      Boolean
-    verify        Boolean
-    userId        String?      @unique
-    user          User?        @relation(fields: [userId], references: [id])
-    categoryId    String?
-    category      Category?    @relation(fields: [categoryId], references: [id])
-    subcategoryId String?
-    subcategory   SubCategory? @relation(fields: [subcategoryId], references: [id])
-    project       Project[]
 }
 
 model Appointment {
