@@ -15,13 +15,16 @@ export const workerRouter = createRouter()
             { subcategoryId: { equals: input.id } },
           ],
         },
-        // include worker
         include: {
-          user: true,
+          user: {
+            include: {
+              review_worker: true,
+            },
+          },
           subcategory: true,
         },
       });
-      console.log(workers);
+
       if (!workers.length) {
         throw new trpc.TRPCError({
           code: "NOT_FOUND",
@@ -29,10 +32,24 @@ export const workerRouter = createRouter()
         });
       }
 
+      const data = workers.map((worker: any) => {
+        const totalR = worker.user.review_worker.length
+          ? worker.user.review_worker.reduce((las: number, cur: any) => {
+              return cur ? cur.rating + las : 0;
+            }, 0)
+          : 0;
+        const rating = totalR ? totalR / worker.user.review_worker.length : 0;
+        return {
+          ...worker,
+          rating,
+          reviewer: worker.user.review_worker.length,
+        };
+      });
+
       return {
         status: 200,
         message: "Here workers",
-        workers,
+        workers: data,
       };
     },
   })
@@ -42,15 +59,34 @@ export const workerRouter = createRouter()
       const profile = await ctx.prisma.worker.findFirst({
         where: { id: input.id },
         include: {
-          user: true, // Return all fields
+          user: {
+            include: {
+              review_worker: true,
+            },
+          },
           subcategory: true,
         },
       });
 
+      const totalRating = profile?.user?.review_worker.reduce(
+        (las: number, cur: any) => {
+          return cur ? cur.rating + las : 0;
+        },
+        0
+      );
+      const rating =
+        totalRating && profile?.user
+          ? totalRating / profile?.user.review_worker.length
+          : 0;
+
       return {
         status: 200,
         message: "Here profile",
-        profile,
+        profile: {
+          ...profile,
+          rating,
+          reviewer: profile?.user?.review_worker.length,
+        },
       };
     },
   });

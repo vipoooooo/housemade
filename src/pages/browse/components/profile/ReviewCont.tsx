@@ -13,8 +13,6 @@ import { Skeleton } from "baseui/skeleton";
 
 export default function ReviewSide() {
   const [css, theme] = useStyletron();
-  // const { query } = useRouter();
-  // const review = reviews.filter((item) => item.workerId.toString() === query.id);
 
   const [isOpen, setIsOpen] = React.useState(false);
 
@@ -27,6 +25,7 @@ export default function ReviewSide() {
       retry: false,
     }
   );
+  console.log(data);
 
   return (
     <>

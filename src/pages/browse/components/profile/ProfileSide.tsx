@@ -8,7 +8,7 @@ import {
   ParagraphXSmall,
   ParagraphSmall,
 } from "baseui/typography";
-import { IoAdd, IoCheckmark, IoCheckmarkCircle } from "react-icons/io5";
+import { IoAdd, IoCheckmark, IoCheckmarkCircle, IoStar } from "react-icons/io5";
 import { StyledLink } from "baseui/link";
 import { Button, KIND, SHAPE, SIZE } from "baseui/button";
 import { StarRating } from "baseui/rating";
@@ -19,21 +19,9 @@ import { Skeleton } from "baseui/skeleton";
 
 export default function ProfileSide() {
   const [css, $theme] = useStyletron();
-  // const { query } = useRouter();
   const [isBookmarked, setIsBookmark] = React.useState(false);
-  // const [value, setValue] = React.useState(4);
   const [isOpen, setIsOpen] = React.useState(false);
   const [isOpenB, setIsOpenB] = React.useState(false);
-  // const profile = workers.find((item) => item.id.toString() === query.id);
-  //   React.useEffect(() => {
-  //     if (profile) setIsBookmark(profile.bookmark);
-  //   }, [profile]);
-
-  //   const rater = reviews.filter((item) => item.workerId.toString() === query.id);
-  //   const rating = rater.reduce(
-  //     (previousValue: number, currentValue: Ireview) => previousValue + currentValue.rating,
-  // 0
-  //   ) / rater.length;
   const router = useRouter();
   const { id } = router.query;
 
@@ -199,13 +187,17 @@ export default function ProfileSide() {
                 >
                   {data?.profile?.subcategory?.title}
                 </ParagraphSmall>
-                {/* <StarRating
-              numItems={5}
-              onChange={(data) => setValue(data.value)}
-              size={15}
-              value={rating}
-              readOnly
-            /> */}
+                <Block display={"flex"}>
+                  <Block marginRight={"5px"}>
+                    <IoStar
+                      size={"15px"}
+                      color={$theme.colors.backgroundWarning}
+                    />
+                  </Block>
+                  <ParagraphXSmall margin={0}>
+                    {data?.profile?.rating} ({data?.profile?.reviewer} review)
+                  </ParagraphXSmall>
+                </Block>
               </div>
             </div>
             <div
