@@ -3,14 +3,32 @@ import { useStyletron } from "baseui";
 import { IoClose, IoHandRight } from "react-icons/io5";
 import { ParagraphSmall } from "baseui/typography";
 import { Button, KIND, SIZE } from "baseui/button";
-import { ISchedule } from "../../../constants/schedule.const";
+// import { Schedule } from "../../../constants/schedule.const";
 import ScheduleContent from "./wrapper/ScheduleContent";
 import { RequestingWrapper } from "./wrapper/RequestingWrapper";
 import RequestingModal from "./wrapper/ScheduleContentModal";
+import { Appointment } from "@prisma/client";
+import { trpc } from "../../../utils/trpc";
+import { IDeleteAppointment } from "../../../server/router/schedule/schedule.type";
+import { object } from "zod";
 
-export function Requesting({ scheduleData }: { scheduleData: ISchedule }) {
+export function Requesting({ scheduleData }: { scheduleData: any }) {
   const [css, theme] = useStyletron();
-  const [isOpen, setIsOpen] = React.useState(false);
+  const utils = trpc.useContext();
+
+  const { mutateAsync, isLoading } = trpc.useMutation([
+    "schedule.deleteAppointments",
+  ]);
+
+  const onSubmit = React.useCallback(async (data: IDeleteAppointment) => {
+    try {
+      const result = await mutateAsync(data, {
+        onSuccess: () => {
+          utils.invalidateQueries(["schedule.appointments"]);
+        },
+      });
+    } catch (err) {}
+  }, []);
   return (
     <>
       <RequestingWrapper>
@@ -24,10 +42,13 @@ export function Requesting({ scheduleData }: { scheduleData: ISchedule }) {
           }
           bg={theme.colors.backgroundLightWarning}
           title={
-            scheduleData.clientName + "want to booked on " + scheduleData.date
+            "You’re requesting an appointment with " +
+            scheduleData.worker.username +
+            " on " +
+            scheduleData.appointmentDate.toDateString()
           }
           date={scheduleData.createAt}
-          name={scheduleData.workerName}
+          name={scheduleData.worker.username}
           location={scheduleData.location}
         />
         <div
@@ -58,7 +79,9 @@ export function Requesting({ scheduleData }: { scheduleData: ISchedule }) {
             })}
           >
             <Button
-              onClick={() => alert("click")}
+              onClick={() => onSubmit({ id: scheduleData.id })}
+              isLoading={isLoading}
+              disabled={isLoading}
               kind={KIND.secondary}
               size={SIZE.compact}
               startEnhancer={<IoClose size={20} />}

@@ -3,6 +3,7 @@ import Document, {Head, Html, Main, NextScript} from 'next/document';
 import {Provider as StyletronProvider} from 'styletron-react';
 import {Server, Sheet} from 'styletron-engine-atomic';
 import {styletron} from '../helpers/styletron';
+import restricted from './api/restricted';
 
 class MyDocument extends Document<{stylesheets: Sheet[]}> {
   static async getInitialProps(context: any) {

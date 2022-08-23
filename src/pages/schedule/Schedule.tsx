@@ -11,6 +11,8 @@ import { RequestBooking } from "./components/RequestBooking";
 import { Upcoming } from "./components/Upcoming";
 import { Completed } from "./components/Completed";
 import { Requesting } from "./components/Requesting";
+import { trpc } from "../../utils/trpc";
+import { useSession } from "next-auth/react";
 
 const requestingData = schedules.filter(
   (item) => item.status === STATUS.REQUEST
@@ -21,7 +23,6 @@ const upcomingData = schedules.filter(
 const completedData = schedules.filter(
   (item) => item.status === STATUS.COMPLETED
 );
-
 // Wrapper
 export const ScheduleWrapper = ({
   children,
@@ -29,6 +30,7 @@ export const ScheduleWrapper = ({
   children: React.ReactNode;
 }) => {
   const [css] = useStyletron();
+
   return (
     <Accordion
       onChange={({ expanded }) => console.log(expanded)}
@@ -55,6 +57,11 @@ export const ScheduleWrapper = ({
 };
 
 export default function Schedule() {
+  const { data: session } = useSession();
+  const { data, isLoading } = trpc.useQuery(
+    ["schedule.appointments", { userId: session?.id as string }],
+    { retry: false }
+  );
   return (
     <Default hasHeader={true}>
       <HeadingTitle title="Schedule" />
@@ -67,27 +74,36 @@ export default function Schedule() {
         <FlexGridItem>
           <ScheduleWrapper>
             <Panel title="Requesting...">
-              {requestingData.map((item) => (
-                <Requesting scheduleData={item} key={item.id} />
-              ))}
+              {data?.appointments.map((item) => {
+                if (item.status === "request") {
+                  if (item.clientId === session?.id) {
+                    return <Requesting scheduleData={item} key={item.id} />;
+                  }
+                  return <RequestBooking scheduleData={item} key={item.id} />;
+                }
+              })}
             </Panel>
           </ScheduleWrapper>
         </FlexGridItem>
         <FlexGridItem>
           <ScheduleWrapper>
             <Panel title="Upcoming Appointment">
-              {upcomingData.map((item) => (
-                <Upcoming scheduleData={item} key={item.id} />
-              ))}
+              {data?.appointments.map((item) => {
+                if (item.status === "upcoming") {
+                  return <Upcoming scheduleData={item} key={item.id} />;
+                }
+              })}
             </Panel>
           </ScheduleWrapper>
         </FlexGridItem>
         <FlexGridItem>
           <ScheduleWrapper>
             <Panel title="Completed Appointment">
-              {completedData.map((item) => (
-                <Completed scheduleData={item} key={item.id} />
-              ))}
+              {data?.appointments.map((item) => {
+                if (item.status === "completed") {
+                  return <Completed scheduleData={item} key={item.id} />;
+                }
+              })}
             </Panel>
           </ScheduleWrapper>
         </FlexGridItem>
