@@ -13,6 +13,12 @@ import { Completed } from "./components/Completed";
 import { Requesting } from "./components/Requesting";
 import { trpc } from "../../utils/trpc";
 import { useSession } from "next-auth/react";
+import restricted from "../api/restricted";
+
+// FOR RESTRICTED AUTH PURPOSE
+export const getServerSideProps = restricted(async (ctx) => {
+  return { props: {} };
+});
 
 const requestingData = schedules.filter(
   (item) => item.status === STATUS.REQUEST
