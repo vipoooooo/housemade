@@ -3,12 +3,42 @@ import { useStyletron } from "baseui";
 import { IoCheckmark, IoClose, IoMailUnread } from "react-icons/io5";
 import { ParagraphSmall } from "baseui/typography";
 import { Button, KIND, SIZE } from "baseui/button";
-import { ISchedule } from "../../../constants/schedule.const";
 import ScheduleContent from "./wrapper/ScheduleContent";
 import { RequestingWrapper } from "./wrapper/RequestingWrapper";
+import { trpc } from "../../../utils/trpc";
+import { IDeleteAppointment, IUpdateAppointment } from "../../../server/router/schedule/schedule.type";
 
-export function RequestBooking({ scheduleData }: { scheduleData: ISchedule }) {
+export function RequestBooking({ scheduleData }: { scheduleData: any }) {
   const [css, theme] = useStyletron();
+  const utils = trpc.useContext();
+
+  const declineApp = trpc.useMutation([
+    "schedule.deleteAppointments",
+  ]);
+
+  const acceptApp = trpc.useMutation([
+    "schedule.updateAppointments",
+  ]);
+
+  const onDecline = React.useCallback(async (data: IDeleteAppointment) => {
+    try {
+      const result = await declineApp.mutateAsync(data, {
+        onSuccess: () => {
+          utils.invalidateQueries(["schedule.appointments"]);
+        },
+      });
+    } catch (err) {}
+  }, []);
+
+  const onAccept = React.useCallback(async (data: IUpdateAppointment) => {
+    try {
+      const result = await acceptApp.mutateAsync(data, {
+        onSuccess: () => {
+          utils.invalidateQueries(["schedule.appointments"]);
+        },
+      });
+    } catch (err) {}
+  }, []);
   return (
     <RequestingWrapper>
       <ScheduleContent
@@ -21,10 +51,9 @@ export function RequestBooking({ scheduleData }: { scheduleData: ISchedule }) {
         }
         bg={theme.colors.backgroundLightWarning}
         title={
-          "You’re requesting an appointment with " +
-          scheduleData.workerName +
-          " on " +
-          scheduleData.date
+          scheduleData.client.username +
+          " want to booked on " +
+          scheduleData.appointmentDate.toDateString()
         }
         date={scheduleData.createAt}
         name={scheduleData.workerName}
@@ -59,7 +88,9 @@ export function RequestBooking({ scheduleData }: { scheduleData: ISchedule }) {
           })}
         >
           <Button
-            onClick={() => alert("click")}
+            onClick={() => onDecline({ id: scheduleData.id })}
+            isLoading={declineApp.isLoading}
+            disabled={declineApp.isLoading}
             kind={KIND.secondary}
             size={SIZE.compact}
             startEnhancer={<IoClose size={20} />}
@@ -74,7 +105,9 @@ export function RequestBooking({ scheduleData }: { scheduleData: ISchedule }) {
             Decline
           </Button>
           <Button
-            onClick={() => alert("click")}
+            onClick={() => onAccept({ id: scheduleData.id })}
+            isLoading={acceptApp.isLoading}
+            disabled={acceptApp.isLoading}
             kind={KIND.primary}
             size={SIZE.compact}
             startEnhancer={<IoCheckmark size={20} />}

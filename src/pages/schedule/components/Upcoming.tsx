@@ -1,11 +1,10 @@
 import * as React from "react";
 import { useStyletron } from "baseui";
 import { IoToday } from "react-icons/io5";
-import { ISchedule } from "../../../constants/schedule.const";
 import { RequestingWrapper } from "./wrapper/RequestingWrapper";
 import ScheduleContent from "./wrapper/ScheduleContent";
 
-export function Upcoming({ scheduleData }: { scheduleData: ISchedule }) {
+export function Upcoming({ scheduleData }: { scheduleData: any }) {
   const [css, theme] = useStyletron();
   return (
     <RequestingWrapper>
@@ -18,7 +17,7 @@ export function Upcoming({ scheduleData }: { scheduleData: ISchedule }) {
           />
         }
         bg={theme.colors.backgroundLightAccent}
-        title={"Appointment on " + scheduleData.date}
+        title={"Appointment on " + scheduleData.appointmentDate.toDateString()}
         date={scheduleData.createAt}
         name={scheduleData.workerName}
         location={scheduleData.location}

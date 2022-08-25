@@ -7,6 +7,12 @@ import { Button } from "baseui/button";
 import { Block } from "baseui/block";
 import { trpc } from "../../utils/trpc";
 import WorkerBtn from "../../components/common/WorkerBtn";
+import restricted from "../api/restricted";
+
+// FOR RESTRICTED AUTH PURPOSE
+export const getServerSideProps = restricted(async (ctx) => {
+  return { props: {} };
+});
 
 export default function Worker() {
   const router = useRouter();

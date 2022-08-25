@@ -5,6 +5,12 @@ import { useStyletron } from "baseui";
 import { wrap } from "module";
 import ProfileSide from "./components/profile/ProfileSide";
 import ContentSide from "./components/profile/ContentSide";
+import restricted from "../api/restricted";
+
+// FOR RESTRICTED AUTH PURPOSE
+export const getServerSideProps = restricted(async (ctx) => {
+  return { props: {} };
+});
 
 export default function Profile() {
   const [css, theme] = useStyletron();

@@ -5,6 +5,12 @@ import { Tabs, Tab, FILL } from "baseui/tabs-motion";
 import ProfileSetting from "./ProfileSetting";
 import AppearenceSetting from "./AppearenceSetting";
 import Account from "./Account";
+import restricted from "../api/restricted";
+
+// FOR RESTRICTED AUTH PURPOSE
+export const getServerSideProps = restricted(async (ctx) => {
+  return { props: {} };
+});
 
 export default function Setting() {
   const [activeKey, setActiveKey] = React.useState<React.Key>(
