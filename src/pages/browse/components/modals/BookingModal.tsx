@@ -1,12 +1,9 @@
 import * as React from "react";
 import { useStyletron } from "baseui";
 import ModalW from "../../../../layouts/ModalW";
-import { Block } from "baseui/block";
-import { ParagraphMedium, ParagraphSmall } from "baseui/typography";
 import { Textarea } from "baseui/textarea";
 import { Button, KIND } from "baseui/button";
 import { Input } from "baseui/input";
-import { IoLocate } from "react-icons/io5";
 import { DatePicker, ORIENTATION } from "baseui/datepicker";
 import { SIZE } from "baseui/input";
 import { FormControl } from "baseui/form-control";
@@ -32,8 +29,6 @@ export default function BookingModal({
   const router = useRouter();
   const { id } = router.query;
   const { data } = useSession();
-  // const _toISOString = new Date().toISOString();
-  // const _FormatISO = formatISO(new Date());
   const {
     control,
     handleSubmit,
@@ -102,7 +97,6 @@ export default function BookingModal({
                 value={field.value}
                 onChange={({ date }) =>
                   field.onChange(Array.isArray(date) ? date[0] : [date][0])
-                  // console.log(Array.isArray(date) ? date[0] : [date][0])
                 }
                 size={SIZE.compact}
               />

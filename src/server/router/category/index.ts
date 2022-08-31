@@ -1,5 +1,4 @@
 import * as trpc from "@trpc/server";
-import { z } from "zod";
 import { createRouter } from "../context";
 import { categorySchema } from "./category.type";
 

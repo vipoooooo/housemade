@@ -11,7 +11,6 @@ import {
 import { IoAdd, IoCheckmark, IoCheckmarkCircle, IoStar } from "react-icons/io5";
 import { StyledLink } from "baseui/link";
 import { Button, KIND, SHAPE, SIZE } from "baseui/button";
-import { StarRating } from "baseui/rating";
 import ReportModal from "../modals/ReportModal";
 import BookingModal from "../modals/BookingModal";
 import { trpc } from "../../../../utils/trpc";

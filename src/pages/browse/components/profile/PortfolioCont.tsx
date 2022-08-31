@@ -15,9 +15,6 @@ export default function PortfolioCont() {
   const [css] = useStyletron();
   const router = useRouter();
   const { id } = router.query;
-  // const portfolios = projects.filter(
-  //   (item) => item.workerId.toString() === query.id
-  // );
 
   const { data, isLoading } = trpc.useQuery(
     ["project.projects", { id: id as string }],

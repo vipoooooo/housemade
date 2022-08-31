@@ -29,7 +29,7 @@ export default function ReviewSide() {
 
   return (
     <>
-      {isLoading || isFetching ? (
+      {isLoading ? (
         <>
           <Block display={"flex"} flexDirection={"column"}>
             <Block

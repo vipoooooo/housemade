@@ -2,7 +2,7 @@ import * as React from "react";
 import { useStyletron } from "baseui";
 import ModalW from "../../../../layouts/ModalW";
 import { Block } from "baseui/block";
-import { ParagraphMedium, ParagraphSmall } from "baseui/typography";
+import { ParagraphMedium } from "baseui/typography";
 import { Textarea } from "baseui/textarea";
 import { Button, KIND, SIZE } from "baseui/button";
 import { StarRating } from "baseui/rating";
@@ -54,8 +54,6 @@ export default function ReviewModal({
       return data.reviews.find((review) => review.clientId === session?.id);
     },
   });
-
-  // console.log(isLoading, isFetching);
 
   React.useEffect(() => {
     if (currentReview) {
