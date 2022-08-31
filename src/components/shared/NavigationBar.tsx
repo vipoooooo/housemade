@@ -16,6 +16,7 @@ import { Drawer, SIZE, ANCHOR } from "baseui/drawer";
 import { useRouter } from "next/router";
 import { Navlink, NavBtn } from "../common/NavItem";
 import { useActiveMenu } from "../../hooks/useActiveMenu";
+import { useSession } from "next-auth/react";
 
 const options = {
   options: [
@@ -36,6 +37,7 @@ const options = {
 
 export default function Navigationbar() {
   const [css, theme] = useStyletron();
+  const { data } = useSession();
   const [isOpen, setIsOpen] = React.useState(false);
   const { menus } = useActiveMenu();
   const router = useRouter();
@@ -96,7 +98,7 @@ export default function Navigationbar() {
               />
             </Block>
             <Button
-              onClick={() => router.push("/authentication/Login")}
+              onClick={() => router.push("/authentication/RegisterWorker")}
               kind={KIND.tertiary}
             >
               Become a worker

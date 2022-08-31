@@ -20,18 +20,7 @@ export default function Account() {
         // gap: "20px",
       })}
     >
-      <FormControl
-        label="Switch mode"
-        caption="You are currently in client mode"
-      >
-        <Button type="submit" onClick={() => signOut({ callbackUrl: "/" })}>
-          Switch to Worker
-        </Button>
-      </FormControl>
-      <FormControl
-        label="Logout"
-        caption="If click, you will be sign out"
-      >
+      <FormControl label="Logout" caption="If click, you will be sign out">
         <Button type="submit" onClick={() => signOut({ callbackUrl: "/" })}>
           Log out
         </Button>

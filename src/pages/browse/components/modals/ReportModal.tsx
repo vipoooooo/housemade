@@ -1,8 +1,6 @@
 import * as React from "react";
 import { useStyletron } from "baseui";
 import ModalW from "../../../../layouts/ModalW";
-import { Block } from "baseui/block";
-import { ParagraphMedium } from "baseui/typography";
 import { Textarea } from "baseui/textarea";
 import { Button, KIND, SIZE } from "baseui/button";
 import { FormControl, FormControlOverrides } from "baseui/form-control";
@@ -16,8 +14,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "baseui/input";
 import { useSession } from "next-auth/react";
 import { trpc } from "../../../../utils/trpc";
-import { Notification } from "baseui/notification";
-import { Toast } from "baseui/toast";
 
 export default function ReportModal({
   isOpen,

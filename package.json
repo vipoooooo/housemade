@@ -42,6 +42,7 @@
     "styletron-react": "^6.0.2",
     "superjson": "^1.9.1",
     "ts-jest": "^27.0.7",
+    "uuid": "^8.3.2",
     "yup": "^0.32.11",
     "zod": "^3.17.3"
   },
@@ -49,6 +50,7 @@
     "@types/node": "18.0.0",
     "@types/react": "18.0.14",
     "@types/react-dom": "18.0.5",
+    "@types/uuid": "^8.3.4",
     "@types/validator": "^13.7.4",
     "eslint": "8.18.0",
     "eslint-config-next": "12.1.6",

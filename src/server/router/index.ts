@@ -2,7 +2,6 @@
 import { createRouter } from "./context";
 import superjson from "superjson";
 
-import { exampleRouter } from "./example";
 import { authRouter } from "./auth";
 import { categoryRouter } from "./category";
 import { subcategoryRouter } from "./subcategory";
@@ -11,6 +10,7 @@ import { reviewRouter } from "./review";
 import { projectRouter } from "./project";
 import { reportRouter } from "./report";
 import { scheduleRouter } from "./schedule";
+import { userRouter } from "./user";
 
 export const appRouter = createRouter()
   .transformer(superjson)
@@ -21,6 +21,7 @@ export const appRouter = createRouter()
   .merge("project.", projectRouter)
   .merge("report.", reportRouter)
   .merge("schedule.", scheduleRouter)
+  .merge("user.", userRouter)
   .merge("auth.", authRouter);
 
 // export type definition of API

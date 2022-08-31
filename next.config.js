@@ -6,6 +6,7 @@ const nextConfig = {
       "images.unsplash.com",
       "media0.giphy.com",
       "encrypted-tbn0.gstatic.com",
+      "i.pinimg.com",
     ],
   },
 };
