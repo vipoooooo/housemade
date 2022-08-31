@@ -1,6 +1,6 @@
 import * as trpc from "@trpc/server";
 import { createRouter } from "../context";
-import { oneProjectSchema, projectSchema } from "./project.type";
+import { oneProjectSchema, projectSchema, writeProjectSchema } from "./project.type";
 
 export const projectRouter = createRouter()
   .query("projects", {
@@ -43,5 +43,27 @@ export const projectRouter = createRouter()
         message: "Here project",
         project,
       };
+    },
+  })
+
+  .mutation("writeProject", {
+    input: writeProjectSchema,
+    resolve: async({ ctx, input}) => {
+
+      const result = await ctx.prisma.project.create({
+        data:{
+          // coverImg: input.coverImg,
+          title: input.title,
+          description: input.description,
+          client: input.client,
+          workerId: input.workerId,
+        }
+      });
+
+      return {
+        status: 200,
+        message: "create project successfully",
+        result,
+      }
     },
   });

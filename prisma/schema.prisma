@@ -127,7 +127,7 @@ model Appointment {
 
 model Project {
     id          String   @id @default(cuid())
-    coverImg    String
+    coverImg    String?
     title       String
     client      String
     description String

@@ -44,6 +44,15 @@ export default function BasicInfo() {
   const sublist = trpc.useQuery(["subcategory.subcategorylist"], {
     retry: false,
   });
+  const categoryQuery = trpc.useQuery(["category.categoriesWithSubcategory"], {
+    retry: false,
+  });
+  console.log(categoryQuery)
+  // const options = {
+  //   __ungrouped: [],
+  //   A: [{ id: 1, label: 'AA' }],
+  //   B: [{ id: 1, label: 'BA' }, { id: 1, label: 'BB' }]
+  // }
 
   React.useEffect(() => {
     const user = userQuery.data?.user;
@@ -54,6 +63,21 @@ export default function BasicInfo() {
       setValue("email", user.email);
     }
   }, [userQuery.data?.user]);
+
+  const [skill, setSkill] = React.useState({__ungrouped: []});
+  console.log(skill)
+  React.useEffect(() => {
+    const categories = categoryQuery.data?.categories;
+    if (categories) {
+      setSkill({ __ungrouped: [], ...categoryQuery.data?.categories  })
+    }
+  }, [categoryQuery.data]);
+
+  // React.useEffect(() => {
+  //   if (categoryQuery.data) {
+  //     // setValue("subcategoryId", {});
+  //   }
+  // }, [categoryQuery.data]);
 
   const onSubmit = React.useCallback(
     async (data: IUser) => {
@@ -191,11 +215,19 @@ export default function BasicInfo() {
                   control={control}
                   rules={{ required: userQuery.data?.user.role === "worker" }}
                   render={({ field }) => (
+                    // <Select
+                    //   ref={field.ref}
+                    //   value={field.value}
+                    //   onChange={(params) => field.onChange(params.value)}
+                    //   options={sublist.data?.subcategorylist}
+                    //   placeholder="Choose one skill"
+                    // />
                     <Select
                       ref={field.ref}
                       value={field.value}
+                      options={skill}
                       onChange={(params) => field.onChange(params.value)}
-                      options={sublist.data?.subcategorylist}
+                      isLoading={categoryQuery.isLoading}
                       placeholder="Choose one skill"
                     />
                   )}

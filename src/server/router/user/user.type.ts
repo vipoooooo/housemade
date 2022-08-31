@@ -14,9 +14,10 @@ export const userSchema = z.object({
   username: z.string(),
   email: z.string(),
   // password: z.string(),
-  subcategoryId: z
-    .array(z.object({ label: z.string(), id: z.string() }))
-    .optional(),
+  // subcategoryId: z
+  //   .array(z.object({ label: z.string(), id: z.string() }))
+  //   .optional(),
+  subcategoryId: z.any().optional(),
   description: z.string().optional(),
   link: z.string().url().optional(),
 });
