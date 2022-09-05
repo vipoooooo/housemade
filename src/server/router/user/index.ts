@@ -1,17 +1,28 @@
-import { Category, SubCategory, User } from "@prisma/client";
+import { Category, SubCategory, User, Worker } from "@prisma/client";
 import * as trpc from "@trpc/server";
 import { verify } from "argon2";
 import { createRouter } from "../context";
 import { userSchema, getUserSchema } from "./user.type";
 import { v4 as uuidv4 } from "uuid";
+import {
+  uploadFile,
+  getFile,
+  getMultipleFile,
+  getDeleteFile,
+  getDeleteFiles,
+} from "../../../utils/google-service";
 
 export const userRouter = createRouter()
   .query("getUser", {
     input: getUserSchema,
     resolve: async ({ ctx, input }) => {
-      const user: User | null = await ctx.prisma.user.findFirst({
-        where: {
-          id: input.id,
+      if (!input.id) return;
+
+      const user = await ctx.prisma.user.findFirst({
+        where: { id: input.id },
+        include: {
+          worker: { include: { subcategory: true } },
+          review_worker: true,
         },
       });
 
@@ -19,44 +30,59 @@ export const userRouter = createRouter()
         return null;
       }
 
+      let imageURL = "";
+      try {
+        imageURL = await getFile({
+          id: user.image as string,
+          folderId: "housemade-user-pfp",
+        });
+      } catch (err: any) {
+        console.log(err.message);
+      }
+
       return {
         code: 200,
         message: "User data",
-        user,
+        user: { ...user, imageURL },
       };
     },
   })
   .mutation("user", {
     input: userSchema,
     resolve: async ({ ctx, input }) => {
-      // const isValidPassword = await verify(user.password, input.password);
+      let image = input.image;
 
-      // if (!isValidPassword) {
-      //   return null;
-      // }
-      // const image = uuidv4() + "." + input.pfp.type.split("/")[1];
-      // const imagePath = "profile-image/";
-      console.log(input, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+      if (input.imageBase64) {
+        try {
+          await getDeleteFile({ id: input.image });
+        } catch (err) {
+          console.log("Old image not found");
+        }
+
+        const uploadRes = await uploadFile({
+          fileName: uuidv4(),
+          folderId: "housemade-user-pfp",
+          fileData: input.imageBase64,
+        });
+
+        image = uploadRes.id || "";
+      }
 
       const userResult = await ctx.prisma.user.update({
         where: { id: input.id },
         data: {
-          // image: imagePath + image,
-          image:
-            "https://i.pinimg.com/564x/a9/97/ec/a997ec11c58c945802d2ac73b298f7d5.jpg",
+          image,
           username: input.username,
           email: input.email,
         },
       });
 
-      console.log(userResult, "~~~~~~~~~~~~~~~~~~~~~");
-
       // WORKER
       const subcategory = input.subcategoryId;
-      if (input.role === "worker" && subcategory?.length) {
+      if (input.role === "worker") {
         const subCategory: SubCategory | null =
           await ctx.prisma.subCategory.findFirst({
-            where: { id: subcategory[0]?.id },
+            where: { id: subcategory.id },
           });
 
         if (!subCategory) {
@@ -69,7 +95,7 @@ export const userRouter = createRouter()
         const workerResult = await ctx.prisma.worker.update({
           where: { id: input.id },
           data: {
-            subcategoryId: subcategory[0]?.id,
+            subcategoryId: subcategory.id,
             categoryId: subCategory.categoryId,
             description: input.description,
             link: input.link,

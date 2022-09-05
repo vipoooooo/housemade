@@ -33,14 +33,11 @@ export default function ReportModal({
   } = useForm<IWriteReport>({
     resolver: zodResolver(writeReportSchema),
   });
-  console.log("errors", errors);
 
   const { mutateAsync, error } = trpc.useMutation(["report.report"]);
-  console.log(error, "adfs eror");
 
   const onSubmit = React.useCallback(async (data: IWriteReport) => {
     try {
-      console.log(data, "data12121");
       const result = await mutateAsync(data);
       setIsOpen(false);
     } catch (err) {}

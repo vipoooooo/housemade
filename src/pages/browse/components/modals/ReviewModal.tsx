@@ -39,10 +39,8 @@ export default function ReviewModal({
   } = useForm<IWriteReview>({
     resolver: zodResolver(writeReviewSchema),
   });
-  console.log("errors", errors);
 
   const { mutateAsync, error } = trpc.useMutation(["review.review"]);
-  console.log(error, "review error");
 
   const {
     data: currentReview,
@@ -65,13 +63,11 @@ export default function ReviewModal({
 
   const onSubmit = React.useCallback(async (data: IWriteReview) => {
     try {
-      console.log(data, "data12121");
       const result = await mutateAsync(data, {
         onSuccess: () => {
           utils.invalidateQueries(["review.reviews"]);
         },
       });
-      console.log(result);
       setIsOpen(false);
     } catch (err) {}
   }, []);

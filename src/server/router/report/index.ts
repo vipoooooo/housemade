@@ -5,8 +5,6 @@ import { writeReportSchema } from "./report.type";
 export const reportRouter = createRouter().mutation("report", {
   input: writeReportSchema,
   resolve: async ({ ctx, input }) => {
-    console.log("input", input);
-
     const result = await ctx.prisma.report.create({
       data: {
         description: input.description,

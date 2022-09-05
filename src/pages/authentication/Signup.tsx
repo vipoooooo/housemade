@@ -20,7 +20,7 @@ import { StyleObject } from "styletron-standard";
 
 const SignUp: NextPage = () => {
   const router = useRouter();
-  const [css, theme] = useStyletron()
+  const [css, theme] = useStyletron();
   const {
     control,
     handleSubmit,
@@ -35,7 +35,6 @@ const SignUp: NextPage = () => {
   }
 
   const { mutateAsync, error } = trpc.useMutation(["auth.signup"]);
-  console.log(error, "signup eror");
   const onSubmit = useCallback(
     async (data: ISignUp) => {
       try {

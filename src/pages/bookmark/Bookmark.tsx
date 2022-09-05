@@ -11,13 +11,12 @@ import Default from "../../layouts/Default";
 import { Block } from "baseui/block";
 import { HeadingTitle } from "../../components/shared/HeadingTitle";
 import { workers } from "../../mocks/worker.const";
-import WorkerCard from "../../components/common/WorkerCard";
 import { useStyletron } from "baseui";
 
 const isBookmarked = workers.filter((item) => item.bookmark);
 
 export default function Bookmark() {
-  const [css, theme] = useStyletron()
+  const [css, theme] = useStyletron();
   return (
     <Default hasHeader={true}>
       <HeadingTitle title="Schedule" />
@@ -29,15 +28,17 @@ export default function Bookmark() {
         >
           {isBookmarked.map((bm) => {
             return (
-              <FlexGridItem>
-                <WorkerCard data={bm} />
-              </FlexGridItem>
+              <FlexGridItem>{/* <WorkerCard data={bm} /> */}</FlexGridItem>
             );
           })}
         </FlexGrid>
       ) : (
         <>
-          <Block display={'flex'} flexDirection={"column"} className={css({gap: '10px'})}>
+          <Block
+            display={"flex"}
+            flexDirection={"column"}
+            className={css({ gap: "10px" })}
+          >
             <HeadingXSmall margin={0}>
               There is nothing to show here
             </HeadingXSmall>

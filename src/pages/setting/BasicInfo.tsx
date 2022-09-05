@@ -1,13 +1,11 @@
 import { useStyletron } from "baseui";
 import { Input } from "baseui/input";
 import * as React from "react";
-import { useState } from "react";
 import { Button, KIND, SIZE } from "baseui/button";
 import { FileUploader } from "baseui/file-uploader";
 import { Block } from "baseui/block";
 import { FormControl } from "baseui/form-control";
 import { Controller, useForm } from "react-hook-form";
-import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IUser, userSchema } from "../../server/router/user/user.type";
@@ -16,16 +14,16 @@ import { trpc } from "../../utils/trpc";
 import { Textarea } from "baseui/textarea";
 import restricted from "../api/restricted";
 import { Avatar } from "baseui/avatar";
+import { toaster, ToasterContainer } from "baseui/toast";
+import { toBase64 } from "../../helpers/snipet";
 
 export const getServerSideProps = restricted(async (ctx) => {
   return { props: {} };
 });
 
 export default function BasicInfo() {
-  const router = useRouter();
-  const [ishover, setisHover] = useState(false);
   const { data } = useSession();
-  const [css, theme] = useStyletron();
+  const [css] = useStyletron();
 
   const {
     control,
@@ -36,23 +34,14 @@ export default function BasicInfo() {
   } = useForm<IUser>({
     resolver: zodResolver(userSchema),
   });
-  console.log(errors, "errr");
 
   const userQuery = trpc.useQuery(["user.getUser", { id: data?.id as string }]);
-  // console.log(userQuery.data?.user);
   const userMutation = trpc.useMutation(["user.user"]);
-  const sublist = trpc.useQuery(["subcategory.subcategorylist"], {
-    retry: false,
-  });
   const categoryQuery = trpc.useQuery(["category.categoriesWithSubcategory"], {
     retry: false,
   });
-  console.log(categoryQuery)
-  // const options = {
-  //   __ungrouped: [],
-  //   A: [{ id: 1, label: 'AA' }],
-  //   B: [{ id: 1, label: 'BA' }, { id: 1, label: 'BB' }]
-  // }
+  const [skill, setSkill] = React.useState({ __ungrouped: [] });
+  const [image, setImage] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     const user = userQuery.data?.user;
@@ -61,41 +50,41 @@ export default function BasicInfo() {
       setValue("role", user.role);
       setValue("username", user.username);
       setValue("email", user.email);
+      setValue("subcategoryId", {
+        id: user.worker?.subcategoryId,
+        label: user.worker?.subcategory?.title,
+      });
+      setValue("description", user.worker?.description || "");
+      setValue("link", user.worker?.link || "");
+      setValue("image", user.image || "");
     }
-  }, [userQuery.data?.user]);
+  }, [userQuery.data]);
 
-  const [skill, setSkill] = React.useState({__ungrouped: []});
-  console.log(skill)
   React.useEffect(() => {
     const categories = categoryQuery.data?.categories;
     if (categories) {
-      setSkill({ __ungrouped: [], ...categoryQuery.data?.categories  })
+      setSkill({ __ungrouped: [], ...categoryQuery.data?.categories });
     }
   }, [categoryQuery.data]);
-
-  // React.useEffect(() => {
-  //   if (categoryQuery.data) {
-  //     // setValue("subcategoryId", {});
-  //   }
-  // }, [categoryQuery.data]);
 
   const onSubmit = React.useCallback(
     async (data: IUser) => {
       try {
-        console.log(data, "jjk");
-        if (data.role === "worker" && !data.subcategoryId?.length) {
+        if (data.role === "worker" && !data.subcategoryId) {
           setError("subcategoryId", {});
           return;
         }
-        const result = await userMutation.mutateAsync(data);
-        console.log("result", result);
+        await userMutation.mutateAsync(data, {
+          onSuccess: () => {
+            toaster.info("Saved", {});
+          },
+        });
       } catch (err) {
         console.log(err);
       }
     },
     [data]
   );
-  // const [error, setError] = useState<SignInResponse["error"]>();
 
   if (userQuery.isLoading) {
     return <>Loading ...</>;
@@ -103,6 +92,16 @@ export default function BasicInfo() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <ToasterContainer
+        autoHideDuration={2000}
+        overrides={{
+          Root: {
+            style: ({ $theme }) => ({
+              zIndex: 4,
+            }),
+          },
+        }}
+      />
       <Block
         display={"flex"}
         flexDirection={["column", "column", "row", "row"]}
@@ -123,7 +122,11 @@ export default function BasicInfo() {
         >
           {userQuery.data?.user.image && (
             <Block>
-              <Avatar name="" size="200px" src={userQuery.data.user.image} />
+              <Avatar
+                name=""
+                size="200px"
+                src={image ? image : userQuery.data.user.imageURL}
+              />
             </Block>
           )}
           <Block
@@ -132,17 +135,22 @@ export default function BasicInfo() {
             })}
           >
             <Controller
-              name="pfp"
+              name="imageBase64"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <FileUploader
                   {...field}
                   accept={".png, .jpg, .jpeg"}
-                  onDrop={(acceptedFiles, rejectedFiles) => {
+                  onDrop={async (acceptedFiles, rejectedFiles) => {
                     // handle file upload...
-                    field.onChange(acceptedFiles[0]);
-                    // console.log(acceptedFiles, rejectedFiles, "jj");
+                    const file = acceptedFiles[0];
+
+                    if (file) {
+                      const base64 = await toBase64(file);
+                      field.onChange(base64);
+                      setImage(URL.createObjectURL(file));
+                    }
                   }}
                   overrides={{
                     FileDragAndDrop: {
@@ -225,10 +233,11 @@ export default function BasicInfo() {
                     <Select
                       ref={field.ref}
                       value={field.value}
+                      size={SIZE.compact}
                       options={skill}
-                      onChange={(params) => field.onChange(params.value)}
+                      onChange={(params) => field.onChange(params.value[0])}
                       isLoading={categoryQuery.isLoading}
-                      placeholder="Choose one skill"
+                      placeholder=""
                     />
                   )}
                 />
@@ -270,6 +279,7 @@ export default function BasicInfo() {
               <FormControl
                 label="Link - optional"
                 caption="link to your personal website or website that contains your information"
+                error={errors["link"] && "this link is invalid"}
               >
                 <Controller
                   name="link"
@@ -282,7 +292,12 @@ export default function BasicInfo() {
               </FormControl>
             </>
           )}
-          <Button type="submit" kind={KIND.primary}>
+          <Button
+            type="submit"
+            kind={KIND.primary}
+            isLoading={userMutation.isLoading}
+            disabled={userMutation.isLoading}
+          >
             Save Changes
           </Button>
         </Block>

@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import { Navlink, NavBtn } from "../common/NavItem";
 import { useActiveMenu } from "../../hooks/useActiveMenu";
 import { useSession } from "next-auth/react";
+import { trpc } from "../../utils/trpc";
 
 const options = {
   options: [
@@ -37,10 +38,21 @@ const options = {
 
 export default function Navigationbar() {
   const [css, theme] = useStyletron();
-  const { data } = useSession();
+  const { data: session } = useSession();
   const [isOpen, setIsOpen] = React.useState(false);
   const { menus } = useActiveMenu();
   const router = useRouter();
+
+  console.log(session);
+
+  const { data, error, isLoading } = trpc.useQuery(
+    ["user.getUser", { id: session?.id as string }],
+    {
+      retry: false,
+    }
+  );
+
+  // console.log(data?.user?.role);
 
   return (
     <>
@@ -48,7 +60,7 @@ export default function Navigationbar() {
         className={css({
           position: "sticky",
           top: 0,
-          zIndex: 100,
+          zIndex: 2,
           backgroundColor: "rgba(255,255,255,0.5)",
           backdropFilter: "saturate(180%) blur(15px)",
         })}
@@ -66,14 +78,17 @@ export default function Navigationbar() {
           </NavigationList>
           <NavigationList $align={ALIGN.left}>
             <Block display={["none", "none", "none", "flex"]}>
-              {menus.map((item, key) => (
-                <Navlink
-                  key={key}
-                  herf={item.href}
-                  title={item.title}
-                  active={item.active}
-                />
-              ))}
+              {menus.map((item, key) => {
+                if (item.roles.includes(data?.user?.role || ""))
+                  return (
+                    <Navlink
+                      key={key}
+                      herf={item.href}
+                      title={item.title}
+                      active={item.active}
+                    />
+                  );
+              })}
             </Block>
           </NavigationList>
           <NavigationList $align={ALIGN.center} />
@@ -125,6 +140,14 @@ function MenuDrawer({
 }) {
   const [css] = useStyletron();
   const { menus } = useActiveMenu();
+  const { data: session } = useSession();
+  const { data, error, isLoading } = trpc.useQuery(
+    ["user.getUser", { id: session?.id as string }],
+    {
+      retry: false,
+    }
+  );
+
   return (
     <Drawer
       isOpen={isOpen}
@@ -137,7 +160,7 @@ function MenuDrawer({
         DrawerBody: {
           style: ({ $theme }) => ({
             // top: '100px',
-            zIndex: 101,
+            zIndex: 3,
             margin: "0px 0px 0px 0px",
             padding: "60px 20px 20px 20px",
           }),
@@ -162,15 +185,18 @@ function MenuDrawer({
               onChange={() => {}}
             />
           </Block>
-          {menus.map((item, key) => (
-            <NavBtn
-              key={key}
-              link={item.href}
-              title={item.title}
-              active={item.active}
-              icon={item.icon}
-            />
-          ))}
+          {menus.map((item, key) => {
+            if (item.roles.includes(data?.user?.role || ""))
+              return (
+                <NavBtn
+                  key={key}
+                  link={item.href}
+                  title={item.title}
+                  active={item.active}
+                  icon={item.icon}
+                />
+              );
+          })}
         </>
       </Block>
     </Drawer>

@@ -7,10 +7,8 @@ export const getUserSchema = z.object({
 export const userSchema = z.object({
   id: z.string(),
   role: z.string(),
-  pfp:
-    typeof window === "undefined"
-      ? z.any()
-      : z.union([z.instanceof(File), z.string()]),
+  imageBase64: z.string(),
+  image: z.string(),
   username: z.string(),
   email: z.string(),
   // password: z.string(),
@@ -25,3 +23,4 @@ export const userSchema = z.object({
 export type IGetUser = z.infer<typeof getUserSchema>;
 export type IUser = z.infer<typeof userSchema>;
 export type IWorker = z.infer<typeof userSchema>;
+export type IUserRole = z.infer<typeof getUserSchema>;
