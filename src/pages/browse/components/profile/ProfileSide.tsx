@@ -227,6 +227,7 @@ export default function ProfileSide() {
                 kind={KIND.secondary}
                 shape={SHAPE.square}
                 size={SIZE.compact}
+                disabled
                 overrides={{
                   Root: {
                     style: ({ $theme }) => ({
@@ -242,6 +243,7 @@ export default function ProfileSide() {
                 kind={KIND.secondary}
                 shape={SHAPE.square}
                 size={SIZE.compact}
+                disabled
               >
                 {isBookmarked ? <IoCheckmark size={16} /> : <IoAdd size={16} />}
               </Button>

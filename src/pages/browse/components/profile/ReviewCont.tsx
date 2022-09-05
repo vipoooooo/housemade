@@ -25,7 +25,6 @@ export default function ReviewSide() {
       retry: false,
     }
   );
-  console.log(data);
 
   return (
     <>
@@ -154,7 +153,7 @@ export default function ReviewSide() {
   );
 }
 
-function SkeletonComp() {
+export function SkeletonComp() {
   const [css, theme] = useStyletron();
   return (
     <Block

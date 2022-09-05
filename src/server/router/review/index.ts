@@ -31,8 +31,6 @@ export const reviewRouter = createRouter()
   .mutation("review", {
     input: writeReviewSchema,
     resolve: async ({ ctx, input }) => {
-      console.log("input", input);
-
       const result = await ctx.prisma.review.upsert({
         where: {
           id: input.reviewId,

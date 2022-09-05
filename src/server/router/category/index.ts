@@ -26,9 +26,11 @@ export const categoryRouter = createRouter()
   .query("categoriesWithSubcategory", {
     resolve: async ({ ctx }) => {
       const categories = await ctx.prisma.category.findMany({
-        include: { subcategories: {
-          select: { id: true, title: true }
-        }, },
+        include: {
+          subcategories: {
+            select: { id: true, title: true },
+          },
+        },
         orderBy: { title: "asc" },
       });
 
@@ -39,11 +41,16 @@ export const categoryRouter = createRouter()
         });
       }
 
-      let optionValue = {} 
-      for(let i=0; i<categories.length; i++) {
-        Object.assign(optionValue, { [`${categories[i]?.title}`]: categories[i]?.subcategories.map(sub => ({ 
-              id: sub.id, label: sub.title 
-              })) })
+      let optionValue = {};
+      for (let i = 0; i < categories.length; i++) {
+        Object.assign(optionValue, {
+          [`${categories[i]?.title}`]: categories[i]?.subcategories.map(
+            (sub) => ({
+              id: sub.id,
+              label: sub.title,
+            })
+          ),
+        });
       }
 
       return {

@@ -74,7 +74,7 @@ export default function PortfolioCont() {
                   >
                     <Image
                       alt={project?.title}
-                      src={project ? project.coverImg : ""}
+                      src={project.coverImg || ""}
                       objectFit={"cover"}
                       priority
                       layout="fill"
@@ -108,7 +108,7 @@ const image: StyleObject = {
   height: "unset !important",
 };
 
-function ProjectSkeleton() {
+export function ProjectSkeleton() {
   const [css] = useStyletron();
   return (
     <>

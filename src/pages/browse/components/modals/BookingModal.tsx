@@ -36,14 +36,11 @@ export default function BookingModal({
   } = useForm<IBooking>({
     resolver: zodResolver(bookingSchema),
   });
-  console.log("errors", errors);
 
   const { mutateAsync, error } = trpc.useMutation(["schedule.Booking"]);
-  console.log(error, "adfs eror");
 
   const onSubmit = React.useCallback(async (data: IBooking) => {
     try {
-      console.log(data, "data12121");
       const result = await mutateAsync(data);
       setIsOpenB(false);
     } catch (err) {}

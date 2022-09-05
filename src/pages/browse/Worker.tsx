@@ -26,8 +26,6 @@ export default function Worker() {
     { retry: false }
   );
 
-  console.log(data);
-
   return (
     <Layout hasHeader={true}>
       <Block marginBottom={"20px"}>

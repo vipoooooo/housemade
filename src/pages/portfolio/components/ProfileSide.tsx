@@ -8,19 +8,24 @@ import {
   ParagraphXSmall,
   ParagraphSmall,
 } from "baseui/typography";
-import { IoAdd, IoCheckmark, IoCheckmarkCircle } from "react-icons/io5";
+import { IoAdd, IoCheckmark, IoCheckmarkCircle, IoStar } from "react-icons/io5";
 import { StyledLink } from "baseui/link";
 import { Button, KIND, SHAPE, SIZE } from "baseui/button";
 import { StarRating } from "baseui/rating";
 import { currentUser, workers } from "../../../mocks/worker.const";
+import { useSession } from "next-auth/react";
+import { trpc } from "../../../utils/trpc";
 
 export default function ProfileSide() {
   const [css, $theme] = useStyletron();
-  const { query } = useRouter();
-  const [isBookmarked, setIsBookmark] = React.useState(false);
-  const [value, setValue] = React.useState(4);
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [isOpenB, setIsOpenB] = React.useState(false);
+  const router = useRouter();
+  const { data: session } = useSession();
+  const { data, error, isLoading } = trpc.useQuery(
+    ["worker.profile", { id: session?.id as string }],
+    {
+      retry: false,
+    }
+  );
 
   if (!currentUser) return <>Loading ...</>;
   return (
@@ -45,7 +50,11 @@ export default function ProfileSide() {
             gap: "10px",
           })}
         >
-          <Avatar name={currentUser.username} size="100px" src={currentUser.pfp} />
+          <Avatar
+            name={currentUser.username}
+            size="100px"
+            src={currentUser.pfp}
+          />
           <div
             className={css({
               display: "flex",
@@ -55,24 +64,25 @@ export default function ProfileSide() {
           >
             <Block display={"flex"} alignItems={"center"}>
               <HeadingXSmall margin={"0 5px 0 0"}>
-                {currentUser.username}
+                {data?.profile.user?.username}
               </HeadingXSmall>
-              {currentUser.verify ? (
+              {data?.profile.verify ? (
                 <IoCheckmarkCircle size={"20px"} color={$theme.colors.accent} />
               ) : (
                 <></>
               )}
             </Block>
             <ParagraphSmall margin={0} color={$theme.colors.contentTertiary}>
-              {currentUser.occupation}
+              {data?.profile.subcategory?.title}
             </ParagraphSmall>
-            <StarRating
-              numItems={5}
-              onChange={(data) => setValue(data.value)}
-              size={15}
-              value={value}
-              readOnly
-            />
+            <Block display={"flex"}>
+              <Block marginRight={"5px"}>
+                <IoStar size={"15px"} color={$theme.colors.backgroundWarning} />
+              </Block>
+              <ParagraphXSmall margin={0}>
+                {data?.profile.rating} ({data?.profile?.reviewer} review)
+              </ParagraphXSmall>
+            </Block>
           </div>
         </div>
         <div
@@ -84,7 +94,7 @@ export default function ProfileSide() {
           })}
         >
           <Button
-            onClick={() => setIsOpenB(true)}
+            onClick={() => router.push(`/setting/Setting`)}
             kind={KIND.secondary}
             shape={SHAPE.square}
             size={SIZE.compact}
@@ -110,7 +120,7 @@ export default function ProfileSide() {
             About
           </ParagraphSmall>
           <ParagraphSmall margin={0} color={$theme.colors.contentTertiary}>
-            {currentUser.description}
+            {data?.profile.description}
           </ParagraphSmall>
         </div>
         <ParagraphXSmall margin={0}>
@@ -121,7 +131,7 @@ export default function ProfileSide() {
               color: $theme.colors.accent,
             }}
           >
-            {currentUser.link}
+            {data?.profile.link}
           </StyledLink>
         </ParagraphXSmall>
       </Block>
