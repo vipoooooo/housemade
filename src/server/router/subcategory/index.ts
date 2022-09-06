@@ -9,6 +9,7 @@ export const subcategoryRouter = createRouter()
     resolve: async ({ ctx, input }) => {
       const subcategories = await ctx.prisma.subCategory.findMany({
         where: { categoryId: input.id },
+        include: { category: true },
       });
 
       if (!subcategories.length) {

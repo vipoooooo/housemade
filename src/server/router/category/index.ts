@@ -63,6 +63,13 @@ export const categoryRouter = createRouter()
   .query("category", {
     input: categorySchema,
     resolve: async ({ input, ctx }) => {
-      const category = await ctx.prisma.category.findFirst({});
+      const category = await ctx.prisma.category.findFirst({
+        where: { id: input.id },
+      });
+      return {
+        status: 200,
+        message: "Here Category",
+        category,
+      };
     },
   });
