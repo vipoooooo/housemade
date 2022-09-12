@@ -1,31 +1,17 @@
 import * as React from "react";
 import { useStyletron } from "baseui";
 import { Block } from "baseui/block";
-import {
-  HeadingMedium,
-  HeadingXSmall,
-  ParagraphMedium,
-  ParagraphSmall,
-  ParagraphXSmall,
-} from "baseui/typography";
+import { ParagraphSmall, ParagraphXSmall } from "baseui/typography";
 import { Avatar } from "baseui/avatar";
 import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
-import { useRouter } from "next/router";
 import { HeadingTitle } from "../../../components/shared/HeadingTitle";
-import { reviews } from "../../../mocks/review.const";
 import { trpc } from "../../../utils/trpc";
 import { useSession } from "next-auth/react";
-import { Button, KIND, SIZE } from "baseui/button";
 import { SkeletonComp } from "../../browse/components/profile/ReviewCont";
-import ReviewModal from "../../browse/components/modals/ReviewModal";
 
 export default function ReviewSide() {
   const [css, theme] = useStyletron();
-  const { query } = useRouter();
   const { data: session } = useSession();
-  // const review = reviews.filter(
-  //   (item) => item.workerId.toString() === query.id
-  // );
   const { data, isLoading, isFetching } = trpc.useQuery(
     ["review.reviews", { id: session?.id as string }],
     {
@@ -85,11 +71,12 @@ export default function ReviewSide() {
                         })}
                       >
                         {
-                        <Avatar
-                          name={review?.client?.username || ""}
-                          size="40px"
-                          src={review?.imageURL || ""}
-                        />}
+                          <Avatar
+                            name={review?.client?.username || ""}
+                            size="40px"
+                            src={review?.imageURL || ""}
+                          />
+                        }
                         <div
                           className={css({
                             display: "flex",

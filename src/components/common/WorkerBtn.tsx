@@ -7,7 +7,7 @@ import { IoStar } from "@react-icons/all-files/io5/IoStar";
 import { useRouter } from "next/router";
 import { useStyletron } from "baseui";
 import { IoCheckmarkCircle } from "react-icons/io5";
-import { Worker } from "@prisma/client";
+import { useSession } from "next-auth/react";
 
 interface ActiveLinkProps {
   id: string;
@@ -30,11 +30,18 @@ export default function WorkerBtn({
 }: ActiveLinkProps) {
   const [css, theme] = useStyletron();
   const router = useRouter();
+  const { data } = useSession();
+
+  console.log(data);
+
+  function handleClick() {
+    data?.id === id
+      ? router.push("/portfolio/Portfolio")
+      : router.push(`/browse/Profile?id=${id}`);
+  }
   return (
     <Button
-      onClick={() => {
-        router.push(`/browse/Profile?id=${id}`);
-      }}
+      onClick={handleClick}
       kind={KIND.tertiary}
       overrides={{
         BaseButton: {

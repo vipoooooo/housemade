@@ -15,22 +15,21 @@ export const reviewRouter = createRouter()
         orderBy: { createdAt: "desc" },
       });
 
-      const thereview = await Promise.all( reviews.map(async (review) =>  
-      {
-        let imageURL = "";
-        try {
-          imageURL = await getFile({
-            id: review?.client?.image as string ,
-            folderId: "housemade-user-pfp",
-          });
-        } catch (err: any) {
-          console.log(err.message);
-        }
+      const thereview = await Promise.all(
+        reviews.map(async (review) => {
+          let imageURL = "";
+          try {
+            imageURL = await getFile({
+              id: review?.client?.image as string,
+              folderId: "housemade-user-pfp",
+            });
+          } catch (err: any) {
+            console.log(err.message);
+          }
 
-        return {...review, imageURL }
-      }))
-      
-      console.log(thereview);
+          return { ...review, imageURL };
+        })
+      );
 
       if (!reviews.length) {
         throw new trpc.TRPCError({
