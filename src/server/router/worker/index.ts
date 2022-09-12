@@ -1,3 +1,4 @@
+import { Review, SubCategory, User, Worker } from "@prisma/client";
 import * as trpc from "@trpc/server";
 import { getFile } from "../../../utils/google-service";
 import { createRouter } from "../context";
@@ -7,8 +8,14 @@ export const workerRouter = createRouter()
   .query("workers", {
     input: workersSchema,
     resolve: async ({ input, ctx }) => {
-      // .user
-      const workers = await ctx.prisma.worker.findMany({
+      type WorkerT = Worker & {
+        user: User & {
+          review_worker: Review[];
+        };
+        subcategory: SubCategory;
+      };
+
+      const workers: WorkerT[] = await ctx.prisma.worker.findMany({
         where: {
           OR: [
             { categoryId: { equals: input.id } },
@@ -25,6 +32,22 @@ export const workerRouter = createRouter()
         },
       });
 
+      // const theworker = await Promise.all(
+      //   workers.map(async (worker) => {
+      //     let imageURL = "";
+      //     try {
+      //       imageURL = await getFile({
+      //         id: worker?.user?.image as string,
+      //         folderId: "housemade-user-pfp",
+      //       });
+      //     } catch (err: any) {
+      //       console.log(err.message);
+      //     }
+
+      //     return { ...worker, imageURL };
+      //   })
+      // );
+
       if (!workers.length) {
         throw new trpc.TRPCError({
           code: "NOT_FOUND",
@@ -32,19 +55,33 @@ export const workerRouter = createRouter()
         });
       }
 
-      const data = workers.map((worker: any) => {
-        const totalR = worker.user.review_worker.length
-          ? worker.user.review_worker.reduce((las: number, cur: any) => {
-              return cur ? cur.rating + las : 0;
-            }, 0)
-          : 0;
-        const rating = totalR ? totalR / worker.user.review_worker.length : 0;
-        return {
-          ...worker,
-          rating,
-          reviewer: worker.user.review_worker.length,
-        };
-      });
+      const data = await Promise.all(
+        workers.map(async (worker) => {
+          let imageURL = "";
+          try {
+            imageURL = await getFile({
+              id: worker.user.image as string,
+              folderId: "housemade-user-pfp",
+            });
+          } catch (err: any) {
+            console.log(err.message);
+          }
+
+          const totalR = worker.user.review_worker.length
+            ? worker.user.review_worker.reduce((las: number, cur: any) => {
+                return cur ? cur.rating + las : 0;
+              }, 0)
+            : 0;
+          const rating = totalR ? totalR / worker.user.review_worker.length : 0;
+
+          return {
+            ...worker,
+            rating,
+            reviewer: worker.user.review_worker.length,
+            imageURL,
+          };
+        })
+      );
 
       return {
         status: 200,
@@ -96,7 +133,7 @@ export const workerRouter = createRouter()
           ...profile,
           rating,
           reviewer: profile?.user?.review_worker.length,
-          imageURL
+          imageURL,
         },
       };
     },

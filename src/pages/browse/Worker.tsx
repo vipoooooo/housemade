@@ -32,6 +32,8 @@ export default function Worker() {
     { retry: false }
   );
 
+  console.log(data?.workers);
+
   return (
     <Layout hasHeader={true}>
       <Head>
@@ -73,13 +75,13 @@ export default function Worker() {
       >
         {data?.workers.map((worker) => {
           return (
-            <FlexGridItem key={worker.id.toString()}>
+            <FlexGridItem key={worker.id}>
               <WorkerBtn
                 id={worker.id}
-                pfp={worker.user?.image || ""}
-                username={worker.user?.username || ""}
+                pfp={worker.imageURL}
+                username={worker.user.username}
                 verify={worker.verify}
-                skill={worker.subcategory?.title || ""}
+                skill={worker.subcategory.title}
                 rating={worker.rating}
                 reviewer={worker.reviewer}
               />

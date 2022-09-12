@@ -107,7 +107,7 @@ export default function ReviewSide() {
                         <Avatar
                           name={review?.client?.username || ""}
                           size="40px"
-                          src={review?.client?.image || ""}
+                          src={review?.imageURL || ""}
                         />
                         <div
                           className={css({

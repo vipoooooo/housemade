@@ -82,17 +82,17 @@ model User {
 }
 
 model Worker {
-    id            String       @id @default(cuid())
+    id            String      @id @default(cuid())
     link          String?
     description   String?
     bookmark      Boolean
     verify        Boolean
-    userId        String?      @unique
-    user          User?        @relation(fields: [userId], references: [id])
-    categoryId    String?
-    category      Category?    @relation(fields: [categoryId], references: [id])
-    subcategoryId String?
-    subcategory   SubCategory? @relation(fields: [subcategoryId], references: [id])
+    userId        String      @unique
+    user          User        @relation(fields: [userId], references: [id])
+    categoryId    String
+    category      Category    @relation(fields: [categoryId], references: [id])
+    subcategoryId String
+    subcategory   SubCategory @relation(fields: [subcategoryId], references: [id])
     project       Project[]
 }
 
@@ -105,10 +105,10 @@ model Category {
 }
 
 model SubCategory {
-    id         String    @id @default(cuid())
+    id         String   @id @default(cuid())
     title      String
-    category   Category? @relation(fields: [categoryId], references: [id])
-    categoryId String?
+    category   Category @relation(fields: [categoryId], references: [id])
+    categoryId String
     workers    Worker[]
 }
 

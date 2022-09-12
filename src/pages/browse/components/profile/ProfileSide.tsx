@@ -158,7 +158,7 @@ export default function ProfileSide() {
               <Avatar
                 name={data?.profile?.user?.username || ""}
                 size="100px"
-                src={data?.profile?.user?.image || ""}
+                src={data?.profile?.imageURL || ""}
               />
               <div
                 className={css({
