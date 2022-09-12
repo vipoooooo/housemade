@@ -53,6 +53,10 @@ export const userRouter = createRouter()
       let image = input.image;
 
       if (input.imageBase64) {
+        /* 
+          - check if image is already exist ? delete image : do nothing
+          - saving storage space
+        */
         try {
           await getDeleteFile({ id: input.image });
         } catch (err) {

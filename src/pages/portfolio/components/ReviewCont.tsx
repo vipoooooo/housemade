@@ -23,9 +23,9 @@ export default function ReviewSide() {
   const [css, theme] = useStyletron();
   const { query } = useRouter();
   const { data: session } = useSession();
-  const review = reviews.filter(
-    (item) => item.workerId.toString() === query.id
-  );
+  // const review = reviews.filter(
+  //   (item) => item.workerId.toString() === query.id
+  // );
   const { data, isLoading, isFetching } = trpc.useQuery(
     ["review.reviews", { id: session?.id as string }],
     {
@@ -84,11 +84,12 @@ export default function ReviewSide() {
                           gap: "10px",
                         })}
                       >
+                        {
                         <Avatar
                           name={review?.client?.username || ""}
                           size="40px"
-                          src={review?.client?.image || ""}
-                        />
+                          src={review?.imageURL || ""}
+                        />}
                         <div
                           className={css({
                             display: "flex",

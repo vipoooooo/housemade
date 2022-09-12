@@ -1,4 +1,5 @@
 import * as trpc from "@trpc/server";
+import { getFile } from "../../../utils/google-service";
 import { createRouter } from "../context";
 import { profileSchema, workersSchema } from "./work.type";
 
@@ -78,6 +79,16 @@ export const workerRouter = createRouter()
           ? totalRating / profile?.user.review_worker.length
           : 0;
 
+      let imageURL = "";
+      try {
+        imageURL = await getFile({
+          id: profile?.user?.image as string,
+          folderId: "housemade-user-pfp",
+        });
+      } catch (err: any) {
+        console.log(err.message);
+      }
+
       return {
         status: 200,
         message: "Here profile",
@@ -85,6 +96,7 @@ export const workerRouter = createRouter()
           ...profile,
           rating,
           reviewer: profile?.user?.review_worker.length,
+          imageURL
         },
       };
     },

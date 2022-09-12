@@ -50,11 +50,13 @@ export default function ProfileSide() {
             gap: "10px",
           })}
         >
+          {data?.profile.user?.image && 
           <Avatar
-            name={currentUser.username}
+            name={data?.profile.user?.username}
             size="100px"
-            src={currentUser.pfp}
+            src={data.profile.imageURL}
           />
+          }
           <div
             className={css({
               display: "flex",

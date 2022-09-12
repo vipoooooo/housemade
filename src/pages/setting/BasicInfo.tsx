@@ -35,6 +35,7 @@ export default function BasicInfo() {
   } = useForm<IUser>({
     resolver: zodResolver(userSchema),
   });
+  console.log(errors)
 
   const userQuery = trpc.useQuery(["user.getUser", { id: data?.id as string }]);
   const userMutation = trpc.useMutation(["user.user"]);
@@ -51,12 +52,14 @@ export default function BasicInfo() {
       setValue("role", user.role);
       setValue("username", user.username);
       setValue("email", user.email);
-      setValue("subcategoryId", {
-        id: user.worker?.subcategoryId,
-        label: user.worker?.subcategory?.title,
-      });
-      setValue("description", user.worker?.description || "");
-      setValue("link", user.worker?.link || "");
+      if(user.role === 'worker') {
+        setValue("subcategoryId", {
+          id: user.worker?.subcategoryId,
+          label: user.worker?.subcategory?.title,
+        });
+        setValue("description", user.worker?.description || "");
+        setValue("link", user.worker?.link || "");
+      }
       setValue("image", user.image || "");
     }
   }, [userQuery.data]);
@@ -146,14 +149,16 @@ export default function BasicInfo() {
               defaultValue=""
               render={({ field }) => (
                 <FileUploader
-                  {...field}
+                  name={field.name}
                   accept={".png, .jpg, .jpeg"}
                   onDrop={async (acceptedFiles, rejectedFiles) => {
                     // handle file upload...
                     const file = acceptedFiles[0];
 
                     if (file) {
+                      console.log(typeof file, file)
                       const base64 = await toBase64(file);
+                      console.log(typeof base64, base64)
                       field.onChange(base64);
                       setImage(URL.createObjectURL(file));
                     }

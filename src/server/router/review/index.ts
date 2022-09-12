@@ -1,4 +1,5 @@
 import * as trpc from "@trpc/server";
+import { getFile } from "../../../utils/google-service";
 import { createRouter } from "../context";
 import { reviewSchema, writeReviewSchema } from "./review.type";
 
@@ -13,6 +14,24 @@ export const reviewRouter = createRouter()
         },
         orderBy: { createdAt: "desc" },
       });
+
+      const thereview = await Promise.all( reviews.map(async (review) =>  
+      {
+        let imageURL = "";
+        try {
+          imageURL = await getFile({
+            id: review?.client?.image as string ,
+            folderId: "housemade-user-pfp",
+          });
+        } catch (err: any) {
+          console.log(err.message);
+        }
+
+        return {...review, imageURL }
+      }))
+      
+      console.log(thereview);
+
       if (!reviews.length) {
         throw new trpc.TRPCError({
           code: "NOT_FOUND",
@@ -23,7 +42,7 @@ export const reviewRouter = createRouter()
       return {
         status: 200,
         message: "Here review",
-        reviews,
+        reviews: thereview,
       };
     },
   })
