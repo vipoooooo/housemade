@@ -1,5 +1,6 @@
 - email validation (add)
 - password validation (fix)
-- worker (loading state)
-- schedule upcoming context
+  <!-- - Navbar (loading state) -->
+  <!-- - move all skeleton to one file -->
+  <!-- - schedule upcoming context -->
 - setting (no preview): when acc have no image, then if u try to upload, it doesn't show the preview of the image

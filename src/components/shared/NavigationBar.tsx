@@ -4,6 +4,7 @@ import {
   ALIGN,
   StyledNavigationItem as NavigationItem,
   StyledNavigationList as NavigationList,
+  StyledNavigationItem,
 } from "baseui/header-navigation";
 import { StatefulSelect as Search, TYPE } from "baseui/select";
 import Image from "next/image";
@@ -18,6 +19,7 @@ import { Navlink, NavBtn } from "../common/NavItem";
 import { useActiveMenu } from "../../hooks/useActiveMenu";
 import { useSession } from "next-auth/react";
 import { trpc } from "../../utils/trpc";
+import { SkeletonText } from "../common/Skeleton";
 
 const options = {
   options: [
@@ -52,8 +54,6 @@ export default function Navigationbar() {
     }
   );
 
-  // console.log(data?.user?.role);
-
   return (
     <>
       <div
@@ -77,19 +77,33 @@ export default function Navigationbar() {
             </NavigationItem>
           </NavigationList>
           <NavigationList $align={ALIGN.left}>
-            <Block display={["none", "none", "none", "flex"]}>
-              {menus.map((item, key) => {
-                if (item.roles.includes(data?.user?.role || ""))
-                  return (
-                    <Navlink
-                      key={key}
-                      herf={item.href}
-                      title={item.title}
-                      active={item.active}
-                    />
-                  );
-              })}
-            </Block>
+            {isLoading ? (
+              <>
+                <StyledNavigationItem>
+                  <SkeletonText />
+                </StyledNavigationItem>
+                <StyledNavigationItem>
+                  <SkeletonText />
+                </StyledNavigationItem>
+                <StyledNavigationItem>
+                  <SkeletonText />
+                </StyledNavigationItem>
+              </>
+            ) : (
+              <Block display={["none", "none", "none", "flex"]}>
+                {menus.map((item, key) => {
+                  if (item.roles.includes(data?.user?.role || ""))
+                    return (
+                      <Navlink
+                        key={key}
+                        herf={item.href}
+                        title={item.title}
+                        active={item.active}
+                      />
+                    );
+                })}
+              </Block>
+            )}
           </NavigationList>
           <NavigationList $align={ALIGN.center} />
 
@@ -102,7 +116,7 @@ export default function Navigationbar() {
               justifyContent: "flex-end",
             })}
           >
-            <Block width={"300px"} display={["none", "none", "none", "block"]}>
+            {/* <Block width={"300px"} display={["none", "none", "none", "block"]}>
               <Search
                 {...options}
                 type={TYPE.search}
@@ -111,7 +125,7 @@ export default function Navigationbar() {
                 }
                 onChange={() => {}}
               />
-            </Block>
+            </Block> */}
             <Button
               onClick={() => router.push("/authentication/RegisterWorker")}
               kind={KIND.tertiary}
@@ -175,7 +189,7 @@ function MenuDrawer({
         })}
       >
         <>
-          <Block width={"100%"}>
+          {/* <Block width={"100%"}>
             <Search
               {...options}
               type={TYPE.search}
@@ -184,7 +198,7 @@ function MenuDrawer({
               }
               onChange={() => {}}
             />
-          </Block>
+          </Block> */}
           {menus.map((item, key) => {
             if (item.roles.includes(data?.user?.role || ""))
               return (

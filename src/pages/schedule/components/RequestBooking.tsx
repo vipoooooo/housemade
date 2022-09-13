@@ -6,19 +6,18 @@ import { Button, KIND, SIZE } from "baseui/button";
 import ScheduleContent from "./wrapper/ScheduleContent";
 import { RequestingWrapper } from "./wrapper/RequestingWrapper";
 import { trpc } from "../../../utils/trpc";
-import { IDeleteAppointment, IUpdateAppointment } from "../../../server/router/schedule/schedule.type";
+import {
+  IDeleteAppointment,
+  IUpdateAppointment,
+} from "../../../server/router/schedule/schedule.type";
 
 export function RequestBooking({ scheduleData }: { scheduleData: any }) {
   const [css, theme] = useStyletron();
   const utils = trpc.useContext();
 
-  const declineApp = trpc.useMutation([
-    "schedule.deleteAppointments",
-  ]);
+  const declineApp = trpc.useMutation(["schedule.deleteAppointments"]);
 
-  const acceptApp = trpc.useMutation([
-    "schedule.updateAppointments",
-  ]);
+  const acceptApp = trpc.useMutation(["schedule.updateAppointments"]);
 
   const onDecline = React.useCallback(async (data: IDeleteAppointment) => {
     try {
@@ -44,20 +43,22 @@ export function RequestBooking({ scheduleData }: { scheduleData: any }) {
       <ScheduleContent
         icon={
           <IoMailUnread
-            color={theme.colors.backgroundWarning}
+            color={theme.colors.contentInversePrimary}
             size={24}
             display={"block"}
           />
         }
-        bg={theme.colors.backgroundLightWarning}
+        bg={theme.colors.backgroundInversePrimary}
         title={
           scheduleData.client.username +
           " want to booked on " +
           scheduleData.appointmentDate.toDateString()
         }
         date={scheduleData.createAt}
-        name={scheduleData.workerName}
+        worker={scheduleData.worker.username}
+        client={scheduleData.client.username}
         location={scheduleData.location}
+        desc={scheduleData.description}
       />
       <div
         className={css({
@@ -69,16 +70,6 @@ export function RequestBooking({ scheduleData }: { scheduleData: any }) {
           // marginLeft: "calc(10px + (24px + (10px * 2)))",
         })}
       >
-        <ParagraphSmall
-          margin={0}
-          className={css({
-            textAlign: "left",
-            width: "100%",
-          })}
-        >
-          {scheduleData.description}
-        </ParagraphSmall>
-
         <div
           className={css({
             display: "flex",

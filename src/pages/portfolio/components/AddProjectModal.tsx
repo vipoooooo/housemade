@@ -1,15 +1,15 @@
 import * as React from "react";
 import { useStyletron } from "baseui";
 import ModalTemp from "../../../layouts/ModalW";
-import { Block } from "baseui/block";
-import { ParagraphMedium, ParagraphSmall } from "baseui/typography";
 import { Textarea } from "baseui/textarea";
 import { Button, KIND, SIZE } from "baseui/button";
 import { FileUploader } from "baseui/file-uploader";
 import { FormControl } from "baseui/form-control";
 import { Input } from "baseui/input";
-
-
+import { Block } from "baseui/block";
+import { Controller } from "react-hook-form";
+import Image from "next/image";
+import { StyleObject } from "styletron-standard";
 
 export default function AddProjectModal({
   isOpen,
@@ -22,7 +22,6 @@ export default function AddProjectModal({
   const [title, setTitle] = React.useState("");
   const [clientName, setClientName] = React.useState("");
   const [desc, setDesc] = React.useState("");
-  const [value, setValue] = React.useState(0);
   return (
     <ModalTemp
       isOpen={isOpen}
@@ -31,23 +30,59 @@ export default function AddProjectModal({
       hasModal={true}
     >
       <FormControl label="Cover">
-        <FileUploader
-          
-          overrides={{
-            FileDragAndDrop: {
-              style: ({ $theme }) => ({
-                // width: "200px",
-                height: "200px",
-                padding: "60px 20px",
-              }),
-            },
-            ContentMessage: {
-              style: ({ $theme }) => ({
-                textAlign: "center",
-              }),
-            },
-          }}
-        />
+        <Block
+          display={"flex"}
+          position={"relative"}
+          className={css({
+            width: "100%",
+            // gap: "20px",
+          })}
+        >
+          <Block height={"200px"} width={"100%"}>
+            <Image
+              alt={"project?.title"}
+              src={
+                "https://i.pinimg.com/564x/fd/81/0f/fd810fa4ac3c2dc4b3fe7ce549786cd9.jpg"
+              }
+              objectFit={"cover"}
+              priority
+              layout="fill"
+              className={css(image)}
+            />
+          </Block>
+          <Block
+            className={css({
+              position: "absolute",
+            })}
+          >
+            <FileUploader
+              overrides={{
+                FileDragAndDrop: {
+                  style: ({}) => ({
+                    height: "200px",
+                    paddingTop: "70px",
+                    transform: "translate(100%, 0)",
+                    background: "transparent",
+                    border: "none",
+                  }),
+                },
+                ContentMessage: {
+                  style: ({ $theme }) => ({
+                    textAlign: "center",
+                    display: "none",
+                  }),
+                },
+              }}
+            />
+            {/* <Controller
+                name="imageBase64"
+                // control={control}
+                defaultValue=""
+                render={({ field }) => (
+                )}
+              /> */}
+          </Block>
+        </Block>
       </FormControl>
       <FormControl label="Title" caption="your project title">
         <Input
@@ -105,3 +140,10 @@ export default function AddProjectModal({
     </ModalTemp>
   );
 }
+
+export const image: StyleObject = {
+  objectFit: "contain",
+  width: "100% !important",
+  position: "relative",
+  height: "unset !important",
+};

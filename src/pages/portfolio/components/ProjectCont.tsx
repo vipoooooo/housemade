@@ -12,7 +12,8 @@ import { Button, KIND, SIZE } from "baseui/button";
 import AddProjectModal from "./AddProjectModal";
 import { useSession } from "next-auth/react";
 import { trpc } from "../../../utils/trpc";
-import { ProjectSkeleton } from "../../browse/components/profile/PortfolioCont";
+import { ProjectSkeleton } from "../../../components/common/Skeleton";
+import { IoPencil } from "react-icons/io5";
 
 export default function ProjectCont() {
   const [css] = useStyletron();
@@ -115,9 +116,25 @@ export default function ProjectCont() {
                       />
                     </AspectRatioBoxBody>
                   </AspectRatioBox>
-                  <ParagraphSmall margin={"10px 0 0 0"}>
-                    {project?.title}
-                  </ParagraphSmall>
+                  <Block
+                    display={"flex"}
+                    justifyContent={"space-between"}
+                    alignItems={"center"}
+                    margin={"10px 0 0 0"}
+                  >
+                    <ParagraphSmall margin={"0"}>
+                      {project?.title}
+                    </ParagraphSmall>
+                    <Button size={SIZE.mini} kind={KIND.tertiary}>
+                      <IoPencil
+                        size={20}
+                        cursor={"pointer"}
+                        onClick={() => {
+                          console.log("edit");
+                        }}
+                      />
+                    </Button>
+                  </Block>
                 </FlexGridItem>
               ))}
             </FlexGrid>

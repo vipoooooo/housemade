@@ -35,12 +35,12 @@ export function Requesting({ scheduleData }: { scheduleData: any }) {
         <ScheduleContent
           icon={
             <IoHandRight
-              color={theme.colors.backgroundWarning}
+              color={theme.colors.contentInversePrimary}
               size={24}
               display={"block"}
             />
           }
-          bg={theme.colors.backgroundLightWarning}
+          bg={theme.colors.backgroundInversePrimary}
           title={
             "You’re requesting an appointment with " +
             scheduleData.worker.username +
@@ -48,54 +48,36 @@ export function Requesting({ scheduleData }: { scheduleData: any }) {
             scheduleData.appointmentDate.toDateString()
           }
           date={scheduleData.createAt}
-          name={scheduleData.worker.username}
+          worker={scheduleData.worker.username}
+          client={scheduleData.client.username}
           location={scheduleData.location}
+          desc={scheduleData.description}
         />
         <div
           className={css({
             display: "flex",
-            flexDirection: "column",
+            alignItems: "stretch",
             gap: "10px",
             width: "100%",
-            // width: "calc(100% - (10px + (24px + (10px * 2))))",
-            // marginLeft: "calc(10px + (24px + (10px * 2)))",
           })}
         >
-          <ParagraphSmall
-            margin={0}
-            className={css({
-              textAlign: "left",
-            })}
+          <Button
+            onClick={() => onSubmit({ id: scheduleData.id })}
+            isLoading={isLoading}
+            disabled={isLoading}
+            kind={KIND.secondary}
+            size={SIZE.compact}
+            startEnhancer={<IoClose size={20} />}
+            overrides={{
+              BaseButton: {
+                style: ({ theme }) => ({
+                  width: "100%",
+                }),
+              },
+            }}
           >
-            {scheduleData.description}
-          </ParagraphSmall>
-
-          <div
-            className={css({
-              display: "flex",
-              alignItems: "stretch",
-              gap: "10px",
-              width: "100%",
-            })}
-          >
-            <Button
-              onClick={() => onSubmit({ id: scheduleData.id })}
-              isLoading={isLoading}
-              disabled={isLoading}
-              kind={KIND.secondary}
-              size={SIZE.compact}
-              startEnhancer={<IoClose size={20} />}
-              overrides={{
-                BaseButton: {
-                  style: ({ theme }) => ({
-                    width: "100%",
-                  }),
-                },
-              }}
-            >
-              Cancel Booking
-            </Button>
-          </div>
+            Cancel Booking
+          </Button>
         </div>
       </RequestingWrapper>
     </>
