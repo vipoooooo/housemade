@@ -62,7 +62,7 @@ export default function ModalW({
           className={css({
             display: "flex",
             flexDirection: "column",
-            gap: "20px",
+            // gap: "20px",
           })}
         >
           <Block display={"flex"} justifyContent={"space-between"}>

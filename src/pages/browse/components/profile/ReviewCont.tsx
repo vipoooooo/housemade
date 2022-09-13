@@ -10,16 +10,16 @@ import ReviewModal from "../modals/ReviewModal";
 import { HeadingTitle } from "../../../../components/shared/HeadingTitle";
 import { trpc } from "../../../../utils/trpc";
 import { Skeleton } from "baseui/skeleton";
+import { SkeletonReview } from "../../../../components/common/Skeleton";
+import { useSession } from "next-auth/react";
 
 export default function ReviewSide() {
   const [css, theme] = useStyletron();
-
   const [isOpen, setIsOpen] = React.useState(false);
-
   const router = useRouter();
   const { id } = router.query;
-
-  const { data, isLoading, isFetching } = trpc.useQuery(
+  const { data: session } = useSession();
+  const { data, isLoading } = trpc.useQuery(
     ["review.reviews", { id: id as string }],
     {
       retry: false,
@@ -51,10 +51,10 @@ export default function ReviewSide() {
               flexGridRowGap="scale800"
             >
               <FlexGridItem>
-                <SkeletonComp />
-                <SkeletonComp />
-                <SkeletonComp />
-                <SkeletonComp />
+                <SkeletonReview />
+                <SkeletonReview />
+                <SkeletonReview />
+                <SkeletonReview />
               </FlexGridItem>
             </FlexGrid>
           </Block>
@@ -125,6 +125,21 @@ export default function ReviewSide() {
                             <ParagraphSmall margin={0}>
                               {review?.client?.username}
                             </ParagraphSmall>
+                            {session?.id === review.clientId ? (
+                              <>
+                                <ParagraphSmall margin={0}>
+                                  &bull;
+                                </ParagraphSmall>
+                                <ParagraphSmall
+                                  margin={0}
+                                  color={theme.colors.accent}
+                                >
+                                  you
+                                </ParagraphSmall>
+                              </>
+                            ) : (
+                              ""
+                            )}
                             <ParagraphXSmall
                               margin={0}
                               color={theme.colors.contentStateDisabled}
@@ -150,82 +165,5 @@ export default function ReviewSide() {
         </>
       )}
     </>
-  );
-}
-
-export function SkeletonComp() {
-  const [css, theme] = useStyletron();
-  return (
-    <Block
-      width={"100%"}
-      // className={css({ flex: 1})}
-      marginBottom="20px"
-    >
-      <div
-        className={css({
-          display: "flex",
-          flexDirection: "column",
-        })}
-      >
-        <div
-          className={css({
-            display: "flex",
-            gap: "10px",
-          })}
-        >
-          <Skeleton
-            width="40px"
-            height="40px"
-            animation
-            overrides={{
-              Root: {
-                style: {
-                  borderRadius: "50%",
-                },
-              },
-            }}
-          />
-          <div
-            className={css({
-              display: "flex",
-              flexDirection: "column",
-              gap: "5px",
-            })}
-          >
-            <div
-              className={css({
-                display: "flex",
-                gap: "10px",
-              })}
-            >
-              <Skeleton
-                width="50px"
-                height="15px"
-                overrides={{
-                  Root: {
-                    style: {
-                      borderRadius: "15px",
-                    },
-                  },
-                }}
-                animation
-              />
-            </div>
-            <Skeleton
-              width="100px"
-              height="15px"
-              overrides={{
-                Root: {
-                  style: {
-                    borderRadius: "15px",
-                  },
-                },
-              }}
-              animation
-            />
-          </div>
-        </div>
-      </div>
-    </Block>
   );
 }

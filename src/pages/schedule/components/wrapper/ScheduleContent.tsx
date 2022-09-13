@@ -5,22 +5,27 @@ import { ParagraphSmall, ParagraphXSmall } from "baseui/typography";
 import { StyledLink } from "baseui/link";
 import ScheduleContentModal from "./ScheduleContentModal";
 import { Button, KIND, SIZE } from "baseui/button";
+import { IoLocationOutline } from "react-icons/io5";
 
 interface ActiveProps {
   icon: React.ReactNode;
   bg: string;
   title: string;
   date: string;
-  name: string;
+  worker: string;
+  client: string;
   location: string;
+  desc: string;
 }
 function ScheduleContent({
   icon,
   bg,
   title,
   date,
-  name,
+  worker,
+  client,
   location,
+  desc,
 }: ActiveProps) {
   const [css, theme] = useStyletron();
   const [isOpen, setIsOpen] = React.useState(false);
@@ -52,7 +57,7 @@ function ScheduleContent({
           width={"100%"}
         >
           <ParagraphSmall
-            margin={0}
+            margin={"0 0 10px 0"}
             className={css({
               textAlign: "left",
             })}
@@ -62,28 +67,39 @@ function ScheduleContent({
           <ParagraphXSmall margin={0} color={theme.colors.contentStateDisabled}>
             {date}
           </ParagraphXSmall>
+          <ParagraphXSmall margin={0}>Description : {desc}</ParagraphXSmall>
           <div
             className={css({
               display: isOpen ? "block" : "none",
             })}
           >
-            <Block margin={"10px 0"}>
-              <ParagraphXSmall margin={0}>
-                <StyledLink
-                  href="/"
-                  style={{
-                    cursor: "pointer",
-                    textDecoration: "none",
-                    color: theme.colors.accent,
-                  }}
-                >
-                  {name}
-                </StyledLink>
-              </ParagraphXSmall>
-              <ParagraphXSmall margin={0} color={theme.colors.contentSecondary}>
-                {location}
-              </ParagraphXSmall>
-            </Block>
+            <ParagraphXSmall margin={0}>
+              Client :
+              <StyledLink
+                href="/"
+                style={{
+                  // cursor: "pointer",
+                  textDecoration: "none",
+                  color: theme.colors.accent,
+                }}
+              >
+                {" " + client}
+              </StyledLink>
+            </ParagraphXSmall>
+            <ParagraphXSmall margin={0}>
+              Worker :
+              <StyledLink
+                href="/"
+                style={{
+                  // cursor: "pointer",
+                  textDecoration: "none",
+                  color: theme.colors.accent,
+                }}
+              >
+                {" " + worker}
+              </StyledLink>
+            </ParagraphXSmall>
+            <ParagraphXSmall margin={0}>Location : {location}</ParagraphXSmall>
           </div>
 
           <Block margin={"5px 0"}>

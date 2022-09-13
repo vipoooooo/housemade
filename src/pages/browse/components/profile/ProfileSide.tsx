@@ -14,7 +14,7 @@ import { Button, KIND, SHAPE, SIZE } from "baseui/button";
 import ReportModal from "../modals/ReportModal";
 import BookingModal from "../modals/BookingModal";
 import { trpc } from "../../../../utils/trpc";
-import { Skeleton } from "baseui/skeleton";
+import { SkeletonProfileCont } from "../../../../components/common/Skeleton";
 
 export default function ProfileSide() {
   const [css, $theme] = useStyletron();
@@ -32,107 +32,7 @@ export default function ProfileSide() {
   return (
     <>
       {isLoading ? (
-        <>
-          <Block
-            position={["relative", "relative", "relative", "sticky"]}
-            top={[0, 0, 0, "68px"]}
-            flex={["0 360px"]}
-            width={["100%", "100%", "360px", "360px"]}
-            margin={"0 auto"}
-            className={css({
-              alignSelf: "flex-start",
-              display: "flex",
-              flexDirection: "column",
-              gap: "20px",
-            })}
-          >
-            <div
-              className={css({
-                display: "flex",
-                alignItems: "center",
-                gap: "10px",
-              })}
-            >
-              <Skeleton
-                width="100px"
-                height="100px"
-                animation
-                overrides={{
-                  Root: {
-                    style: {
-                      borderRadius: "50%",
-                    },
-                  },
-                }}
-              />
-              <div
-                className={css({
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "5px",
-                })}
-              >
-                <Skeleton
-                  width="100px"
-                  height="15px"
-                  overrides={{
-                    Root: {
-                      style: {
-                        borderRadius: "15px",
-                      },
-                    },
-                  }}
-                  animation
-                />
-                <Skeleton
-                  width="75px"
-                  height="15px"
-                  overrides={{
-                    Root: {
-                      style: {
-                        borderRadius: "15px",
-                      },
-                    },
-                  }}
-                  animation
-                />
-              </div>
-            </div>
-            <div
-              className={css({
-                display: "flex",
-                alignItems: "center",
-                width: "100%",
-                gap: "5px",
-              })}
-            >
-              <Skeleton
-                width="calc((100% - (36px + (5px*2)))/2)"
-                height="36px"
-                animation
-              />
-              <Skeleton
-                width="calc((100% - (36px + (5px*2)))/2)"
-                height="36px"
-                animation
-              />
-              <Skeleton width="36px" height="36px" animation />
-            </div>
-            <Skeleton
-              rows={3}
-              width="200px"
-              animation
-              overrides={{
-                Row: {
-                  style: {
-                    height: "20px",
-                    marginBottom: "15px",
-                  },
-                },
-              }}
-            />
-          </Block>
-        </>
+        <SkeletonProfileCont />
       ) : (
         <>
           <Block
@@ -264,7 +164,8 @@ export default function ProfileSide() {
             </div>
             <ParagraphXSmall margin={0}>
               <StyledLink
-                href="/"
+                href={data?.profile?.link || ""}
+                target="_blank"
                 style={{
                   //   textDecoration: "none",
                   color: $theme.colors.accent,

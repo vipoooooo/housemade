@@ -3,24 +3,31 @@ import { useStyletron } from "baseui";
 import { IoToday } from "react-icons/io5";
 import { RequestingWrapper } from "./wrapper/RequestingWrapper";
 import ScheduleContent from "./wrapper/ScheduleContent";
+import { ParagraphSmall } from "baseui/typography";
 
-export function Upcoming({ scheduleData }: { scheduleData: any }) {
+export function UpcomingAsWorker({ scheduleData }: { scheduleData: any }) {
   const [css, theme] = useStyletron();
   return (
     <RequestingWrapper>
       <ScheduleContent
         icon={
           <IoToday
-            color={theme.colors.backgroundAccent}
+            color={theme.colors.contentInversePrimary}
             size={24}
             display={"block"}
           />
         }
-        bg={theme.colors.backgroundLightAccent}
-        title={"Appointment on " + scheduleData.appointmentDate.toDateString()}
+        bg={theme.colors.backgroundInversePrimary}
+        title={
+          scheduleData.client.username +
+          " have an appointment with you on " +
+          scheduleData.appointmentDate.toDateString()
+        }
         date={scheduleData.createAt}
-        name={scheduleData.workerName}
+        worker={scheduleData.worker.username}
+        client={scheduleData.client.username}
         location={scheduleData.location}
+        desc={scheduleData.description}
       />
     </RequestingWrapper>
   );

@@ -6,7 +6,6 @@ import ProfileSide from "./components/ProfileSide";
 import ContentSide from "./components/ContentSide";
 import restricted from "../api/restricted";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { trpc } from "../../utils/trpc";
 
@@ -16,10 +15,9 @@ export const getServerSideProps = restricted(async (ctx) => {
 });
 
 export default function Profile() {
-  const [css, theme] = useStyletron();
-  const router = useRouter();
+  const [css] = useStyletron();
   const { data: session } = useSession();
-  const { data, error, isLoading } = trpc.useQuery(
+  const { data } = trpc.useQuery(
     ["worker.profile", { id: session?.id as string }],
     {
       retry: false,

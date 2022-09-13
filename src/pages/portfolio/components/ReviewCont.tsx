@@ -7,7 +7,7 @@ import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
 import { HeadingTitle } from "../../../components/shared/HeadingTitle";
 import { trpc } from "../../../utils/trpc";
 import { useSession } from "next-auth/react";
-import { SkeletonComp } from "../../browse/components/profile/ReviewCont";
+import { SkeletonReview } from "../../../components/common/Skeleton";
 
 export default function ReviewSide() {
   const [css, theme] = useStyletron();
@@ -31,10 +31,10 @@ export default function ReviewSide() {
               flexGridRowGap="scale800"
             >
               <FlexGridItem>
-                <SkeletonComp />
-                <SkeletonComp />
-                <SkeletonComp />
-                <SkeletonComp />
+                <SkeletonReview />
+                <SkeletonReview />
+                <SkeletonReview />
+                <SkeletonReview />
               </FlexGridItem>
             </FlexGrid>
           </Block>

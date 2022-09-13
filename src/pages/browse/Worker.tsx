@@ -27,7 +27,7 @@ export default function Worker() {
     ["subcategory.subcategories", { id: id as string }],
     { retry: false }
   );
-  const { data, isLoading } = trpc.useQuery(
+  const { data } = trpc.useQuery(
     ["worker.workers", { id: (skillId as string) || (id as string) }],
     { retry: false }
   );
