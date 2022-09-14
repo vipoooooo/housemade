@@ -82,7 +82,7 @@ export default function Worker() {
                 username={worker.user.username}
                 verify={worker.verify}
                 skill={worker.subcategory.title}
-                rating={worker.rating}
+                rating={worker.rating.toFixed(1)}
                 reviewer={worker.reviewer}
               />
             </FlexGridItem>

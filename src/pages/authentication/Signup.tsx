@@ -25,6 +25,7 @@ const SignUp: NextPage = () => {
     control,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<ISignUp>({
     resolver: zodResolver(signUpSchema),
   });
@@ -35,6 +36,7 @@ const SignUp: NextPage = () => {
   }
 
   const { mutateAsync, error } = trpc.useMutation(["auth.signup"]);
+  console.log(error);
   const onSubmit = useCallback(
     async (data: ISignUp) => {
       try {
@@ -42,7 +44,9 @@ const SignUp: NextPage = () => {
         if (result.status === 201) {
           router.push("/authentication/Login");
         }
-      } catch (err) {}
+      } catch (err: any) {
+        setError("email", { message: err.message });
+      }
     },
     [mutateAsync, router]
   );
@@ -96,7 +100,7 @@ const SignUp: NextPage = () => {
               <FormControl
                 label="Password"
                 caption="password must be at least 8 characters long"
-                positive={!errors.password ? "valid password" : null}
+                // positive={!errors.password}
                 error={errors.password ? errors.password.message : null}
               >
                 <Controller

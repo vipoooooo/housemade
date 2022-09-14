@@ -12,10 +12,12 @@ import Image from "next/image";
 import { StyleObject } from "styletron-standard";
 import { useSession } from "next-auth/react";
 import { trpc } from "../../../utils/trpc";
-import { IwriteProjectSchema, writeProjectSchema } from "../../../server/router/project/project.type";
+import {
+  IwriteProjectSchema,
+  writeProjectSchema,
+} from "../../../server/router/project/project.type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { hide } from "../../browse/components/modals/ReportModal";
-import { useRouter } from "next/router";
 
 export default function AddProjectModal({
   isOpen,
@@ -24,13 +26,8 @@ export default function AddProjectModal({
   isOpen: boolean;
   setIsOpen: (val: boolean) => void;
 }) {
-  const [css, theme] = useStyletron();
   const utils = trpc.useContext();
-  const router = useRouter();
-  const [title, setTitle] = React.useState("");
-  const [clientName, setClientName] = React.useState("");
-  const [desc, setDesc] = React.useState("");
-  const {data: session} = useSession();
+  const { data: session } = useSession();
   const {
     control,
     handleSubmit,
@@ -41,9 +38,8 @@ export default function AddProjectModal({
   });
 
   const { mutateAsync, error } = trpc.useMutation(["project.writeProject"]);
-  
-  const onSubmit = React.useCallback(async (data: IwriteProjectSchema) => {
-    console.log('hello');
+
+  const onSubmit = async (data: IwriteProjectSchema) => {
     try {
       const result = await mutateAsync(data, {
         onSuccess: () => {
@@ -52,7 +48,7 @@ export default function AddProjectModal({
       });
       setIsOpen(false);
     } catch (err) {}
-  }, []);
+  };
 
   return (
     <ModalTemp
@@ -132,12 +128,7 @@ export default function AddProjectModal({
           name="title"
           control={control}
           render={({ field }) => (
-            <Input
-              required
-              {...field}
-              ref={field.ref}
-              size={SIZE.compact}
-            />
+            <Input required {...field} ref={field.ref} size={SIZE.compact} />
           )}
         />
       </FormControl>
@@ -149,12 +140,7 @@ export default function AddProjectModal({
           name="client"
           control={control}
           render={({ field }) => (
-            <Input
-              required
-              {...field}
-              ref={field.ref}
-              size={SIZE.compact}
-            />
+            <Input required {...field} ref={field.ref} size={SIZE.compact} />
           )}
         />
       </FormControl>

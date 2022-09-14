@@ -13,11 +13,16 @@ import AddProjectModal from "./AddProjectModal";
 import { useSession } from "next-auth/react";
 import { trpc } from "../../../utils/trpc";
 import { ProjectSkeleton } from "../../../components/common/Skeleton";
-import { IoPencil } from "react-icons/io5";
+import { IoPencilOutline, IoTrashOutline } from "react-icons/io5";
+import { IdeleteProject } from "../../../server/router/project/project.type";
+import { string } from "yup";
+import { toaster, ToasterContainer } from "baseui/toast";
 
 export default function ProjectCont() {
   const [css] = useStyletron();
   const router = useRouter();
+  const utils = trpc.useContext();
+  const [isOpen, setIsOpen] = React.useState(false);
   const { data: session } = useSession();
   const { data, isLoading } = trpc.useQuery(
     ["project.projects", { id: session?.id as string }],
@@ -25,8 +30,20 @@ export default function ProjectCont() {
       retry: false,
     }
   );
+  const { mutateAsync, error } = trpc.useMutation(["project.deleteProject"]);
 
-  const [isOpen, setIsOpen] = React.useState(false);
+  const onDelete = async (data: IdeleteProject) => {
+    try {
+      const result = await mutateAsync(data, {
+        onSuccess: () => {
+          utils.invalidateQueries(["project.projects"]);
+        },
+      });
+    } catch (err) {
+      toaster.negative("Unable to delete your review", {});
+      console.log(err);
+    }
+  };
 
   return (
     <>
@@ -65,6 +82,16 @@ export default function ProjectCont() {
           </Block>
         ) : (
           <Block>
+            <ToasterContainer
+              autoHideDuration={2000}
+              overrides={{
+                Root: {
+                  style: ({ $theme }) => ({
+                    zIndex: 4,
+                  }),
+                },
+              }}
+            />
             <Block
               display={"flex"}
               justifyContent={"space-between"}
@@ -108,7 +135,9 @@ export default function ProjectCont() {
                     >
                       <Image
                         alt={project?.title}
-                        src={project.coverImg || "https://via.placeholder.com/150"}
+                        src={
+                          project.coverImg || "https://via.placeholder.com/150"
+                        }
                         objectFit={"cover"}
                         priority
                         layout="fill"
@@ -119,21 +148,30 @@ export default function ProjectCont() {
                   <Block
                     display={"flex"}
                     justifyContent={"space-between"}
-                    alignItems={"center"}
+                    // alignItems={"center"}
                     margin={"10px 0 0 0"}
                   >
                     <ParagraphSmall margin={"0"}>
                       {project?.title}
                     </ParagraphSmall>
-                    <Button size={SIZE.mini} kind={KIND.tertiary}>
-                      <IoPencil
-                        size={20}
-                        cursor={"pointer"}
+                    <Block display={"flex"} alignItems={"center"}>
+                      <Button
                         onClick={() => {
                           console.log("edit");
                         }}
-                      />
-                    </Button>
+                        size={SIZE.mini}
+                        kind={KIND.tertiary}
+                      >
+                        <IoPencilOutline size={20} cursor={"pointer"} />
+                      </Button>
+                      <Button
+                        onClick={() => onDelete({ id: project.id })}
+                        size={SIZE.mini}
+                        kind={KIND.tertiary}
+                      >
+                        <IoTrashOutline size={20} cursor={"pointer"} />
+                      </Button>
+                    </Block>
                   </Block>
                 </FlexGridItem>
               ))}
