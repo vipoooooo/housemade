@@ -7,9 +7,15 @@ import { FileUploader } from "baseui/file-uploader";
 import { FormControl } from "baseui/form-control";
 import { Input } from "baseui/input";
 import { Block } from "baseui/block";
-import { Controller } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import Image from "next/image";
 import { StyleObject } from "styletron-standard";
+import { useSession } from "next-auth/react";
+import { trpc } from "../../../utils/trpc";
+import { IwriteProjectSchema, writeProjectSchema } from "../../../server/router/project/project.type";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { hide } from "../../browse/components/modals/ReportModal";
+import { useRouter } from "next/router";
 
 export default function AddProjectModal({
   isOpen,
@@ -19,17 +25,54 @@ export default function AddProjectModal({
   setIsOpen: (val: boolean) => void;
 }) {
   const [css, theme] = useStyletron();
+  const utils = trpc.useContext();
+  const router = useRouter();
   const [title, setTitle] = React.useState("");
   const [clientName, setClientName] = React.useState("");
   const [desc, setDesc] = React.useState("");
+  const {data: session} = useSession();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm<IwriteProjectSchema>({
+    resolver: zodResolver(writeProjectSchema),
+  });
+
+  const { mutateAsync, error } = trpc.useMutation(["project.writeProject"]);
+  
+  const onSubmit = React.useCallback(async (data: IwriteProjectSchema) => {
+    console.log('hello');
+    try {
+      const result = await mutateAsync(data, {
+        onSuccess: () => {
+          utils.invalidateQueries(["project.projects"]);
+        },
+      });
+      setIsOpen(false);
+    } catch (err) {}
+  }, []);
+
   return (
     <ModalTemp
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       title="Add Project"
       hasModal={true}
+      onSubmit={handleSubmit(onSubmit)}
     >
-      <FormControl label="Cover">
+      <FormControl overrides={hide}>
+        <Controller
+          name="workerId"
+          control={control}
+          defaultValue={session?.id as string}
+          render={({ field }) => (
+            <Input {...field} type="hidden" ref={field.ref} />
+          )}
+        />
+      </FormControl>
+      {/* <FormControl label="Cover">
         <Block
           display={"flex"}
           position={"relative"}
@@ -62,7 +105,7 @@ export default function AddProjectModal({
                     height: "200px",
                     paddingTop: "70px",
                     transform: "translate(100%, 0)",
-                    background: "transparent",
+                    background: "none",
                     border: "none",
                   }),
                 },
@@ -74,66 +117,82 @@ export default function AddProjectModal({
                 },
               }}
             />
-            {/* <Controller
+            <Controller
                 name="imageBase64"
                 // control={control}
                 defaultValue=""
                 render={({ field }) => (
                 )}
-              /> */}
+              />
           </Block>
         </Block>
-      </FormControl>
+      </FormControl> */}
       <FormControl label="Title" caption="your project title">
-        <Input
-          required
-          id="inputTitle-id"
-          value={title}
-          onChange={(event) => setTitle(event.currentTarget.value)}
-          size={SIZE.compact}
+        <Controller
+          name="title"
+          control={control}
+          render={({ field }) => (
+            <Input
+              required
+              {...field}
+              ref={field.ref}
+              size={SIZE.compact}
+            />
+          )}
         />
       </FormControl>
       <FormControl
         label="Client's name"
         caption="what is the name of the project's client?"
       >
-        <Input
-          required
-          id="inputClientName-id"
-          value={clientName}
-          onChange={(event) => setClientName(event.currentTarget.value)}
-          size={SIZE.compact}
+        <Controller
+          name="client"
+          control={control}
+          render={({ field }) => (
+            <Input
+              required
+              {...field}
+              ref={field.ref}
+              size={SIZE.compact}
+            />
+          )}
         />
       </FormControl>
       <FormControl
         label="Description"
         caption="Description your problem in details"
       >
-        <Textarea
-          value={desc}
-          onChange={(e) => setDesc(e.currentTarget.value)}
-          size={SIZE.compact}
-          placeholder={""}
-          overrides={{
-            Input: {
-              style: {
-                maxHeight: "300px",
-                minHeight: "100px",
-                minWidth: "300px",
-                width: "100vw", // fill all available space up to parent max-width
-                resize: "both",
-              },
-            },
-            InputContainer: {
-              style: {
-                maxWidth: "100%",
-                width: "min-content",
-              },
-            },
-          }}
+        <Controller
+          name="description"
+          control={control}
+          render={({ field }) => (
+            <Textarea
+              {...field}
+              ref={field.ref}
+              size={SIZE.compact}
+              placeholder={""}
+              overrides={{
+                Input: {
+                  style: {
+                    maxHeight: "300px",
+                    minHeight: "100px",
+                    minWidth: "300px",
+                    width: "100vw", // fill all available space up to parent max-width
+                    resize: "both",
+                  },
+                },
+                InputContainer: {
+                  style: {
+                    maxWidth: "100%",
+                    width: "min-content",
+                  },
+                },
+              }}
+            />
+          )}
         />
       </FormControl>
-      <Button onClick={() => alert("click")} kind={KIND.primary}>
+      <Button type="submit" kind={KIND.primary}>
         Submit
       </Button>
       {/* </div> */}

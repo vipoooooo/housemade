@@ -7,6 +7,7 @@ const nextConfig = {
       "media0.giphy.com",
       "encrypted-tbn0.gstatic.com",
       "i.pinimg.com",
+      "via.placeholder.com",
     ],
   },
 };

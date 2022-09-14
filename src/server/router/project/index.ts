@@ -1,6 +1,8 @@
 import * as trpc from "@trpc/server";
+import { getDeleteFile, uploadFile } from "../../../utils/google-service";
 import { createRouter } from "../context";
 import { oneProjectSchema, projectSchema, writeProjectSchema } from "./project.type";
+import { v4 as uuidv4 } from "uuid";
 
 export const projectRouter = createRouter()
   .query("projects", {
@@ -49,10 +51,19 @@ export const projectRouter = createRouter()
   .mutation("writeProject", {
     input: writeProjectSchema,
     resolve: async({ ctx, input}) => {
+      // let image = input.image;
+
+      // const uploadRes = await uploadFile({
+      //   fileName: uuidv4(),
+      //   folderId: "housemade-project-cover",
+      //   fileData: input.imageBase64,
+      // });
+
+      // image = uploadRes.id || "";
 
       const result = await ctx.prisma.project.create({
         data:{
-          // coverImg: input.coverImg,
+          // coverImg: image,
           title: input.title,
           description: input.description,
           client: input.client,

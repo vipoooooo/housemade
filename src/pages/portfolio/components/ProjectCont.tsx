@@ -108,7 +108,7 @@ export default function ProjectCont() {
                     >
                       <Image
                         alt={project?.title}
-                        src={project.coverImg || ""}
+                        src={project.coverImg || "https://via.placeholder.com/150"}
                         objectFit={"cover"}
                         priority
                         layout="fill"
