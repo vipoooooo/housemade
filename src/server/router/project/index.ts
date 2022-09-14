@@ -1,7 +1,12 @@
 import * as trpc from "@trpc/server";
 import { getDeleteFile, uploadFile } from "../../../utils/google-service";
 import { createRouter } from "../context";
-import { oneProjectSchema, projectSchema, writeProjectSchema } from "./project.type";
+import {
+  deleteProjectSchema,
+  oneProjectSchema,
+  projectSchema,
+  writeProjectSchema,
+} from "./project.type";
 import { v4 as uuidv4 } from "uuid";
 
 export const projectRouter = createRouter()
@@ -47,10 +52,9 @@ export const projectRouter = createRouter()
       };
     },
   })
-
   .mutation("writeProject", {
     input: writeProjectSchema,
-    resolve: async({ ctx, input}) => {
+    resolve: async ({ ctx, input }) => {
       // let image = input.image;
 
       // const uploadRes = await uploadFile({
@@ -62,19 +66,35 @@ export const projectRouter = createRouter()
       // image = uploadRes.id || "";
 
       const result = await ctx.prisma.project.create({
-        data:{
+        data: {
           // coverImg: image,
           title: input.title,
           description: input.description,
           client: input.client,
           workerId: input.workerId,
-        }
+        },
       });
 
       return {
         status: 200,
         message: "create project successfully",
         result,
-      }
+      };
+    },
+  })
+  .mutation("deleteProject", {
+    input: deleteProjectSchema,
+    resolve: async ({ ctx, input }) => {
+      const result = await ctx.prisma.project.delete({
+        where: {
+          id: input.id,
+        },
+      });
+
+      return {
+        status: 200,
+        message: "delete project successfully",
+        result,
+      };
     },
   });

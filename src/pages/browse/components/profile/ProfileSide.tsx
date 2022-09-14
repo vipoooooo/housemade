@@ -94,7 +94,8 @@ export default function ProfileSide() {
                     />
                   </Block>
                   <ParagraphXSmall margin={0}>
-                    {data?.profile?.rating} ({data?.profile?.reviewer} review)
+                    {data?.profile?.rating.toFixed(1)} (
+                    {data?.profile?.reviewer} review)
                   </ParagraphXSmall>
                 </Block>
               </div>

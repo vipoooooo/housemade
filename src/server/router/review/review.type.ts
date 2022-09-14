@@ -8,6 +8,8 @@ export const writeReviewSchema = z.object({
   userId: z.string(),
   workerId: z.string(),
 });
+export const deleteReviewSchema = z.object({ id: z.string() });
 
 export type IReview = z.infer<typeof reviewSchema>;
 export type IWriteReview = z.infer<typeof writeReviewSchema>;
+export type IDeleteReview = z.infer<typeof deleteReviewSchema>;

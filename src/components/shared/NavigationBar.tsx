@@ -45,8 +45,6 @@ export default function Navigationbar() {
   const { menus } = useActiveMenu();
   const router = useRouter();
 
-  console.log(session);
-
   const { data, error, isLoading } = trpc.useQuery(
     ["user.getUser", { id: session?.id as string }],
     {

@@ -15,7 +15,7 @@ interface ActiveLinkProps {
   username: string;
   verify: boolean;
   skill: string;
-  rating: number;
+  rating: string;
   reviewer: number;
 }
 
@@ -31,8 +31,6 @@ export default function WorkerBtn({
   const [css, theme] = useStyletron();
   const router = useRouter();
   const { data } = useSession();
-
-  console.log(data);
 
   function handleClick() {
     data?.id === id

@@ -1,7 +1,11 @@
 import * as trpc from "@trpc/server";
 import { getFile } from "../../../utils/google-service";
 import { createRouter } from "../context";
-import { reviewSchema, writeReviewSchema } from "./review.type";
+import {
+  deleteReviewSchema,
+  reviewSchema,
+  writeReviewSchema,
+} from "./review.type";
 
 export const reviewRouter = createRouter()
   .query("reviews", {
@@ -45,7 +49,6 @@ export const reviewRouter = createRouter()
       };
     },
   })
-
   .mutation("review", {
     input: writeReviewSchema,
     resolve: async ({ ctx, input }) => {
@@ -68,6 +71,22 @@ export const reviewRouter = createRouter()
       return {
         status: 201,
         message: "Review successfully",
+        result,
+      };
+    },
+  })
+  .mutation("deleteReview", {
+    input: deleteReviewSchema,
+    resolve: async ({ ctx, input }) => {
+      const result = await ctx.prisma.review.delete({
+        where: {
+          id: input.id,
+        },
+      });
+
+      return {
+        status: 200,
+        message: "delete project successfully",
         result,
       };
     },
