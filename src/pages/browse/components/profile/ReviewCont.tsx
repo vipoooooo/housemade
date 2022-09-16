@@ -12,7 +12,8 @@ import { trpc } from "../../../../utils/trpc";
 import { SkeletonReview } from "../../../../components/common/Skeleton";
 import { useSession } from "next-auth/react";
 import { IDeleteReview } from "../../../../server/router/review/review.type";
-import { toaster, ToasterContainer } from "baseui/toast";
+import { toaster } from "baseui/toast";
+import { Toaster } from "../../../../components/common/Toaster";
 
 export default function ReviewSide() {
   const [css, theme] = useStyletron();
@@ -38,7 +39,7 @@ export default function ReviewSide() {
         },
       });
     } catch (err) {
-      toaster.negative("Unable to delete project", {});
+      toaster.warning("Unable to delete project", {});
       console.log(err);
     }
   };
@@ -79,16 +80,7 @@ export default function ReviewSide() {
         </>
       ) : (
         <>
-          <ToasterContainer
-            autoHideDuration={2000}
-            overrides={{
-              Root: {
-                style: ({ $theme }) => ({
-                  zIndex: 4,
-                }),
-              },
-            }}
-          />
+          <Toaster />
           <Block
             display={"flex"}
             flexDirection={"column"}

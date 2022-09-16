@@ -36,7 +36,6 @@ const SignUp: NextPage = () => {
   }
 
   const { mutateAsync, error } = trpc.useMutation(["auth.signup"]);
-  console.log(error);
   const onSubmit = useCallback(
     async (data: ISignUp) => {
       try {

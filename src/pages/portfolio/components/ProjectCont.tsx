@@ -15,14 +15,15 @@ import { trpc } from "../../../utils/trpc";
 import { ProjectSkeleton } from "../../../components/common/Skeleton";
 import { IoPencilOutline, IoTrashOutline } from "react-icons/io5";
 import { IdeleteProject } from "../../../server/router/project/project.type";
-import { string } from "yup";
-import { toaster, ToasterContainer } from "baseui/toast";
+import { toaster } from "baseui/toast";
+import { Toaster } from "../../../components/common/Toaster";
 
 export default function ProjectCont() {
   const [css] = useStyletron();
   const router = useRouter();
   const utils = trpc.useContext();
   const [isOpen, setIsOpen] = React.useState(false);
+  const [projectId, setProjectId] = React.useState("");
   const { data: session } = useSession();
   const { data, isLoading } = trpc.useQuery(
     ["project.projects", { id: session?.id as string }],
@@ -30,7 +31,11 @@ export default function ProjectCont() {
       retry: false,
     }
   );
-  const { mutateAsync, error } = trpc.useMutation(["project.deleteProject"]);
+  const {
+    mutateAsync,
+    error,
+    isLoading: deleteLoading,
+  } = trpc.useMutation(["project.deleteProject"]);
 
   const onDelete = async (data: IdeleteProject) => {
     try {
@@ -40,7 +45,7 @@ export default function ProjectCont() {
         },
       });
     } catch (err) {
-      toaster.negative("Unable to delete your review", {});
+      toaster.warning("Unable to delete your project", {});
       console.log(err);
     }
   };
@@ -82,16 +87,7 @@ export default function ProjectCont() {
           </Block>
         ) : (
           <Block>
-            <ToasterContainer
-              autoHideDuration={2000}
-              overrides={{
-                Root: {
-                  style: ({ $theme }) => ({
-                    zIndex: 4,
-                  }),
-                },
-              }}
-            />
+            <Toaster />
             <Block
               display={"flex"}
               justifyContent={"space-between"}
@@ -136,7 +132,7 @@ export default function ProjectCont() {
                       <Image
                         alt={project?.title}
                         src={
-                          project.coverImg || "https://via.placeholder.com/150"
+                          project.imageURL || "https://via.placeholder.com/150"
                         }
                         objectFit={"cover"}
                         priority
@@ -157,7 +153,8 @@ export default function ProjectCont() {
                     <Block display={"flex"} alignItems={"center"}>
                       <Button
                         onClick={() => {
-                          console.log("edit");
+                          setIsOpen(true);
+                          setProjectId(project.id);
                         }}
                         size={SIZE.mini}
                         kind={KIND.tertiary}
@@ -166,6 +163,7 @@ export default function ProjectCont() {
                       </Button>
                       <Button
                         onClick={() => onDelete({ id: project.id })}
+                        disabled={deleteLoading}
                         size={SIZE.mini}
                         kind={KIND.tertiary}
                       >
@@ -179,7 +177,11 @@ export default function ProjectCont() {
           </Block>
         )}
       </Block>
-      <AddProjectModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      <AddProjectModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        projectId={projectId}
+      />
     </>
   );
 }
