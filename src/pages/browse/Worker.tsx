@@ -32,8 +32,6 @@ export default function Worker() {
     { retry: false }
   );
 
-  console.log(data?.workers);
-
   return (
     <Layout hasHeader={true}>
       <Head>

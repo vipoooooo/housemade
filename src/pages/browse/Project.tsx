@@ -45,7 +45,7 @@ export default function Project() {
             >
               <Image
                 alt={proj.title}
-                src={proj.coverImg || ""}
+                src={proj.imageURL || ""}
                 objectFit={"cover"}
                 priority
                 layout="fill"

@@ -39,13 +39,13 @@ const options = {
 };
 
 export default function Navigationbar() {
-  const [css, theme] = useStyletron();
+  const [css] = useStyletron();
   const { data: session } = useSession();
   const [isOpen, setIsOpen] = React.useState(false);
   const { menus } = useActiveMenu();
   const router = useRouter();
 
-  const { data, error, isLoading } = trpc.useQuery(
+  const { data, isLoading } = trpc.useQuery(
     ["user.getUser", { id: session?.id as string }],
     {
       retry: false,
@@ -124,12 +124,16 @@ export default function Navigationbar() {
                 onChange={() => {}}
               />
             </Block> */}
-            <Button
-              onClick={() => router.push("/authentication/RegisterWorker")}
-              kind={KIND.tertiary}
-            >
-              Become a worker
-            </Button>
+            {data?.user?.role === "worker" ? (
+              <Block height={"48px"}></Block>
+            ) : (
+              <Button
+                onClick={() => router.push("/authentication/RegisterWorker")}
+                kind={KIND.tertiary}
+              >
+                Become a worker
+              </Button>
+            )}
             <Block display={["block", "block", "block", "none"]}>
               <Button onClick={() => setIsOpen(!isOpen)} kind={KIND.tertiary}>
                 {isOpen ? <IoClose size={20} /> : <IoMenu size={20} />}

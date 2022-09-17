@@ -3,8 +3,9 @@ import * as z from "zod";
 export const projectSchema = z.object({ id: z.string() });
 export const oneProjectSchema = z.object({ id: z.string() });
 export const writeProjectSchema = z.object({
-  // imageBase64: z.string(),
-  // image: z.string(),
+  id: z.string().optional(),
+  imageBase64: z.string(),
+  image: z.string(),
   title: z.string(),
   client: z.string(),
   description: z.string(),
