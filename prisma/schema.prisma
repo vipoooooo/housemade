@@ -85,8 +85,8 @@ model Worker {
     id            String      @id @default(cuid())
     link          String?
     description   String?
-    bookmark      Boolean
-    verify        Boolean
+    bookmark      Boolean?    @default(false)
+    verify        Boolean?    @default(false)
     userId        String      @unique
     user          User        @relation(fields: [userId], references: [id])
     categoryId    String

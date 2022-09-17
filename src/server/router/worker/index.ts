@@ -2,7 +2,11 @@ import { Review, SubCategory, User, Worker } from "@prisma/client";
 import * as trpc from "@trpc/server";
 import { getFile } from "../../../utils/google-service";
 import { createRouter } from "../context";
-import { profileSchema, workersSchema } from "./work.type";
+import {
+  profileSchema,
+  registerWorkerSchema,
+  workersSchema,
+} from "./work.type";
 
 export const workerRouter = createRouter()
   .query("workers", {
@@ -135,6 +139,56 @@ export const workerRouter = createRouter()
           reviewer: profile?.user?.review_worker.length,
           imageURL,
         },
+      };
+    },
+  })
+  .mutation("registerWorker", {
+    input: registerWorkerSchema,
+    resolve: async ({ ctx, input }) => {
+      // WORKER
+      const subcategory = input.subcategoryId;
+      const subCategory: SubCategory | null =
+        await ctx.prisma.subCategory.findFirst({
+          where: { id: subcategory.id },
+        });
+
+      if (!subCategory) {
+        throw new trpc.TRPCError({
+          code: "NOT_FOUND",
+          message: "Subcategory not found.",
+        });
+      }
+
+      const workerResult = await ctx.prisma.worker.create({
+        data: {
+          id: input.userId,
+          userId: input.userId,
+          subcategoryId: subcategory.id,
+          categoryId: subCategory.categoryId,
+          description: input.description,
+          link: input.link,
+          bookmark: false,
+          verify: false,
+        },
+      });
+
+      const workerRole = await ctx.prisma.user.update({
+        where: { id: input.userId },
+        data: {
+          role: "worker",
+        },
+      });
+
+      if (!workerResult || !workerRole) {
+        throw new trpc.TRPCError({
+          code: "BAD_REQUEST",
+          message: "Can not update worker.",
+        });
+      }
+
+      return {
+        status: 200,
+        message: "Update user successfully",
       };
     },
   });

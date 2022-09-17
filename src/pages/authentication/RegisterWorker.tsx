@@ -1,3 +1,4 @@
+import * as React from "react";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useCallback, useState } from "react";
@@ -15,37 +16,65 @@ import { StyledLink } from "baseui/link";
 import { Notification, KIND } from "baseui/notification";
 import { trpc } from "../../utils/trpc";
 import { Select } from "baseui/select";
-import { IRegisterWorker } from "../../server/router/worker/work.type";
+import {
+  IRegisterWorker,
+  registerWorkerSchema,
+} from "../../server/router/worker/work.type";
+import { Textarea } from "baseui/textarea";
+import { toaster } from "baseui/toast";
+import { hide } from "../browse/components/modals/ReportModal";
+import { Toaster } from "../../components/common/Toaster";
 
 const RegisterWorker: NextPage = () => {
+  const [css] = useStyletron();
+  const { data } = useSession();
   const router = useRouter();
-  const [css, theme] = useStyletron();
-  //   const {
-  //     control,
-  //     handleSubmit,
-  //     formState: { errors },
-  //   } = useForm<IRegisterWorker>({
-  //     resolver: zodResolver(loginSchema),
-  //   });
-  //   const [error, setError] = useState<SignInResponse["error"]>();
 
-  //   const onSubmit = useCallback(async (data: IRegisterWorker) => {
-  //     await signIn("credentials", {
-  //       ...data,
-  //       callbackUrl: "/browse/Browse",
-  //       redirect: false,
-  //     }).then((res) => {
-  //       if (res?.ok) {
-  //         router.push("/browse/Browse");
-  //       } else {
-  //         setError("Invalid credentials!");
-  //       }
-  //     });
-  //   }, []);
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    setError,
+  } = useForm<IRegisterWorker>({
+    resolver: zodResolver(registerWorkerSchema),
+  });
+  console.log(errors);
 
-  const sublist = trpc.useQuery(["subcategory.subcategorylist"], {
+  React.useEffect(() => {
+    if (data) setValue("userId", data.id as string);
+  }, [data]);
+
+  const userMutation = trpc.useMutation(["worker.registerWorker"]);
+  const categoryQuery = trpc.useQuery(["category.categoriesWithSubcategory"], {
     retry: false,
   });
+
+  // For Select input with group selection
+  const [skill, setSkill] = React.useState({ __ungrouped: [] });
+  React.useEffect(() => {
+    const categories = categoryQuery.data?.categories;
+    if (categories) {
+      setSkill({ __ungrouped: [], ...categoryQuery.data?.categories });
+    }
+  }, [categoryQuery.data]);
+
+  const onSubmit = React.useCallback(
+    async (data: IRegisterWorker) => {
+      try {
+        // console.log(data);
+        await userMutation.mutateAsync(data, {
+          onSuccess: () => {
+            toaster.info("Saved", {});
+            router.push("/browse/Browse");
+          },
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    [data]
+  );
 
   return (
     <div>
@@ -56,10 +85,11 @@ const RegisterWorker: NextPage = () => {
       </Head>
 
       <main>
+        <Toaster />
         <Form
           title="Worker Registration"
           hasForm={true}
-          //   onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(onSubmit)}
         >
           <div
             className={css({
@@ -78,7 +108,10 @@ const RegisterWorker: NextPage = () => {
                 border: "2px solid #EEEEEE",
               })}
             >
-              {/* <FormControl label="Skill">
+              <FormControl
+                label="Skill"
+                error={errors["subcategoryId"] && <>Skill is required</>}
+              >
                 <Controller
                   name="subcategoryId"
                   control={control}
@@ -86,13 +119,63 @@ const RegisterWorker: NextPage = () => {
                     <Select
                       ref={field.ref}
                       value={field.value}
-                      onChange={(params) => field.onChange(params.value)}
-                      options={sublist.data?.subcategorylist}
-                      placeholder="Choose one skill"
+                      size={SIZE.compact}
+                      options={skill}
+                      onChange={(params) => field.onChange(params.value[0])}
+                      isLoading={categoryQuery.isLoading}
+                      placeholder=""
                     />
                   )}
                 />
-              </FormControl> */}
+              </FormControl>
+              <FormControl
+                label="Description - optional"
+                caption="describe what you do"
+              >
+                <Controller
+                  name="description"
+                  control={control}
+                  rules={{ required: false }}
+                  render={({ field }) => (
+                    <Textarea
+                      {...field}
+                      size={SIZE.compact}
+                      placeholder={""}
+                      overrides={{
+                        Input: {
+                          style: {
+                            maxHeight: "300px",
+                            minHeight: "100px",
+                            minWidth: "300px",
+                            width: "100vw", // fill all available space up to parent max-width
+                            resize: "both",
+                          },
+                        },
+                        InputContainer: {
+                          style: {
+                            maxWidth: "100%",
+                            width: "min-content",
+                          },
+                        },
+                      }}
+                    />
+                  )}
+                />
+              </FormControl>
+              <FormControl
+                label="Link - optional"
+                caption="link to your personal website or website that contains your information"
+                error={errors["link"] && "this link is invalid"}
+              >
+                <Controller
+                  name="link"
+                  control={control}
+                  rules={{ required: false }}
+                  render={({ field }) => (
+                    <Input {...field} size={SIZE.compact} />
+                  )}
+                />
+              </FormControl>
               <Button
                 type="submit"
                 overrides={{

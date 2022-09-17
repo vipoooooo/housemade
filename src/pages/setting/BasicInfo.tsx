@@ -46,6 +46,7 @@ export default function BasicInfo() {
   const [skill, setSkill] = React.useState({ __ungrouped: [] });
   const [image, setImage] = React.useState<string | null>(null);
 
+  //Check If data exist for edit purpose
   React.useEffect(() => {
     const user = userQuery.data?.user;
     if (user) {
@@ -72,6 +73,7 @@ export default function BasicInfo() {
     }
   }, [categoryQuery.data]);
 
+  //Submit Button
   const onSubmit = React.useCallback(
     async (data: IUser) => {
       try {
@@ -79,6 +81,7 @@ export default function BasicInfo() {
           setError("subcategoryId", {});
           return;
         }
+        // console.log(data);
         await userMutation.mutateAsync(data, {
           onSuccess: () => {
             toaster.info("Saved", {});
