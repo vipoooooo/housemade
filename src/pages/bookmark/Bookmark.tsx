@@ -12,6 +12,7 @@ import { Block } from "baseui/block";
 import { HeadingTitle } from "../../components/shared/HeadingTitle";
 import { workers } from "../../mocks/worker.const";
 import { useStyletron } from "baseui";
+import WorkerBtn from "../../components/common/WorkerBtn";
 
 const isBookmarked = workers.filter((item) => item.bookmark);
 
@@ -28,7 +29,18 @@ export default function Bookmark() {
         >
           {isBookmarked.map((bm) => {
             return (
-              <FlexGridItem>{/* <WorkerCard data={bm} /> */}</FlexGridItem>
+              //   <FlexGridItem key={bm.id}>
+              //   <WorkerBtn
+              //     id={bm.id}
+              //     pfp={bm.imageURL}
+              //     username={bm.user.username}
+              //     verify={worker.verify || false}
+              //     skill={worker.subcategory.title}
+              //     rating={worker.rating.toFixed(1)}
+              //     reviewer={worker.reviewer}
+              //   />
+              // </FlexGridItem>
+              <></>
             );
           })}
         </FlexGrid>

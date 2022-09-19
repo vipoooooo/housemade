@@ -92,12 +92,27 @@ export default function Schedule() {
             <Panel title="Upcoming Appointment">
               {data?.appointments.map((item) => {
                 if (item.status === "upcoming") {
-                  if(item.upcoming_status === "default"){
-                    return <UpcomingAsDefault scheduleData={item} key={item.id} />
-                  }else if(item.upcoming_status === "ending" && session?.id != item.senderId){
-                    return (<UpcomingAsEnding scheduleData={item} key={item.id} />);
-                  }else if(item.upcoming_status === "ending" && item.senderId === session?.id){
-                    return <UpcomingAsEndingReciever scheduleData={item} key={item.id} />;
+                  if (item.upcoming_status === "default") {
+                    return (
+                      <UpcomingAsDefault scheduleData={item} key={item.id} />
+                    );
+                  } else if (
+                    item.upcoming_status === "ending" &&
+                    session?.id != item.senderId
+                  ) {
+                    return (
+                      <UpcomingAsEnding scheduleData={item} key={item.id} />
+                    );
+                  } else if (
+                    item.upcoming_status === "ending" &&
+                    item.senderId === session?.id
+                  ) {
+                    return (
+                      <UpcomingAsEndingReciever
+                        scheduleData={item}
+                        key={item.id}
+                      />
+                    );
                   }
                 }
               })}

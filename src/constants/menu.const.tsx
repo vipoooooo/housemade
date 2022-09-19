@@ -7,6 +7,7 @@ import {
   IoLanguage,
   IoLogOut,
   IoMenu,
+  IoPerson,
   IoSettings,
 } from "react-icons/io5";
 import { array } from "yup";
@@ -31,7 +32,7 @@ export const menuItems: MenuItem[] = [
     title: "Portfolio",
     href: "/portfolio/Portfolio",
     active: false,
-    icon: <IoChatbubble size={20} />,
+    icon: <IoPerson size={20} />,
     roles: ["worker"],
   },
   // {

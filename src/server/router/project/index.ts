@@ -20,6 +20,7 @@ export const projectRouter = createRouter()
     resolve: async ({ ctx, input }) => {
       const projects = await ctx.prisma.project.findMany({
         where: { workerId: input.id },
+        orderBy: { createdAt: "desc" },
       });
 
       if (!projects.length) {

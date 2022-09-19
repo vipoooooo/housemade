@@ -3,7 +3,7 @@ import * as trpc from "@trpc/server";
 import { getFile } from "../../../utils/google-service";
 import { createRouter } from "../context";
 import {
-  profileSchema,
+  bookmarkSchema,
   registerWorkerSchema,
   workersSchema,
 } from "./work.type";
@@ -95,7 +95,7 @@ export const workerRouter = createRouter()
     },
   })
   .query("profile", {
-    input: profileSchema,
+    input: workersSchema,
     resolve: async ({ ctx, input }) => {
       const profile = await ctx.prisma.worker.findFirst({
         where: { id: input.id },
@@ -189,6 +189,23 @@ export const workerRouter = createRouter()
       return {
         status: 200,
         message: "Update user successfully",
+      };
+    },
+  })
+  .mutation("bookmark", {
+    input: bookmarkSchema,
+    resolve: async ({ ctx, input }) => {
+      const bookmarkBool = await ctx.prisma.worker.update({
+        where: { id: input.id },
+        data: {
+          bookmark: input.bookmark,
+        },
+      });
+
+      return {
+        status: 200,
+        message: "Update user successfully",
+        bookmarkBool,
       };
     },
   });

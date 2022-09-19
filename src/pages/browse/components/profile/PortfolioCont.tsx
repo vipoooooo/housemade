@@ -76,7 +76,7 @@ export default function PortfolioCont() {
                     >
                       <Image
                         alt={project?.title}
-                        src={project.coverImg || ""}
+                        src={project.imageURL || ""}
                         objectFit={"cover"}
                         priority
                         layout="fill"

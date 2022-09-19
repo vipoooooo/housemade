@@ -53,11 +53,17 @@ export default function ProfileSide() {
               gap: "10px",
             })}
           >
-            {data?.profile.user?.image && (
+            {data?.profile.user?.image ? (
               <Avatar
                 name={data?.profile.user?.username}
                 size="100px"
                 src={data.profile.imageURL}
+              />
+            ) : (
+              <Avatar
+                name={data?.profile.user?.username || ""}
+                size="100px"
+                src={""}
               />
             )}
             <div

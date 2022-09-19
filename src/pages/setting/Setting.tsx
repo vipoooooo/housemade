@@ -27,10 +27,10 @@ export default function Setting() {
         <Tab key="0" title="Basic Info">
           <BasicInfo />
         </Tab>
-        <Tab key="1" title="Appearence">
+        {/* <Tab key="1" title="Appearence">
           <AppearenceSetting />
-        </Tab>
-        <Tab key="2" title="Account">
+        </Tab> */}
+        <Tab key="1" title="Account">
           <Account />
         </Tab>
       </Tabs>

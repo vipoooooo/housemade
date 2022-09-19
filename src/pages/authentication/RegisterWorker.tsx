@@ -66,7 +66,7 @@ const RegisterWorker: NextPage = () => {
         await userMutation.mutateAsync(data, {
           onSuccess: () => {
             toaster.info("Saved", {});
-            router.push("/browse/Browse");
+            router.push("/portfolio/Portfolio");
           },
         });
       } catch (err) {
