@@ -78,7 +78,7 @@ export default function Worker() {
                 id={worker.id}
                 pfp={worker.imageURL}
                 username={worker.user.username}
-                verify={worker.verify}
+                verify={worker.verify || false}
                 skill={worker.subcategory.title}
                 rating={worker.rating.toFixed(1)}
                 reviewer={worker.reviewer}

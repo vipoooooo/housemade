@@ -15,9 +15,14 @@ import ReportModal from "../modals/ReportModal";
 import BookingModal from "../modals/BookingModal";
 import { trpc } from "../../../../utils/trpc";
 import { SkeletonProfileCont } from "../../../../components/common/Skeleton";
+import { IBookmark } from "../../../../server/router/worker/work.type";
+import { toaster } from "baseui/toast";
+import { Toaster } from "../../../../components/common/Toaster";
+import { useSession } from "next-auth/react";
 
 export default function ProfileSide() {
   const [css, $theme] = useStyletron();
+  const utils = trpc.useContext();
   const [isBookmarked, setIsBookmark] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
   const [isOpenB, setIsOpenB] = React.useState(false);
@@ -29,12 +34,29 @@ export default function ProfileSide() {
     { retry: false }
   );
 
+  const { mutateAsync, error } = trpc.useMutation(["worker.bookmark"]);
+
+  const onBookmark = async (data: IBookmark) => {
+    try {
+      const result = await mutateAsync(data, {
+        onSuccess: () => {
+          utils.invalidateQueries(["worker.profile"]);
+          setIsBookmark(!isBookmarked);
+        },
+      });
+    } catch (err) {
+      toaster.warning("Bookmark unsuccessfully", {});
+      console.log(err);
+    }
+  };
+
   return (
     <>
       {isLoading ? (
         <SkeletonProfileCont />
       ) : (
         <>
+          <Toaster />
           <Block
             position={["relative", "relative", "relative", "sticky"]}
             top={[0, 0, 0, "68px"]}
@@ -140,13 +162,20 @@ export default function ProfileSide() {
                 Contact Me
               </Button>
               <Button
-                onClick={() => setIsBookmark(!isBookmarked)}
+                onClick={() =>
+                  onBookmark({ id: id as string, bookmark: isBookmarked })
+                }
                 kind={KIND.secondary}
                 shape={SHAPE.square}
                 size={SIZE.compact}
                 disabled
               >
-                {isBookmarked ? <IoCheckmark size={16} /> : <IoAdd size={16} />}
+                <IoAdd size={16} />
+                {/* {data?.profile.bookmark ? (
+                  <IoCheckmark size={16} />
+                ) : (
+                  <IoAdd size={16} />
+                )} */}
               </Button>
             </div>
             <div
