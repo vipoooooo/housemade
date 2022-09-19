@@ -5,14 +5,15 @@ import { HeadingTitle } from "../../components/shared/HeadingTitle";
 import { useStyletron } from "baseui";
 import { Accordion, Panel } from "baseui/accordion";
 import { RequestBooking } from "./components/RequestBooking";
-import { UpcomingAsWorker } from "./components/UpcomingAsWorker";
 import { Completed } from "./components/Completed";
 import { Requesting } from "./components/Requesting";
 import { trpc } from "../../utils/trpc";
 import { useSession } from "next-auth/react";
 import restricted from "../api/restricted";
 import Head from "next/head";
-import { UpcomingAsClient } from "./components/UpcomingAsClient";
+import { UpcomingAsDefault } from "./components/UpcomingAsDefault";
+import { UpcomingAsEnding } from "./components/UpcomingAsEnding";
+import { UpcomingAsEndingReciever } from "./components/UpcomingAsEndingReciever";
 
 // FOR RESTRICTED AUTH PURPOSE
 export const getServerSideProps = restricted(async (ctx) => {
@@ -91,12 +92,13 @@ export default function Schedule() {
             <Panel title="Upcoming Appointment">
               {data?.appointments.map((item) => {
                 if (item.status === "upcoming") {
-                  if (item.clientId === session?.id) {
-                    return (
-                      <UpcomingAsClient scheduleData={item} key={item.id} />
-                    );
+                  if(item.upcoming_status === "default"){
+                    return <UpcomingAsDefault scheduleData={item} key={item.id} />
+                  }else if(item.upcoming_status === "ending" && session?.id != item.senderId){
+                    return (<UpcomingAsEnding scheduleData={item} key={item.id} />);
+                  }else if(item.upcoming_status === "ending" && item.senderId === session?.id){
+                    return <UpcomingAsEndingReciever scheduleData={item} key={item.id} />;
                   }
-                  return <UpcomingAsWorker scheduleData={item} key={item.id} />;
                 }
               })}
             </Panel>

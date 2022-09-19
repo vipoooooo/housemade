@@ -77,6 +77,7 @@ model User {
 
     appointment_client Appointment[] @relation("AppointmentSend")
     appointment_worker Appointment[] @relation("AppointmentRecieve")
+    appointment_sender Appointment[] @relation("AppointmentUpcomingStatus")
 
     worker Worker?
 }
@@ -113,16 +114,19 @@ model SubCategory {
 }
 
 model Appointment {
-    id              String   @id @default(cuid())
+    id              String           @id @default(cuid())
     appointmentDate DateTime
     location        String
     description     String
-    status          Status?  @default(request)
-    client          User     @relation("AppointmentSend", fields: [clientId], references: [id])
+    status          Status?          @default(request)
+    client          User             @relation("AppointmentSend", fields: [clientId], references: [id])
     clientId        String
-    worker          User     @relation("AppointmentRecieve", fields: [workerId], references: [id])
+    worker          User             @relation("AppointmentRecieve", fields: [workerId], references: [id])
     workerId        String
-    createdAt       DateTime @default(now())
+    upcoming_status upcoming_status? @default(default)
+    sender          User?            @relation("AppointmentUpcomingStatus", fields: [senderId], references: [id])
+    senderId        String?
+    createdAt       DateTime         @default(now())
 }
 
 model Project {
@@ -169,4 +173,9 @@ enum Status {
     request
     upcoming
     completed
+}
+
+enum upcoming_status {
+    default
+    ending
 }

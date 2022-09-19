@@ -6,6 +6,10 @@ import {
   appointmentSchema,
   deleteAppointmentSchema,
   updateAppointmentSchema,
+  updateUpcomingAppointmentSchema,
+  updateUpcomingApprovalAppointmentSchema,
+  deleteUpcomingApprovalAppointmentSchema,
+  deleteUpcomingAppointmentSchema
 } from "./schedule.type";
 
 export const scheduleRouter = createRouter()
@@ -92,6 +96,83 @@ export const scheduleRouter = createRouter()
         status: 201,
         message: "booking successfully",
         result,
+      };
+    },
+  })
+  .mutation("updateUpcomingAppointmentSchema", {
+    input: updateUpcomingAppointmentSchema,
+    resolve: async ({ ctx, input }) => {
+      const updateUpcomingAppointments = await ctx.prisma.appointment.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          upcoming_status: "ending",
+          senderId: input.senderId,
+        },
+      });
+
+      return {
+        status: 200,
+        message: "Here project",
+        updateUpcomingAppointments,
+      };
+    },
+  })
+  .mutation("updateUpcomingApprovalAppointmentSchema", {
+    input: updateUpcomingApprovalAppointmentSchema,
+    resolve: async ({ ctx, input }) => {
+      const updateUpcomingApprovalAppointmentSchema = await ctx.prisma.appointment.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          status: "completed",
+        },
+      });
+
+      return {
+        status: 200,
+        message: "Here project",
+        updateUpcomingApprovalAppointmentSchema,
+      };
+    },
+  })
+  .mutation("deleteUpcomingApprovalAppointmentSchema", {
+    input: deleteUpcomingApprovalAppointmentSchema,
+    resolve: async ({ ctx, input }) => {
+      const deleteUpcomingApprovalAppointmentSchema = await ctx.prisma.appointment.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          upcoming_status: "default",
+        },
+      });
+
+      return {
+        status: 200,
+        message: "Here project",
+        deleteUpcomingApprovalAppointmentSchema,
+      };
+    },
+  })
+  .mutation("deleteUpcomingAppointmentSchema", {
+    input: deleteUpcomingAppointmentSchema,
+    resolve: async ({ ctx, input }) => {
+      const deleteUpcomingAppointments = await ctx.prisma.appointment.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          upcoming_status: "default",
+        },
+      });
+
+      return {
+        status: 200,
+        message: "Here project",
+        deleteUpcomingAppointments,
       };
     },
   });
