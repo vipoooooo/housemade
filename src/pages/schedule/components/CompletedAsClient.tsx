@@ -4,7 +4,7 @@ import ScheduleContent from "./wrapper/ScheduleContent";
 import { IoCheckbox } from "react-icons/io5";
 import { RequestingWrapper } from "./wrapper/RequestingWrapper";
 
-export function Completed({ scheduleData }: { scheduleData: any }) {
+export function CompletedAsClient({ scheduleData }: { scheduleData: any }) {
   const [css, theme] = useStyletron();
   return (
     <RequestingWrapper>
@@ -17,8 +17,13 @@ export function Completed({ scheduleData }: { scheduleData: any }) {
           />
         }
         bg={theme.colors.backgroundInversePrimary}
-        title={"Completed on " + scheduleData.appointmentDate.toDateString()}
-        date={scheduleData.createAt}
+        title={
+          "Completed an appointment with " +
+          scheduleData.worker.username +
+          " that happened on " +
+          scheduleData.appointmentDate.toDateString()
+        }
+        date={scheduleData.createdAt.toDateString()}
         worker={scheduleData.worker.username}
         client={scheduleData.client.username}
         location={scheduleData.location}

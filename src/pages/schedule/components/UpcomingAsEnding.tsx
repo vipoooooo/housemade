@@ -5,36 +5,49 @@ import { RequestingWrapper } from "./wrapper/RequestingWrapper";
 import ScheduleContent from "./wrapper/ScheduleContent";
 import { ParagraphSmall } from "baseui/typography";
 import { Button, KIND, SIZE } from "baseui/button";
-import { IDeleteUpcomingApprovalAppointment, IUpdateUpcomingApprovalAppointment } from "../../../server/router/schedule/schedule.type";
+import {
+  IDeleteUpcomingApprovalAppointment,
+  IUpdateUpcomingApprovalAppointment,
+} from "../../../server/router/schedule/schedule.type";
 import { trpc } from "../../../utils/trpc";
 
 export function UpcomingAsEnding({ scheduleData }: { scheduleData: any }) {
   const [css, theme] = useStyletron();
   const utils = trpc.useContext();
 
-  const declineApp = trpc.useMutation(["schedule.deleteUpcomingApprovalAppointmentSchema"]);
+  const declineApp = trpc.useMutation([
+    "schedule.deleteUpcomingApprovalAppointmentSchema",
+  ]);
 
-  const acceptApp = trpc.useMutation(["schedule.updateUpcomingApprovalAppointmentSchema"]);
+  const acceptApp = trpc.useMutation([
+    "schedule.updateUpcomingApprovalAppointmentSchema",
+  ]);
 
-  const onDecline = React.useCallback(async (data: IDeleteUpcomingApprovalAppointment) => {
-    try {
-      const result = await declineApp.mutateAsync(data, {
-        onSuccess: () => {
-          utils.invalidateQueries(["schedule.appointments"]);
-        },
-      });
-    } catch (err) {}
-  }, []);
+  const onDecline = React.useCallback(
+    async (data: IDeleteUpcomingApprovalAppointment) => {
+      try {
+        const result = await declineApp.mutateAsync(data, {
+          onSuccess: () => {
+            utils.invalidateQueries(["schedule.appointments"]);
+          },
+        });
+      } catch (err) {}
+    },
+    []
+  );
 
-  const onAccept = React.useCallback(async (data: IUpdateUpcomingApprovalAppointment) => {
-    try {
-      const result = await acceptApp.mutateAsync(data, {
-        onSuccess: () => {
-          utils.invalidateQueries(["schedule.appointments"]);
-        },
-      });
-    } catch (err) {}
-  }, []);
+  const onAccept = React.useCallback(
+    async (data: IUpdateUpcomingApprovalAppointment) => {
+      try {
+        const result = await acceptApp.mutateAsync(data, {
+          onSuccess: () => {
+            utils.invalidateQueries(["schedule.appointments"]);
+          },
+        });
+      } catch (err) {}
+    },
+    []
+  );
 
   return (
     <RequestingWrapper>
@@ -53,7 +66,7 @@ export function UpcomingAsEnding({ scheduleData }: { scheduleData: any }) {
           " on " +
           scheduleData.appointmentDate.toDateString()
         }
-        date={scheduleData.createAt}
+        date={scheduleData.createdAt.toDateString()}
         worker={scheduleData.worker.username}
         client={scheduleData.client.username}
         location={scheduleData.location}

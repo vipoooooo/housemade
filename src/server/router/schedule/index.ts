@@ -9,7 +9,7 @@ import {
   updateUpcomingAppointmentSchema,
   updateUpcomingApprovalAppointmentSchema,
   deleteUpcomingApprovalAppointmentSchema,
-  deleteUpcomingAppointmentSchema
+  deleteUpcomingAppointmentSchema,
 } from "./schedule.type";
 
 export const scheduleRouter = createRouter()
@@ -23,6 +23,9 @@ export const scheduleRouter = createRouter()
             { clientId: { equals: input.userId } },
             { workerId: { equals: input.userId } },
           ],
+        },
+        orderBy: {
+          createdAt: "desc",
         },
         include: {
           client: true,
@@ -122,14 +125,15 @@ export const scheduleRouter = createRouter()
   .mutation("updateUpcomingApprovalAppointmentSchema", {
     input: updateUpcomingApprovalAppointmentSchema,
     resolve: async ({ ctx, input }) => {
-      const updateUpcomingApprovalAppointmentSchema = await ctx.prisma.appointment.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          status: "completed",
-        },
-      });
+      const updateUpcomingApprovalAppointmentSchema =
+        await ctx.prisma.appointment.update({
+          where: {
+            id: input.id,
+          },
+          data: {
+            status: "completed",
+          },
+        });
 
       return {
         status: 200,
@@ -141,14 +145,15 @@ export const scheduleRouter = createRouter()
   .mutation("deleteUpcomingApprovalAppointmentSchema", {
     input: deleteUpcomingApprovalAppointmentSchema,
     resolve: async ({ ctx, input }) => {
-      const deleteUpcomingApprovalAppointmentSchema = await ctx.prisma.appointment.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          upcoming_status: "default",
-        },
-      });
+      const deleteUpcomingApprovalAppointmentSchema =
+        await ctx.prisma.appointment.update({
+          where: {
+            id: input.id,
+          },
+          data: {
+            upcoming_status: "default",
+          },
+        });
 
       return {
         status: 200,

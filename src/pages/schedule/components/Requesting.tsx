@@ -47,7 +47,7 @@ export function Requesting({ scheduleData }: { scheduleData: any }) {
             " on " +
             scheduleData.appointmentDate.toDateString()
           }
-          date={scheduleData.createAt}
+          date={scheduleData.createdAt.toDateString()}
           worker={scheduleData.worker.username}
           client={scheduleData.client.username}
           location={scheduleData.location}
