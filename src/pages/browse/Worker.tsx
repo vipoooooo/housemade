@@ -10,6 +10,7 @@ import WorkerBtn from "../../components/common/WorkerBtn";
 import restricted from "../api/restricted";
 import Head from "next/head";
 import { HeadingTitle } from "../../components/shared/HeadingTitle";
+import { Paragraph1 } from "baseui/typography";
 
 // FOR RESTRICTED AUTH PURPOSE
 export const getServerSideProps = restricted(async (ctx) => {
@@ -31,6 +32,7 @@ export default function Worker() {
     ["worker.workers", { id: (skillId as string) || (id as string) }],
     { retry: false }
   );
+  console.log(data?.workers.length);
 
   return (
     <Layout hasHeader={true}>
@@ -41,52 +43,60 @@ export default function Worker() {
       </Head>
       <HeadingTitle title={cate.data?.category?.title || ""} />
       <Block marginBottom={"20px"}>
-        <StatefulButtonGroup
-          size={SIZE.compact}
-          shape={SHAPE.pill}
-          mode={MODE.radio}
-          initialState={{ selected: 0 }}
-        >
-          <Button
-            onClick={() => {
-              router.push(`/browse/Worker?id=${id}`);
-            }}
+        {!subcategoryQuery.data?.subcategories.length ? (
+          <></>
+        ) : (
+          <StatefulButtonGroup
+            size={SIZE.compact}
+            shape={SHAPE.pill}
+            mode={MODE.radio}
+            initialState={{ selected: 0 }}
           >
-            All
-          </Button>
-          {subcategoryQuery.data?.subcategories.map((skill) => (
             <Button
-              key={skill.id.toString()}
               onClick={() => {
-                router.push(`/browse/Worker?id=${id}&skillId=${skill.id}`);
+                router.push(`/browse/Worker?id=${id}`);
               }}
             >
-              {skill.title}
+              All
             </Button>
-          ))}
-        </StatefulButtonGroup>
+            {subcategoryQuery.data?.subcategories.map((skill) => (
+              <Button
+                key={skill.id.toString()}
+                onClick={() => {
+                  router.push(`/browse/Worker?id=${id}&skillId=${skill.id}`);
+                }}
+              >
+                {skill.title}
+              </Button>
+            ))}
+          </StatefulButtonGroup>
+        )}
       </Block>
-      <FlexGrid
-        flexGridColumnCount={[1, 1, 2, 3]}
-        flexGridColumnGap="scale500"
-        flexGridRowGap="scale500"
-      >
-        {data?.workers.map((worker) => {
-          return (
-            <FlexGridItem key={worker.id}>
-              <WorkerBtn
-                id={worker.id}
-                pfp={worker.imageURL}
-                username={worker.user.username}
-                verify={worker.verify || false}
-                skill={worker.subcategory.title}
-                rating={worker.rating.toFixed(1)}
-                reviewer={worker.reviewer}
-              />
-            </FlexGridItem>
-          );
-        })}
-      </FlexGrid>
+      {!data?.workers.length ? (
+        <Paragraph1>No workers are available with this skill set</Paragraph1>
+      ) : (
+        <FlexGrid
+          flexGridColumnCount={[1, 1, 2, 3]}
+          flexGridColumnGap="scale500"
+          flexGridRowGap="scale500"
+        >
+          {data?.workers.map((worker) => {
+            return (
+              <FlexGridItem key={worker.id}>
+                <WorkerBtn
+                  id={worker.id}
+                  pfp={worker.imageURL}
+                  username={worker.user.username}
+                  verify={worker.verify || false}
+                  skill={worker.subcategory.title}
+                  rating={worker.rating.toFixed(1)}
+                  reviewer={worker.reviewer}
+                />
+              </FlexGridItem>
+            );
+          })}
+        </FlexGrid>
+      )}
     </Layout>
   );
 }

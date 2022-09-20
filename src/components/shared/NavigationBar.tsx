@@ -19,7 +19,7 @@ import { Navlink, NavBtn } from "../common/NavItem";
 import { useActiveMenu } from "../../hooks/useActiveMenu";
 import { useSession } from "next-auth/react";
 import { trpc } from "../../utils/trpc";
-import { SkeletonText } from "../common/Skeleton";
+import { SkeletonBtn, SkeletonText } from "../common/Skeleton";
 
 const options = {
   options: [
@@ -69,14 +69,21 @@ export default function Navigationbar() {
               className={css({
                 paddingLeft: "20px",
                 lineHeight: "0px",
+                cursor: "pointer",
               })}
             >
-              <Image src={Logo} height={20} width={20} objectFit={"contain"} />
+              <Image
+                onClick={() => router.push("/browse/Browse")}
+                src={Logo}
+                height={20}
+                width={20}
+                objectFit={"contain"}
+              />
             </NavigationItem>
           </NavigationList>
           <NavigationList $align={ALIGN.left}>
             {isLoading ? (
-              <>
+              <Block display={["none", "none", "none", "flex"]}>
                 <StyledNavigationItem>
                   <SkeletonText />
                 </StyledNavigationItem>
@@ -86,7 +93,7 @@ export default function Navigationbar() {
                 <StyledNavigationItem>
                   <SkeletonText />
                 </StyledNavigationItem>
-              </>
+              </Block>
             ) : (
               <Block display={["none", "none", "none", "flex"]}>
                 {menus.map((item, key) => {
@@ -124,15 +131,25 @@ export default function Navigationbar() {
                 onChange={() => {}}
               />
             </Block> */}
-            {data?.user?.role === "worker" ? (
-              <Block height={"48px"}></Block>
+            {isLoading ? (
+              <Block display={["none", "none", "none", "flex"]}>
+                <SkeletonBtn />
+              </Block>
             ) : (
-              <Button
-                onClick={() => router.push("/authentication/RegisterWorker")}
-                kind={KIND.tertiary}
-              >
-                Become a worker
-              </Button>
+              <>
+                {data?.user?.role === "worker" ? (
+                  <Block height={"48px"}></Block>
+                ) : (
+                  <Button
+                    onClick={() =>
+                      router.push("/authentication/RegisterWorker")
+                    }
+                    kind={KIND.tertiary}
+                  >
+                    Become a worker
+                  </Button>
+                )}
+              </>
             )}
             <Block display={["block", "block", "block", "none"]}>
               <Button onClick={() => setIsOpen(!isOpen)} kind={KIND.tertiary}>

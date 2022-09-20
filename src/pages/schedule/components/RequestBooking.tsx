@@ -54,7 +54,7 @@ export function RequestBooking({ scheduleData }: { scheduleData: any }) {
           " want to booked on " +
           scheduleData.appointmentDate.toDateString()
         }
-        date={scheduleData.createAt}
+        date={scheduleData.createdAt.toDateString()}
         worker={scheduleData.worker.username}
         client={scheduleData.client.username}
         location={scheduleData.location}

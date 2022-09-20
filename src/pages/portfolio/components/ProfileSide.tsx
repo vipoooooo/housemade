@@ -11,7 +11,6 @@ import {
 import { IoCheckmarkCircle, IoStar } from "react-icons/io5";
 import { StyledLink } from "baseui/link";
 import { Button, KIND, SHAPE, SIZE } from "baseui/button";
-import { currentUser } from "../../../mocks/worker.const";
 import { useSession } from "next-auth/react";
 import { trpc } from "../../../utils/trpc";
 import { SkeletonPortfolioCont } from "../../../components/common/Skeleton";
@@ -26,8 +25,6 @@ export default function ProfileSide() {
       retry: false,
     }
   );
-
-  if (!currentUser) return <>Loading ...</>;
   return (
     <>
       {isLoading ? (

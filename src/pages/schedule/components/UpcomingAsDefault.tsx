@@ -12,21 +12,24 @@ import { useSession } from "next-auth/react";
 export function UpcomingAsDefault({ scheduleData }: { scheduleData: any }) {
   const [css, theme] = useStyletron();
   const utils = trpc.useContext();
-  const {data: session} = useSession();
+  const { data: session } = useSession();
 
   const { mutateAsync, isLoading } = trpc.useMutation([
     "schedule.updateUpcomingAppointmentSchema",
   ]);
 
-  const onSubmit = React.useCallback(async (data: IUpdateUpcomingAppointment) => {
-    try {
-      const result = await mutateAsync(data, {
-        onSuccess: () => {
-          utils.invalidateQueries(["schedule.appointments"]);
-        },
-      });
-    } catch (err) {}
-  }, []);
+  const onSubmit = React.useCallback(
+    async (data: IUpdateUpcomingAppointment) => {
+      try {
+        const result = await mutateAsync(data, {
+          onSuccess: () => {
+            utils.invalidateQueries(["schedule.appointments"]);
+          },
+        });
+      } catch (err) {}
+    },
+    []
+  );
   return (
     <RequestingWrapper>
       <ScheduleContent
@@ -44,38 +47,40 @@ export function UpcomingAsDefault({ scheduleData }: { scheduleData: any }) {
           " on " +
           scheduleData.appointmentDate.toDateString()
         }
-        date={scheduleData.createAt}
+        date={scheduleData.createdAt.toDateString()}
         worker={scheduleData.worker.username}
         client={scheduleData.client.username}
         location={scheduleData.location}
         desc={scheduleData.description}
       />
       <div
-          className={css({
-            display: "flex",
-            alignItems: "stretch",
-            gap: "10px",
-            width: "100%",
-          })}
+        className={css({
+          display: "flex",
+          alignItems: "stretch",
+          gap: "10px",
+          width: "100%",
+        })}
+      >
+        <Button
+          onClick={() =>
+            onSubmit({ id: scheduleData.id, senderId: session?.id as string })
+          }
+          isLoading={isLoading}
+          disabled={isLoading}
+          kind={KIND.secondary}
+          size={SIZE.compact}
+          // startEnhancer={<IoClose size={20} />}
+          overrides={{
+            BaseButton: {
+              style: ({ theme }) => ({
+                width: "100%",
+              }),
+            },
+          }}
         >
-          <Button
-            onClick={() => onSubmit({ id: scheduleData.id, senderId: session?.id as string })}
-            isLoading={isLoading}
-            disabled={isLoading}
-            kind={KIND.secondary}
-            size={SIZE.compact}
-            // startEnhancer={<IoClose size={20} />}
-            overrides={{
-              BaseButton: {
-                style: ({ theme }) => ({
-                  width: "100%",
-                }),
-              },
-            }}
-          >
-            End appointment
-          </Button>
-        </div>
+          End appointment
+        </Button>
+      </div>
     </RequestingWrapper>
   );
 }

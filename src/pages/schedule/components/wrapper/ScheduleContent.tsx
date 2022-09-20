@@ -57,22 +57,25 @@ function ScheduleContent({
           width={"100%"}
         >
           <ParagraphSmall
-            margin={"0 0 10px 0"}
+            margin={0}
             className={css({
               textAlign: "left",
             })}
           >
             {title}
           </ParagraphSmall>
-          <ParagraphXSmall margin={0} color={theme.colors.contentStateDisabled}>
+          <ParagraphXSmall
+            margin={"0 0 10px 0"}
+            color={theme.colors.contentStateDisabled}
+          >
             {date}
           </ParagraphXSmall>
-          <ParagraphXSmall margin={0}>Description : {desc}</ParagraphXSmall>
           <div
             className={css({
               display: isOpen ? "block" : "none",
             })}
           >
+            <ParagraphXSmall margin={0}>Description : {desc}</ParagraphXSmall>
             <ParagraphXSmall margin={0}>
               Client :
               <StyledLink

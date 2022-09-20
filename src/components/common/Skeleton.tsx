@@ -22,6 +22,10 @@ export function SkeletonText() {
   );
 }
 
+export function SkeletonBtn() {
+  return <Skeleton width="160px" height="48px" animation />;
+}
+
 export function SkeletonProfileCont() {
   const [css, $theme] = useStyletron();
   return (

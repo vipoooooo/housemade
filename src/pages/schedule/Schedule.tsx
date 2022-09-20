@@ -5,7 +5,6 @@ import { HeadingTitle } from "../../components/shared/HeadingTitle";
 import { useStyletron } from "baseui";
 import { Accordion, Panel } from "baseui/accordion";
 import { RequestBooking } from "./components/RequestBooking";
-import { Completed } from "./components/Completed";
 import { Requesting } from "./components/Requesting";
 import { trpc } from "../../utils/trpc";
 import { useSession } from "next-auth/react";
@@ -14,6 +13,8 @@ import Head from "next/head";
 import { UpcomingAsDefault } from "./components/UpcomingAsDefault";
 import { UpcomingAsEnding } from "./components/UpcomingAsEnding";
 import { UpcomingAsEndingReciever } from "./components/UpcomingAsEndingReciever";
+import { CompletedAsClient } from "./components/CompletedAsClient";
+import { CompletedAsWorker } from "./components/CompletedAsWorker";
 
 // FOR RESTRICTED AUTH PURPOSE
 export const getServerSideProps = restricted(async (ctx) => {
@@ -124,7 +125,14 @@ export default function Schedule() {
             <Panel title="Completed Appointment">
               {data?.appointments.map((item) => {
                 if (item.status === "completed") {
-                  return <Completed scheduleData={item} key={item.id} />;
+                  if (item.clientId === session?.id) {
+                    return (
+                      <CompletedAsClient scheduleData={item} key={item.id} />
+                    );
+                  }
+                  return (
+                    <CompletedAsWorker scheduleData={item} key={item.id} />
+                  );
                 }
               })}
             </Panel>
