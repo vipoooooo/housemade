@@ -5,21 +5,25 @@ import { RequestingWrapper } from "./wrapper/RequestingWrapper";
 import ScheduleContent from "./wrapper/ScheduleContent";
 import { ParagraphSmall } from "baseui/typography";
 import { Button, KIND, SIZE } from "baseui/button";
-import { IUpdateUpcomingAppointment } from "../../../server/router/schedule/schedule.type";
+import { IDeleteUpcomingAppointment } from "../../../server/router/schedule/schedule.type";
 import { trpc } from "../../../utils/trpc";
 import { useSession } from "next-auth/react";
+import { djs } from "../../../helpers/snipet";
 
-export function UpcomingAsDefault({ scheduleData }: { scheduleData: any }) {
+export function UpcomingEndingRecieverAsClient({
+  scheduleData,
+}: {
+  scheduleData: any;
+}) {
   const [css, theme] = useStyletron();
   const utils = trpc.useContext();
-  const { data: session } = useSession();
 
   const { mutateAsync, isLoading } = trpc.useMutation([
-    "schedule.updateUpcomingAppointmentSchema",
+    "schedule.deleteUpcomingAppointmentSchema",
   ]);
 
   const onSubmit = React.useCallback(
-    async (data: IUpdateUpcomingAppointment) => {
+    async (data: IDeleteUpcomingAppointment) => {
       try {
         const result = await mutateAsync(data, {
           onSuccess: () => {
@@ -42,12 +46,14 @@ export function UpcomingAsDefault({ scheduleData }: { scheduleData: any }) {
         }
         bg={theme.colors.backgroundInversePrimary}
         title={
-          "You have an appointment with " +
-          scheduleData.worker.username +
-          " on " +
-          scheduleData.appointmentDate.toDateString()
+          <>
+            You have an appointment with
+            <b> {scheduleData.worker.username} </b>
+            on
+            <b> {scheduleData.appointmentDate.toDateString()}</b>
+          </>
         }
-        date={scheduleData.createdAt.toDateString()}
+        date={djs(scheduleData.createdAt).fromNow()}
         worker={scheduleData.worker.username}
         client={scheduleData.client.username}
         location={scheduleData.location}
@@ -62,9 +68,7 @@ export function UpcomingAsDefault({ scheduleData }: { scheduleData: any }) {
         })}
       >
         <Button
-          onClick={() =>
-            onSubmit({ id: scheduleData.id, senderId: session?.id as string })
-          }
+          onClick={() => onSubmit({ id: scheduleData.id })}
           isLoading={isLoading}
           disabled={isLoading}
           kind={KIND.secondary}
@@ -78,7 +82,7 @@ export function UpcomingAsDefault({ scheduleData }: { scheduleData: any }) {
             },
           }}
         >
-          End appointment
+          Cancel request end appointment
         </Button>
       </div>
     </RequestingWrapper>

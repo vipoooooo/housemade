@@ -1,6 +1,6 @@
 import { Block } from "baseui/block";
 import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
-import { ParagraphSmall } from "baseui/typography";
+import { Paragraph1, Paragraph3, ParagraphSmall } from "baseui/typography";
 import Image from "next/image";
 import * as React from "react";
 import { useStyletron } from "baseui";
@@ -13,7 +13,7 @@ import { Skeleton } from "baseui/skeleton";
 import { ProjectSkeleton } from "../../../../components/common/Skeleton";
 
 export default function PortfolioCont() {
-  const [css] = useStyletron();
+  const [css, theme] = useStyletron();
   const router = useRouter();
   const { id } = router.query;
 
@@ -48,7 +48,19 @@ export default function PortfolioCont() {
           <HeadingTitle title="Portfolio" />
           {/* Spacer */}
           {!data?.projects.length ? (
-            "no project"
+            <Block
+              width={"100%"}
+              backgroundColor={theme.colors.backgroundSecondary}
+              padding={"5px 20px"}
+            >
+              <Paragraph3
+                className={css({
+                  textAlign: "center",
+                })}
+              >
+                This worker has not upload a project yet
+              </Paragraph3>
+            </Block>
           ) : (
             <FlexGrid
               flexGridColumnCount={[1, 2, 3, 2]}

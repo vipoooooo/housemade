@@ -11,6 +11,7 @@ import { Appointment } from "@prisma/client";
 import { trpc } from "../../../utils/trpc";
 import { IDeleteAppointment } from "../../../server/router/schedule/schedule.type";
 import { object } from "zod";
+import { djs } from "../../../helpers/snipet";
 
 export function Requesting({ scheduleData }: { scheduleData: any }) {
   const [css, theme] = useStyletron();
@@ -42,12 +43,13 @@ export function Requesting({ scheduleData }: { scheduleData: any }) {
           }
           bg={theme.colors.backgroundInversePrimary}
           title={
-            "You’re requesting an appointment with " +
-            scheduleData.worker.username +
-            " on " +
-            scheduleData.appointmentDate.toDateString()
+            <>
+              You’re requesting an appointment with
+              <b> {scheduleData.worker.username} </b> on
+              <b> {scheduleData.appointmentDate.toDateString()}</b>
+            </>
           }
-          date={scheduleData.createdAt.toDateString()}
+          date={djs(scheduleData.createdAt).fromNow()}
           worker={scheduleData.worker.username}
           client={scheduleData.client.username}
           location={scheduleData.location}

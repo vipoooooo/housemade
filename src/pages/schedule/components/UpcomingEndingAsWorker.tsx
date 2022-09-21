@@ -10,8 +10,13 @@ import {
   IUpdateUpcomingApprovalAppointment,
 } from "../../../server/router/schedule/schedule.type";
 import { trpc } from "../../../utils/trpc";
+import { djs } from "../../../helpers/snipet";
 
-export function UpcomingAsEnding({ scheduleData }: { scheduleData: any }) {
+export function UpcomingEndingAsWorker({
+  scheduleData,
+}: {
+  scheduleData: any;
+}) {
   const [css, theme] = useStyletron();
   const utils = trpc.useContext();
 
@@ -61,12 +66,14 @@ export function UpcomingAsEnding({ scheduleData }: { scheduleData: any }) {
         }
         bg={theme.colors.backgroundInversePrimary}
         title={
-          "You have an appointment with " +
-          scheduleData.worker.username +
-          " on " +
-          scheduleData.appointmentDate.toDateString()
+          <>
+            You have an appointment with
+            <b> {scheduleData.client.username} </b>
+            on
+            <b> {scheduleData.appointmentDate.toDateString()}</b>
+          </>
         }
-        date={scheduleData.createdAt.toDateString()}
+        date={djs(scheduleData.createdAt).fromNow()}
         worker={scheduleData.worker.username}
         client={scheduleData.client.username}
         location={scheduleData.location}

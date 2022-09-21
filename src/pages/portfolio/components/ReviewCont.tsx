@@ -8,6 +8,9 @@ import { HeadingTitle } from "../../../components/shared/HeadingTitle";
 import { trpc } from "../../../utils/trpc";
 import { useSession } from "next-auth/react";
 import { SkeletonReview } from "../../../components/common/Skeleton";
+import { djs } from "../../../helpers/snipet";
+import { StarRating } from "baseui/rating";
+import { IoStar } from "react-icons/io5";
 
 export default function ReviewSide() {
   const [css, theme] = useStyletron();
@@ -93,13 +96,27 @@ export default function ReviewSide() {
                             <ParagraphSmall margin={0}>
                               {review?.client?.username}
                             </ParagraphSmall>
+                            {/* <ParagraphXSmall margin={0}>&bull;</ParagraphXSmall> */}
                             <ParagraphXSmall
                               margin={0}
                               color={theme.colors.contentStateDisabled}
                             >
-                              &bull; {review?.createdAt.toDateString()}
+                              | Rate {review.rating.toFixed(0)}
+                            </ParagraphXSmall>
+
+                            <ParagraphXSmall
+                              margin={0}
+                              color={theme.colors.contentStateDisabled}
+                            >
+                              &bull; {djs(review?.updatedAt).fromNow()}
                             </ParagraphXSmall>
                           </div>
+                          {/* <StarRating
+                            numItems={5}
+                            readOnly
+                            size={12}
+                            value={review.rating}
+                          /> */}
                           <ParagraphSmall
                             margin={0}
                             color={theme.colors.contentSecondary}
