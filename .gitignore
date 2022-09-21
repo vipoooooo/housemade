@@ -4,7 +4,6 @@
 /node_modules/*/*
 /node_modules/baseui/*
 !/node_modules/baseui/overrides.ts
-# !/node_modules/baseui/overrides.ts/
 /.pnp
 .pnp.js
 
