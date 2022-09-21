@@ -124,8 +124,10 @@ export default function BasicInfo() {
             textAlign: "center",
           })}
         >
-          If you just insert profile picture for the first time, you're not
-          going to see the preview of your profile. After you saved, please hit
+          If you just insert profile picture for the first time or just login
+          back, <br /> you're not going to see the preview of your profile.
+          <br />
+          After you saved, please hit
           <Button
             size={SIZE.mini}
             kind={KIND.tertiary}

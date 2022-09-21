@@ -5,24 +5,26 @@ import { RequestingWrapper } from "./wrapper/RequestingWrapper";
 import ScheduleContent from "./wrapper/ScheduleContent";
 import { ParagraphSmall } from "baseui/typography";
 import { Button, KIND, SIZE } from "baseui/button";
-import { IDeleteUpcomingAppointment } from "../../../server/router/schedule/schedule.type";
+import { IUpdateUpcomingAppointment } from "../../../server/router/schedule/schedule.type";
 import { trpc } from "../../../utils/trpc";
 import { useSession } from "next-auth/react";
+import { djs } from "../../../helpers/snipet";
 
-export function UpcomingAsEndingReciever({
+export function UpcomingDefaultAsClient({
   scheduleData,
 }: {
   scheduleData: any;
 }) {
   const [css, theme] = useStyletron();
   const utils = trpc.useContext();
+  const { data: session } = useSession();
 
   const { mutateAsync, isLoading } = trpc.useMutation([
-    "schedule.deleteUpcomingAppointmentSchema",
+    "schedule.updateUpcomingAppointmentSchema",
   ]);
 
   const onSubmit = React.useCallback(
-    async (data: IDeleteUpcomingAppointment) => {
+    async (data: IUpdateUpcomingAppointment) => {
       try {
         const result = await mutateAsync(data, {
           onSuccess: () => {
@@ -45,12 +47,14 @@ export function UpcomingAsEndingReciever({
         }
         bg={theme.colors.backgroundInversePrimary}
         title={
-          "You have an appointment with " +
-          scheduleData.worker.username +
-          " on " +
-          scheduleData.appointmentDate.toDateString()
+          <>
+            You have an appointment with
+            <b> {scheduleData.worker.username} </b>
+            on
+            <b> {scheduleData.appointmentDate.toDateString()}</b>
+          </>
         }
-        date={scheduleData.createdAt.toDateString()}
+        date={djs(scheduleData.createdAt).fromNow()}
         worker={scheduleData.worker.username}
         client={scheduleData.client.username}
         location={scheduleData.location}
@@ -65,7 +69,9 @@ export function UpcomingAsEndingReciever({
         })}
       >
         <Button
-          onClick={() => onSubmit({ id: scheduleData.id })}
+          onClick={() =>
+            onSubmit({ id: scheduleData.id, senderId: session?.id as string })
+          }
           isLoading={isLoading}
           disabled={isLoading}
           kind={KIND.secondary}
@@ -79,7 +85,7 @@ export function UpcomingAsEndingReciever({
             },
           }}
         >
-          Cancel request end appointment
+          End appointment
         </Button>
       </div>
     </RequestingWrapper>

@@ -3,7 +3,7 @@ import { useStyletron } from "baseui";
 import ScheduleContent from "./wrapper/ScheduleContent";
 import { IoCheckbox } from "react-icons/io5";
 import { RequestingWrapper } from "./wrapper/RequestingWrapper";
-
+import { djs } from "../../../helpers/snipet";
 export function CompletedAsClient({ scheduleData }: { scheduleData: any }) {
   const [css, theme] = useStyletron();
   return (
@@ -18,12 +18,13 @@ export function CompletedAsClient({ scheduleData }: { scheduleData: any }) {
         }
         bg={theme.colors.backgroundInversePrimary}
         title={
-          "Completed an appointment with " +
-          scheduleData.worker.username +
-          " that happened on " +
-          scheduleData.appointmentDate.toDateString()
+          <>
+            Completed an appointment with
+            <b> {scheduleData.worker.username} </b>that happened on
+            <b> {scheduleData.appointmentDate.toDateString()}</b>
+          </>
         }
-        date={scheduleData.createdAt.toDateString()}
+        date={djs(scheduleData.createdAt).fromNow()}
         worker={scheduleData.worker.username}
         client={scheduleData.client.username}
         location={scheduleData.location}

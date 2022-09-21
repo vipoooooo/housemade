@@ -14,6 +14,7 @@ import { useSession } from "next-auth/react";
 import { IDeleteReview } from "../../../../server/router/review/review.type";
 import { toaster } from "baseui/toast";
 import { Toaster } from "../../../../components/common/Toaster";
+import { djs } from "../../../../helpers/snipet";
 
 export default function ReviewSide() {
   const [css, theme] = useStyletron();
@@ -171,7 +172,13 @@ export default function ReviewSide() {
                                 margin={0}
                                 color={theme.colors.contentStateDisabled}
                               >
-                                &bull; {review?.updatedAt.toDateString()}
+                                | Rate {review.rating.toFixed(0)}
+                              </ParagraphXSmall>
+                              <ParagraphXSmall
+                                margin={0}
+                                color={theme.colors.contentStateDisabled}
+                              >
+                                &bull; {djs(review?.updatedAt).fromNow()}
                               </ParagraphXSmall>
                             </div>
 

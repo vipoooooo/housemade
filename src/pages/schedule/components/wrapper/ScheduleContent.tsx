@@ -10,7 +10,7 @@ import { IoLocationOutline } from "react-icons/io5";
 interface ActiveProps {
   icon: React.ReactNode;
   bg: string;
-  title: string;
+  title: React.ReactNode;
   date: string;
   worker: string;
   client: string;

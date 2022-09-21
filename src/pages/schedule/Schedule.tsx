@@ -10,11 +10,14 @@ import { trpc } from "../../utils/trpc";
 import { useSession } from "next-auth/react";
 import restricted from "../api/restricted";
 import Head from "next/head";
-import { UpcomingAsDefault } from "./components/UpcomingAsDefault";
-import { UpcomingAsEnding } from "./components/UpcomingAsEnding";
-import { UpcomingAsEndingReciever } from "./components/UpcomingAsEndingReciever";
+import { UpcomingDefaultAsWorker } from "./components/UpcomingDefaultAsWorker";
+import { UpcomingEndingAsWorker } from "./components/UpcomingEndingAsWorker";
+import { UpcomingEndingRecieverAsWorker } from "./components/UpcomingEndingRecieverAsWorker";
 import { CompletedAsClient } from "./components/CompletedAsClient";
 import { CompletedAsWorker } from "./components/CompletedAsWorker";
+import { UpcomingDefaultAsClient } from "./components/UpcomingDefaultAsClient";
+import { UpcomingEndingAsClient } from "./components/UpcomingEndingAsClient";
+import { UpcomingEndingRecieverAsClient } from "./components/UpcomingEndingRecieverAsClient";
 
 // FOR RESTRICTED AUTH PURPOSE
 export const getServerSideProps = restricted(async (ctx) => {
@@ -94,22 +97,52 @@ export default function Schedule() {
               {data?.appointments.map((item) => {
                 if (item.status === "upcoming") {
                   if (item.upcoming_status === "default") {
+                    if (item.clientId === session?.id) {
+                      return (
+                        <UpcomingDefaultAsClient
+                          scheduleData={item}
+                          key={item.id}
+                        />
+                      );
+                    }
                     return (
-                      <UpcomingAsDefault scheduleData={item} key={item.id} />
+                      <UpcomingDefaultAsWorker
+                        scheduleData={item}
+                        key={item.id}
+                      />
                     );
                   } else if (
                     item.upcoming_status === "ending" &&
                     session?.id != item.senderId
                   ) {
+                    if (item.clientId === session?.id) {
+                      return (
+                        <UpcomingEndingAsClient
+                          scheduleData={item}
+                          key={item.id}
+                        />
+                      );
+                    }
                     return (
-                      <UpcomingAsEnding scheduleData={item} key={item.id} />
+                      <UpcomingEndingAsWorker
+                        scheduleData={item}
+                        key={item.id}
+                      />
                     );
                   } else if (
                     item.upcoming_status === "ending" &&
                     item.senderId === session?.id
                   ) {
+                    if (item.clientId === session?.id) {
+                      return (
+                        <UpcomingEndingRecieverAsClient
+                          scheduleData={item}
+                          key={item.id}
+                        />
+                      );
+                    }
                     return (
-                      <UpcomingAsEndingReciever
+                      <UpcomingEndingRecieverAsWorker
                         scheduleData={item}
                         key={item.id}
                       />

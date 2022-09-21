@@ -1,49 +1,64 @@
 import * as React from "react";
 import { useStyletron } from "baseui";
-import { IoCheckmark, IoClose, IoMailUnread } from "react-icons/io5";
+import { IoCalendar, IoCheckmark, IoClose } from "react-icons/io5";
+import { RequestingWrapper } from "./wrapper/RequestingWrapper";
+import ScheduleContent from "./wrapper/ScheduleContent";
 import { ParagraphSmall } from "baseui/typography";
 import { Button, KIND, SIZE } from "baseui/button";
-import ScheduleContent from "./wrapper/ScheduleContent";
-import { RequestingWrapper } from "./wrapper/RequestingWrapper";
-import { trpc } from "../../../utils/trpc";
 import {
-  IDeleteAppointment,
-  IUpdateAppointment,
+  IDeleteUpcomingApprovalAppointment,
+  IUpdateUpcomingApprovalAppointment,
 } from "../../../server/router/schedule/schedule.type";
+import { trpc } from "../../../utils/trpc";
 import { djs } from "../../../helpers/snipet";
 
-export function RequestBooking({ scheduleData }: { scheduleData: any }) {
+export function UpcomingEndingAsClient({
+  scheduleData,
+}: {
+  scheduleData: any;
+}) {
   const [css, theme] = useStyletron();
   const utils = trpc.useContext();
 
-  const declineApp = trpc.useMutation(["schedule.deleteAppointments"]);
+  const declineApp = trpc.useMutation([
+    "schedule.deleteUpcomingApprovalAppointmentSchema",
+  ]);
 
-  const acceptApp = trpc.useMutation(["schedule.updateAppointments"]);
+  const acceptApp = trpc.useMutation([
+    "schedule.updateUpcomingApprovalAppointmentSchema",
+  ]);
 
-  const onDecline = React.useCallback(async (data: IDeleteAppointment) => {
-    try {
-      const result = await declineApp.mutateAsync(data, {
-        onSuccess: () => {
-          utils.invalidateQueries(["schedule.appointments"]);
-        },
-      });
-    } catch (err) {}
-  }, []);
+  const onDecline = React.useCallback(
+    async (data: IDeleteUpcomingApprovalAppointment) => {
+      try {
+        const result = await declineApp.mutateAsync(data, {
+          onSuccess: () => {
+            utils.invalidateQueries(["schedule.appointments"]);
+          },
+        });
+      } catch (err) {}
+    },
+    []
+  );
 
-  const onAccept = React.useCallback(async (data: IUpdateAppointment) => {
-    try {
-      const result = await acceptApp.mutateAsync(data, {
-        onSuccess: () => {
-          utils.invalidateQueries(["schedule.appointments"]);
-        },
-      });
-    } catch (err) {}
-  }, []);
+  const onAccept = React.useCallback(
+    async (data: IUpdateUpcomingApprovalAppointment) => {
+      try {
+        const result = await acceptApp.mutateAsync(data, {
+          onSuccess: () => {
+            utils.invalidateQueries(["schedule.appointments"]);
+          },
+        });
+      } catch (err) {}
+    },
+    []
+  );
+
   return (
     <RequestingWrapper>
       <ScheduleContent
         icon={
-          <IoMailUnread
+          <IoCalendar
             color={theme.colors.contentInversePrimary}
             size={24}
             display={"block"}
@@ -52,8 +67,9 @@ export function RequestBooking({ scheduleData }: { scheduleData: any }) {
         bg={theme.colors.backgroundInversePrimary}
         title={
           <>
-            <b>{scheduleData.client.username} </b>
-            want to booked on
+            You have an appointment with
+            <b> {scheduleData.worker.username} </b>
+            on
             <b> {scheduleData.appointmentDate.toDateString()}</b>
           </>
         }
@@ -69,8 +85,6 @@ export function RequestBooking({ scheduleData }: { scheduleData: any }) {
           flexDirection: "column",
           gap: "10px",
           width: "100%",
-          // width: "calc(100% - (10px + (24px + (10px * 2))))",
-          // marginLeft: "calc(10px + (24px + (10px * 2)))",
         })}
       >
         <div
@@ -113,7 +127,7 @@ export function RequestBooking({ scheduleData }: { scheduleData: any }) {
               },
             }}
           >
-            Accept
+            Approve
           </Button>
         </div>
       </div>
