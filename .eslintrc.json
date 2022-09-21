@@ -2,7 +2,9 @@
   "parser": "@typescript-eslint/parser", // Specifies the ESLint parser
   "extends": [
     "plugin:react/recommended", // Uses the recommended rules from @eslint-plugin-react
-    "plugin:prettier/recommended" // Enables eslint-plugin-prettier and eslint-config-prettier.
+    // "plugin:prettier/recommended", // Enables eslint-plugin-prettier and eslint-config-prettier.
+    // "eslint:recommended",
+    "next/core-web-vitals"
   ],
   "parserOptions": {
     "ecmaVersion": 2018, // Allows for the parsing of modern ECMAScript features
@@ -18,7 +20,10 @@
     "@typescript-eslint/ban-ts-ignore": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-empty-function": "off",
-    "@typescript-eslint/explicit-module-boundary-types": "off"
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "react/display-name": "off",
+    "react/no-unescaped-entities": "off"
   },
   "settings": {
     "react": {

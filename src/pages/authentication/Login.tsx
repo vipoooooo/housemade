@@ -124,7 +124,7 @@ const LogIn: NextPage = () => {
                 type="submit"
                 overrides={{
                   BaseButton: {
-                    style: ({ $theme }) => ({
+                    style: () => ({
                       marginBottom: "20px",
                       width: "100%",
                     }),

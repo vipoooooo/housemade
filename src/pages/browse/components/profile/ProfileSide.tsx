@@ -137,7 +137,7 @@ export default function ProfileSide() {
                 size={SIZE.compact}
                 overrides={{
                   Root: {
-                    style: ({ $theme }) => ({
+                    style: () => ({
                       width: "calc((100% - (36px + (5px*2)))/2)",
                     }),
                   },
@@ -153,7 +153,7 @@ export default function ProfileSide() {
                 disabled
                 overrides={{
                   Root: {
-                    style: ({ $theme }) => ({
+                    style: () => ({
                       width: "calc((100% - (36px + (5px*2)))/2)",
                     }),
                   },

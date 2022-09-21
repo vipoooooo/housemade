@@ -1,16 +1,15 @@
 import * as React from "react";
 import { useStyletron } from "baseui";
 import { IoCalendar, IoCheckmark, IoClose } from "react-icons/io5";
-import { RequestingWrapper } from "./wrapper/RequestingWrapper";
-import ScheduleContent from "./wrapper/ScheduleContent";
-import { ParagraphSmall } from "baseui/typography";
 import { Button, KIND, SIZE } from "baseui/button";
 import {
   IDeleteUpcomingApprovalAppointment,
   IUpdateUpcomingApprovalAppointment,
-} from "../../../server/router/schedule/schedule.type";
-import { trpc } from "../../../utils/trpc";
-import { djs } from "../../../helpers/snipet";
+} from "../../server/router/schedule/schedule.type";
+import { trpc } from "../../utils/trpc";
+import { djs } from "../../helpers/snipet";
+import ScheduleContent from "./wrapper/ScheduleContent";
+import { RequestingWrapper } from "./wrapper/RequestingWrapper";
 
 export function UpcomingEndingAsClient({
   scheduleData,
@@ -104,7 +103,7 @@ export function UpcomingEndingAsClient({
             startEnhancer={<IoClose size={20} />}
             overrides={{
               BaseButton: {
-                style: ({ $theme }) => ({
+                style: () => ({
                   width: "calc(50% - (10px/2))",
                 }),
               },
@@ -121,7 +120,7 @@ export function UpcomingEndingAsClient({
             startEnhancer={<IoCheckmark size={20} />}
             overrides={{
               BaseButton: {
-                style: ({ $theme }) => ({
+                style: () => ({
                   width: "calc(50% - (10px/2))",
                 }),
               },

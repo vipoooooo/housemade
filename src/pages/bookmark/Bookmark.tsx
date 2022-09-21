@@ -1,26 +1,17 @@
 import * as React from "react";
 import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
-import {
-  HeadingMedium,
-  HeadingXSmall,
-  ParagraphLarge,
-  ParagraphMedium,
-  ParagraphSmall,
-} from "baseui/typography";
+import { HeadingXSmall, ParagraphMedium } from "baseui/typography";
 import Default from "../../layouts/Default";
 import { Block } from "baseui/block";
 import { HeadingTitle } from "../../components/shared/HeadingTitle";
-import { workers } from "../../mocks/worker.const";
 import { useStyletron } from "baseui";
-import WorkerBtn from "../../components/common/WorkerBtn";
-
-const isBookmarked = workers.filter((item) => item.bookmark);
 
 export default function Bookmark() {
   const [css, theme] = useStyletron();
   return (
     <Default hasHeader={true}>
-      <HeadingTitle title="Schedule" />
+      <></>
+      {/* <HeadingTitle title="Schedule" />
       {isBookmarked.length > 0 ? (
         <FlexGrid
           flexGridColumnCount={[1, 1, 2, 3]}
@@ -59,7 +50,7 @@ export default function Bookmark() {
             </ParagraphMedium>
           </Block>
         </>
-      )}
+      )} */}
     </Default>
   );
 }

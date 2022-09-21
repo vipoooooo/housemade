@@ -118,7 +118,7 @@ export default function ReportModal({
 
 export const hide: FormControlOverrides = {
   ControlContainer: {
-    style: ({ $theme }) => ({
+    style: () => ({
       display: "none",
     }),
   },

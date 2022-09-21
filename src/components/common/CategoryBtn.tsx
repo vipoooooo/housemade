@@ -20,7 +20,7 @@ export default function CategoryBtn({ id, title, icon }: ActiveLinkProps) {
       kind={KIND.tertiary}
       overrides={{
         BaseButton: {
-          style: ({ $theme }) => ({
+          style: () => ({
             width: "100%",
             aspectRatio: "1 / 1",
             display: "flex",

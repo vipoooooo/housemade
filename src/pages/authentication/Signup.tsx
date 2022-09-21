@@ -120,7 +120,7 @@ const SignUp: NextPage = () => {
                 type="submit"
                 // disabled={}
                 overrides={{
-                  BaseButton: { style: ({ $theme }) => ({ width: "100%" }) },
+                  BaseButton: { style: () => ({ width: "100%" }) },
                 }}
               >
                 Sign up

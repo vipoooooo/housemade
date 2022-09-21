@@ -4,20 +4,20 @@ import Default from "../../layouts/Default";
 import { HeadingTitle } from "../../components/shared/HeadingTitle";
 import { useStyletron } from "baseui";
 import { Accordion, Panel } from "baseui/accordion";
-import { RequestBooking } from "./components/RequestBooking";
-import { Requesting } from "./components/Requesting";
+import { RequestBooking } from "../../components/schedule/RequestBooking";
+import { Requesting } from "../../components/schedule/Requesting";
 import { trpc } from "../../utils/trpc";
 import { useSession } from "next-auth/react";
 import restricted from "../api/restricted";
 import Head from "next/head";
-import { UpcomingDefaultAsWorker } from "./components/UpcomingDefaultAsWorker";
-import { UpcomingEndingAsWorker } from "./components/UpcomingEndingAsWorker";
-import { UpcomingEndingRecieverAsWorker } from "./components/UpcomingEndingRecieverAsWorker";
-import { CompletedAsClient } from "./components/CompletedAsClient";
-import { CompletedAsWorker } from "./components/CompletedAsWorker";
-import { UpcomingDefaultAsClient } from "./components/UpcomingDefaultAsClient";
-import { UpcomingEndingAsClient } from "./components/UpcomingEndingAsClient";
-import { UpcomingEndingRecieverAsClient } from "./components/UpcomingEndingRecieverAsClient";
+import { UpcomingDefaultAsWorker } from "../../components/schedule/UpcomingDefaultAsWorker";
+import { UpcomingEndingAsWorker } from "../../components/schedule/UpcomingEndingAsWorker";
+import { UpcomingEndingRecieverAsWorker } from "../../components/schedule/UpcomingEndingRecieverAsWorker";
+import { CompletedAsClient } from "../../components/schedule/CompletedAsClient";
+import { CompletedAsWorker } from "../../components/schedule/CompletedAsWorker";
+import { UpcomingDefaultAsClient } from "../../components/schedule/UpcomingDefaultAsClient";
+import { UpcomingEndingAsClient } from "../../components/schedule/UpcomingEndingAsClient";
+import { UpcomingEndingRecieverAsClient } from "../../components/schedule/UpcomingEndingRecieverAsClient";
 
 // FOR RESTRICTED AUTH PURPOSE
 export const getServerSideProps = restricted(async (ctx) => {
@@ -30,7 +30,7 @@ export const ScheduleWrapper = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [css] = useStyletron();
+  const [css, theme] = useStyletron();
 
   return (
     <Accordion
@@ -38,12 +38,12 @@ export const ScheduleWrapper = ({
       accordion
       overrides={{
         Header: {
-          style: ({ $theme }) => ({
-            backgroundColor: $theme.colors.backgroundSecondary,
+          style: () => ({
+            backgroundColor: theme.colors.backgroundSecondary,
           }),
         },
         Content: {
-          style: ({ $theme }) => ({
+          style: () => ({
             paddingTop: "0px",
             paddingBottom: "0px",
             paddingLeft: "0px",

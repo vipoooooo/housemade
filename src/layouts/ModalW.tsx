@@ -40,7 +40,7 @@ export default function ModalW({
       role={ROLE.dialog}
       overrides={{
         Dialog: {
-          style: ({ $theme }) => ({
+          style: () => ({
             // borderRadius: 0,
             borderTopLeftRadius: 0,
             borderTopRightRadius: 0,
@@ -50,7 +50,7 @@ export default function ModalW({
           }),
         },
         Close: {
-          style: ({ $theme }) => ({
+          style: () => ({
             display: "none",
           }),
         },

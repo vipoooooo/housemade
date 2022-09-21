@@ -36,13 +36,13 @@ export default function ScheduleContentModal({
       role={ROLE.dialog}
       overrides={{
         Dialog: {
-          style: ({ $theme }) => ({
+          style: () => ({
             borderRadius: 0,
             // padding: 0
           }),
         },
         Close: {
-          style: ({ $theme }) => ({
+          style: () => ({
             display: "none",
           }),
         },
@@ -96,7 +96,7 @@ export default function ScheduleContentModal({
               </ParagraphXSmall>
             </Block>
           </div>
-          
+
           {/* <Button
             onClick={() => alert("click")}
             kind={KIND.secondary}

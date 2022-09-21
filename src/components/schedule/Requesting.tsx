@@ -3,15 +3,14 @@ import { useStyletron } from "baseui";
 import { IoClose, IoHandRight } from "react-icons/io5";
 import { ParagraphSmall } from "baseui/typography";
 import { Button, KIND, SIZE } from "baseui/button";
-// import { Schedule } from "../../../constants/schedule.const";
-import ScheduleContent from "./wrapper/ScheduleContent";
-import { RequestingWrapper } from "./wrapper/RequestingWrapper";
 import RequestingModal from "./wrapper/ScheduleContentModal";
 import { Appointment } from "@prisma/client";
-import { trpc } from "../../../utils/trpc";
-import { IDeleteAppointment } from "../../../server/router/schedule/schedule.type";
+import { trpc } from "../../utils/trpc";
+import { IDeleteAppointment } from "../../server/router/schedule/schedule.type";
 import { object } from "zod";
-import { djs } from "../../../helpers/snipet";
+import { djs } from "../../helpers/snipet";
+import ScheduleContent from "./wrapper/ScheduleContent";
+import { RequestingWrapper } from "./wrapper/RequestingWrapper";
 
 export function Requesting({ scheduleData }: { scheduleData: any }) {
   const [css, theme] = useStyletron();

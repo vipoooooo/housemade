@@ -3,14 +3,14 @@ import { useStyletron } from "baseui";
 import { IoCheckmark, IoClose, IoMailUnread } from "react-icons/io5";
 import { ParagraphSmall } from "baseui/typography";
 import { Button, KIND, SIZE } from "baseui/button";
-import ScheduleContent from "./wrapper/ScheduleContent";
-import { RequestingWrapper } from "./wrapper/RequestingWrapper";
-import { trpc } from "../../../utils/trpc";
+import { trpc } from "../../utils/trpc";
 import {
   IDeleteAppointment,
   IUpdateAppointment,
-} from "../../../server/router/schedule/schedule.type";
-import { djs } from "../../../helpers/snipet";
+} from "../../server/router/schedule/schedule.type";
+import { djs } from "../../helpers/snipet";
+import { RequestingWrapper } from "./wrapper/RequestingWrapper";
+import ScheduleContent from "./wrapper/ScheduleContent";
 
 export function RequestBooking({ scheduleData }: { scheduleData: any }) {
   const [css, theme] = useStyletron();
@@ -90,7 +90,7 @@ export function RequestBooking({ scheduleData }: { scheduleData: any }) {
             startEnhancer={<IoClose size={20} />}
             overrides={{
               BaseButton: {
-                style: ({ $theme }) => ({
+                style: () => ({
                   width: "calc(50% - (10px/2))",
                 }),
               },
@@ -107,7 +107,7 @@ export function RequestBooking({ scheduleData }: { scheduleData: any }) {
             startEnhancer={<IoCheckmark size={20} />}
             overrides={{
               BaseButton: {
-                style: ({ $theme }) => ({
+                style: () => ({
                   width: "calc(50% - (10px/2))",
                 }),
               },

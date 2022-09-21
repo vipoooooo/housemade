@@ -181,7 +181,7 @@ const RegisterWorker: NextPage = () => {
                 type="submit"
                 overrides={{
                   BaseButton: {
-                    style: ({ $theme }) => ({
+                    style: () => ({
                       width: "100%",
                     }),
                   },

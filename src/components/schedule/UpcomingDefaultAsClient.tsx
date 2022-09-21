@@ -1,29 +1,29 @@
 import * as React from "react";
 import { useStyletron } from "baseui";
 import { IoCalendar, IoClose } from "react-icons/io5";
-import { RequestingWrapper } from "./wrapper/RequestingWrapper";
-import ScheduleContent from "./wrapper/ScheduleContent";
-import { ParagraphSmall } from "baseui/typography";
 import { Button, KIND, SIZE } from "baseui/button";
-import { IDeleteUpcomingAppointment } from "../../../server/router/schedule/schedule.type";
-import { trpc } from "../../../utils/trpc";
+import { IUpdateUpcomingAppointment } from "../../server/router/schedule/schedule.type";
+import { trpc } from "../../utils/trpc";
 import { useSession } from "next-auth/react";
-import { djs } from "../../../helpers/snipet";
+import { djs } from "../../helpers/snipet";
+import ScheduleContent from "./wrapper/ScheduleContent";
+import { RequestingWrapper } from "./wrapper/RequestingWrapper";
 
-export function UpcomingEndingRecieverAsWorker({
+export function UpcomingDefaultAsClient({
   scheduleData,
 }: {
   scheduleData: any;
 }) {
   const [css, theme] = useStyletron();
   const utils = trpc.useContext();
+  const { data: session } = useSession();
 
   const { mutateAsync, isLoading } = trpc.useMutation([
-    "schedule.deleteUpcomingAppointmentSchema",
+    "schedule.updateUpcomingAppointmentSchema",
   ]);
 
   const onSubmit = React.useCallback(
-    async (data: IDeleteUpcomingAppointment) => {
+    async (data: IUpdateUpcomingAppointment) => {
       try {
         const result = await mutateAsync(data, {
           onSuccess: () => {
@@ -46,10 +46,12 @@ export function UpcomingEndingRecieverAsWorker({
         }
         bg={theme.colors.backgroundInversePrimary}
         title={
-          "You have an appointment with " +
-          scheduleData.client.username +
-          " on " +
-          scheduleData.appointmentDate.toDateString()
+          <>
+            You have an appointment with
+            <b> {scheduleData.worker.username} </b>
+            on
+            <b> {scheduleData.appointmentDate.toDateString()}</b>
+          </>
         }
         date={djs(scheduleData.createdAt).fromNow()}
         worker={scheduleData.worker.username}
@@ -66,7 +68,9 @@ export function UpcomingEndingRecieverAsWorker({
         })}
       >
         <Button
-          onClick={() => onSubmit({ id: scheduleData.id })}
+          onClick={() =>
+            onSubmit({ id: scheduleData.id, senderId: session?.id as string })
+          }
           isLoading={isLoading}
           disabled={isLoading}
           kind={KIND.secondary}
@@ -80,7 +84,7 @@ export function UpcomingEndingRecieverAsWorker({
             },
           }}
         >
-          Cancel request end appointment
+          End appointment
         </Button>
       </div>
     </RequestingWrapper>

@@ -1,15 +1,13 @@
 import * as React from "react";
 import {
-  HeaderNavigation,
   ALIGN,
   StyledNavigationItem as NavigationItem,
   StyledNavigationList as NavigationList,
   StyledNavigationItem,
 } from "baseui/header-navigation";
-import { StatefulSelect as Search, TYPE } from "baseui/select";
 import Image from "next/image";
 import { Logo } from "../../constants/icon.const";
-import { Button, KIND, SHAPE } from "baseui/button";
+import { Button, KIND } from "baseui/button";
 import { IoClose, IoMenu } from "react-icons/io5";
 import { useStyletron } from "baseui";
 import { Block } from "baseui/block";
@@ -20,23 +18,6 @@ import { useActiveMenu } from "../../hooks/useActiveMenu";
 import { useSession } from "next-auth/react";
 import { trpc } from "../../utils/trpc";
 import { SkeletonBtn, SkeletonText } from "../common/Skeleton";
-
-const options = {
-  options: [
-    { id: "AliceBlue", color: "#F0F8FF" },
-    { id: "AntiqueWhite", color: "#FAEBD7" },
-    { id: "Aqua", color: "#00FFFF" },
-    { id: "Aquamarine", color: "#7FFFD4" },
-    { id: "Azure", color: "#F0FFFF" },
-    { id: "Beige", color: "#F5F5DC" },
-    { id: "Bisque", color: "#FFE4C4" },
-    { id: "Black", color: "#000000" },
-  ],
-  labelKey: "id",
-  valueKey: "color",
-  placeholder: "Search here...",
-  maxDropdownHeight: "300px",
-};
 
 export default function Navigationbar() {
   const [css] = useStyletron();
@@ -174,7 +155,7 @@ function MenuDrawer({
   const [css] = useStyletron();
   const { menus } = useActiveMenu();
   const { data: session } = useSession();
-  const { data, error, isLoading } = trpc.useQuery(
+  const { data } = trpc.useQuery(
     ["user.getUser", { id: session?.id as string }],
     {
       retry: false,
@@ -191,7 +172,7 @@ function MenuDrawer({
       anchor={ANCHOR.top}
       overrides={{
         DrawerBody: {
-          style: ({ $theme }) => ({
+          style: () => ({
             // top: '100px',
             zIndex: 3,
             margin: "0px 0px 0px 0px",

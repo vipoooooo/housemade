@@ -7,7 +7,7 @@ export function Toaster() {
       autoHideDuration={2000}
       overrides={{
         Root: {
-          style: ({ $theme }) => ({
+          style: () => ({
             zIndex: 4,
           }),
         },

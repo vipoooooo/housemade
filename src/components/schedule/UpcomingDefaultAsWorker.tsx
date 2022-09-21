@@ -1,14 +1,14 @@
 import * as React from "react";
 import { useStyletron } from "baseui";
 import { IoCalendar, IoClose } from "react-icons/io5";
-import { RequestingWrapper } from "./wrapper/RequestingWrapper";
-import ScheduleContent from "./wrapper/ScheduleContent";
 import { ParagraphSmall } from "baseui/typography";
 import { Button, KIND, SIZE } from "baseui/button";
-import { IUpdateUpcomingAppointment } from "../../../server/router/schedule/schedule.type";
-import { trpc } from "../../../utils/trpc";
+import { IUpdateUpcomingAppointment } from "../../server/router/schedule/schedule.type";
+import { trpc } from "../../utils/trpc";
 import { useSession } from "next-auth/react";
-import { djs } from "../../../helpers/snipet";
+import { djs } from "../../helpers/snipet";
+import ScheduleContent from "./wrapper/ScheduleContent";
+import { RequestingWrapper } from "./wrapper/RequestingWrapper";
 
 export function UpcomingDefaultAsWorker({
   scheduleData,

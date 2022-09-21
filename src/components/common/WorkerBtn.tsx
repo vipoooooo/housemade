@@ -43,7 +43,7 @@ export default function WorkerBtn({
       kind={KIND.tertiary}
       overrides={{
         BaseButton: {
-          style: ({ $theme }) => ({
+          style: () => ({
             width: "100%",
             display: "flex",
             alignItems: "start",

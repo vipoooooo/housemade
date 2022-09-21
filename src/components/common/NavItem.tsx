@@ -1,13 +1,11 @@
 import { StyledNavigationItem } from "baseui/header-navigation";
-import { ParagraphMedium, ParagraphSmall } from "baseui/typography";
+import { ParagraphMedium } from "baseui/typography";
 import Link from "next/link";
 import * as React from "react";
-import { Button, KIND, SIZE, SHAPE } from "baseui/button";
-import { IoClose } from "react-icons/io5";
+import { Button, KIND } from "baseui/button";
 import { Block } from "baseui/block";
 import { useRouter } from "next/router";
 import { useStyletron } from "baseui";
-
 
 // NAVLINK__________
 export function Navlink({
@@ -32,7 +30,6 @@ export function Navlink({
   );
 }
 
-
 // NAVBTN__________
 interface ActiveLinkProps {
   link: string;
@@ -52,7 +49,7 @@ export function NavBtn({ link, icon, title, active }: ActiveLinkProps) {
         kind={KIND.tertiary}
         overrides={{
           BaseButton: {
-            style: ({ $theme }) => ({
+            style: () => ({
               width: "100%",
               display: "flex",
               justifyContent: "start",

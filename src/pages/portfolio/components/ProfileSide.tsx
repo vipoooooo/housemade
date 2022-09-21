@@ -115,7 +115,7 @@ export default function ProfileSide() {
               size={SIZE.compact}
               overrides={{
                 Root: {
-                  style: ({ $theme }) => ({
+                  style: () => ({
                     width: "100%",
                   }),
                 },

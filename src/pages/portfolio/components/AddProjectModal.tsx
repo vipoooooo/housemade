@@ -176,7 +176,7 @@ export default function AddProjectModal({
                         }),
                       },
                       ContentMessage: {
-                        style: ({ $theme }) => ({
+                        style: () => ({
                           textAlign: "center",
                           display: "none",
                         }),

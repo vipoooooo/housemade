@@ -134,7 +134,7 @@ export default function BasicInfo() {
             onClick={() => location.reload()}
             overrides={{
               BaseButton: {
-                style: ({ $theme }) => ({
+                style: () => ({
                   marginLeft: "5px",
                 }),
               },
@@ -204,7 +204,7 @@ export default function BasicInfo() {
                     }}
                     overrides={{
                       FileDragAndDrop: {
-                        style: ({ $theme }) => ({
+                        style: () => ({
                           width: "200px",
                           height: "200px",
                           paddingTop: "75px",
@@ -213,7 +213,7 @@ export default function BasicInfo() {
                         }),
                       },
                       ContentMessage: {
-                        style: ({ $theme }) => ({
+                        style: () => ({
                           textAlign: "center",
                           display: "none",
                         }),
