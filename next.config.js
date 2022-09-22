@@ -10,6 +10,9 @@ const nextConfig = {
       "via.placeholder.com",
     ],
   },
+  experimental: {
+    nftTracing: true,
+  },
 };
 
 module.exports = nextConfig;
