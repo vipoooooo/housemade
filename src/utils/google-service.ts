@@ -1,7 +1,10 @@
 import { google } from "googleapis";
+import path from 'path';
+
+const file = path.join(process.cwd(), '.', 'housemade-4bacc34cdffd.json');
 
 const auth = new google.auth.GoogleAuth({
-  keyFile: "./housemade-4bacc34cdffd.json",
+  keyFile: file,
   scopes: ["https://www.googleapis.com/auth/drive"],
 });
 
