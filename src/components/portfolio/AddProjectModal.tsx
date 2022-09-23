@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useStyletron } from "baseui";
-import ModalTemp from "../../../layouts/ModalW";
+import ModalTemp from "../../layouts/ModalW";
 import { Textarea } from "baseui/textarea";
 import { Button, KIND, SIZE } from "baseui/button";
 import { FileUploader } from "baseui/file-uploader";
@@ -9,18 +9,19 @@ import { Input } from "baseui/input";
 import { Block } from "baseui/block";
 import { Controller, useForm } from "react-hook-form";
 import Image from "next/image";
-import { StyleObject } from "styletron-standard";
+
 import { useSession } from "next-auth/react";
-import { trpc } from "../../../utils/trpc";
+import { trpc } from "../../utils/trpc";
 import {
   IwriteProjectSchema,
   writeProjectSchema,
-} from "../../../server/router/project/project.type";
+} from "../../server/router/project/project.type";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { hide } from "../../browse/components/modals/ReportModal";
-import { toBase64 } from "../../../helpers/snipet";
-import { Toaster } from "../../../components/common/Toaster";
+import { hide } from "../browse/modals/ReportModal";
+import { toBase64 } from "../../helpers/snipet";
+import { Toaster } from "../common/Toaster";
 import { toaster } from "baseui/toast";
+import { style } from "../../styles/StyleObject";
 
 export default function AddProjectModal({
   isOpen,
@@ -66,13 +67,11 @@ export default function AddProjectModal({
     resolver: zodResolver(writeProjectSchema),
   });
 
-  const { mutateAsync, error, isLoading } = trpc.useMutation([
-    "project.writeProject",
-  ]);
+  const { mutateAsync, isLoading } = trpc.useMutation(["project.writeProject"]);
 
   const onSubmit = async (data: IwriteProjectSchema) => {
     try {
-      const result = await mutateAsync(data, {
+      await mutateAsync(data, {
         onSuccess: () => {
           utils.invalidateQueries(["project.projects"]);
           // clear form
@@ -83,7 +82,6 @@ export default function AddProjectModal({
       setIsOpen(false);
     } catch (err) {
       toaster.warning("Unable to create project", {});
-      console.log(err);
     }
   };
 
@@ -109,14 +107,14 @@ export default function AddProjectModal({
         </FormControl>
         <FormControl label="Cover" caption="Image should not be more than 2 MB">
           <Block
-            display={"flex"}
-            position={"relative"}
+            display="flex"
+            position="relative"
             className={css({
               width: "100%",
               gap: "20px",
             })}
           >
-            <Block height={"200px"} width={"100%"}>
+            <Block height="200px" width="100%">
               <Image
                 alt={"project?.title"}
                 src={
@@ -129,14 +127,10 @@ export default function AddProjectModal({
                 objectFit={"cover"}
                 priority
                 layout="fill"
-                className={css(images)}
+                className={css(style.image)}
               />
             </Block>
-            <Block
-              className={css({
-                position: "absolute",
-              })}
-            >
+            <Block className={css({ position: "absolute" })}>
               <Controller
                 name="imageBase64"
                 control={control}
@@ -176,10 +170,7 @@ export default function AddProjectModal({
                         }),
                       },
                       ContentMessage: {
-                        style: () => ({
-                          textAlign: "center",
-                          display: "none",
-                        }),
+                        style: () => ({ textAlign: "center", display: "none" }),
                       },
                     }}
                   />
@@ -256,10 +247,3 @@ export default function AddProjectModal({
     </>
   );
 }
-
-export const images: StyleObject = {
-  objectFit: "contain",
-  width: "100% !important",
-  position: "relative",
-  height: "unset !important",
-};

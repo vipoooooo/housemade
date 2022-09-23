@@ -55,31 +55,28 @@ export default function WorkerBtn({
         },
       }}
     >
-      <Block width={"100%"} display={"flex"}>
+      <Block width="100%" display="flex">
         <Avatar name={username} size="scale1600" src={pfp} />
         <Block
-          display={"flex"}
-          flexDirection={"column"}
-          alignItems={"start"}
-          marginLeft={"10px"}
+          display="flex"
+          flexDirection="column"
+          alignItems="start"
+          marginLeft="10px"
         >
-          <Block display={"flex"} alignItems={"center"}>
-            <ParagraphMedium
-              margin={"0 5px 0 0"}
-              $style={{ textAlign: "start" }}
-            >
+          <Block display="flex" alignItems="center">
+            <ParagraphMedium margin="0 5px 0 0" $style={{ textAlign: "start" }}>
               {username}
             </ParagraphMedium>
             {verify ? (
-              <IoCheckmarkCircle size={"15px"} color={theme.colors.accent} />
+              <IoCheckmarkCircle size="15px" color={theme.colors.accent} />
             ) : (
               <></>
             )}
           </Block>
           <ParagraphXSmall margin={0}>{skill}</ParagraphXSmall>
-          <Block display={"flex"}>
-            <Block marginRight={"5px"}>
-              <IoStar size={"15px"} color={theme.colors.backgroundWarning} />
+          <Block display="flex">
+            <Block marginRight="5px">
+              <IoStar size="15px" color={theme.colors.backgroundWarning} />
             </Block>
             <ParagraphXSmall margin={0}>
               {rating} ({reviewer} review)

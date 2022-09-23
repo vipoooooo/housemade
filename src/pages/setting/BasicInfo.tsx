@@ -18,8 +18,7 @@ import { toaster } from "baseui/toast";
 import { toBase64 } from "../../helpers/snipet";
 import Head from "next/head";
 import { Toaster } from "../../components/common/Toaster";
-import { Paragraph1, Paragraph4 } from "baseui/typography";
-import { StyledLink } from "baseui/link";
+import { Paragraph4 } from "baseui/typography";
 
 export const getServerSideProps = restricted(async (ctx) => {
   return { props: {} };
@@ -38,7 +37,6 @@ export default function BasicInfo() {
   } = useForm<IUser>({
     resolver: zodResolver(userSchema),
   });
-  console.log(errors);
 
   const userQuery = trpc.useQuery(["user.getUser", { id: data?.id as string }]);
   const userMutation = trpc.useMutation(["user.user"]);
@@ -57,10 +55,12 @@ export default function BasicInfo() {
       setValue("username", user.username);
       setValue("email", user.email);
       if (user.role === "worker") {
-        setValue("subcategoryId", {
-          id: user.worker?.subcategoryId,
-          label: user.worker?.subcategory?.title,
-        });
+        setValue("subcategoryId", [
+          {
+            id: user.worker?.subcategoryId,
+            label: user.worker?.subcategory?.title,
+          },
+        ]);
         setValue("description", user.worker?.description || "");
         setValue("link", user.worker?.link || "");
       }
@@ -83,14 +83,13 @@ export default function BasicInfo() {
           setError("subcategoryId", {});
           return;
         }
-        // console.log(data);
         await userMutation.mutateAsync(data, {
           onSuccess: () => {
             toaster.info("Saved", {});
           },
         });
       } catch (err) {
-        console.log(err);
+        toaster.warning("Can't be saved", {});
       }
     },
     [data]
@@ -114,16 +113,8 @@ export default function BasicInfo() {
         backgroundColor={theme.colors.backgroundLightAccent}
         width="100%"
         padding={" 0 20px"}
-        // className={css({
-        //   borderRadius: "15px",
-        // })}
       >
-        <Paragraph4
-          // color={theme.colors.warning}
-          className={css({
-            textAlign: "center",
-          })}
-        >
+        <Paragraph4 className={css({ textAlign: "center" })}>
           If you just insert profile picture for the first time or just login
           back, <br /> you're not going to see the preview of your profile.
           <br />
@@ -132,13 +123,7 @@ export default function BasicInfo() {
             size={SIZE.mini}
             kind={KIND.tertiary}
             onClick={() => location.reload()}
-            overrides={{
-              BaseButton: {
-                style: () => ({
-                  marginLeft: "5px",
-                }),
-              },
-            }}
+            overrides={{ BaseButton: { style: () => ({ marginLeft: "5px" }) } }}
           >
             REFRESH
           </Button>
@@ -168,7 +153,7 @@ export default function BasicInfo() {
               // gap: "20px",
             })}
           >
-            {userQuery.data?.user.image && (
+            {userQuery.data?.user.image ? (
               <Block>
                 <Avatar
                   name=""
@@ -176,12 +161,24 @@ export default function BasicInfo() {
                   src={image ? image : userQuery.data.user.imageURL}
                 />
               </Block>
+            ) : (
+              <Button
+                overrides={{
+                  BaseButton: {
+                    style: () => ({
+                      height: "200px",
+                      width: "200px",
+                      borderBottomLeftRadius: "50%",
+                      borderBottomRightRadius: "50%",
+                      borderTopLeftRadius: "50%",
+                      borderTopRightRadius: "50%",
+                      backgroundColor: theme.colors.backgroundSecondary,
+                    }),
+                  },
+                }}
+              ></Button>
             )}
-            <Block
-              className={css({
-                position: "absolute",
-              })}
-            >
+            <Block className={css({ position: "absolute" })}>
               <Controller
                 name="imageBase64"
                 control={control}
@@ -195,9 +192,7 @@ export default function BasicInfo() {
                       const file = acceptedFiles[0];
 
                       if (file) {
-                        console.log(typeof file, file);
                         const base64 = await toBase64(file);
-                        console.log(typeof base64, base64);
                         field.onChange(base64);
                         setImage(URL.createObjectURL(file));
                       }
@@ -208,15 +203,15 @@ export default function BasicInfo() {
                           width: "200px",
                           height: "200px",
                           paddingTop: "75px",
-                          background: "none",
-                          border: "none",
+                          backgroundColor: "none",
+                          borderBottomStyle: "none",
+                          borderTopStyle: "none",
+                          borderLeftStyle: "none",
+                          borderRightStyle: "none",
                         }),
                       },
                       ContentMessage: {
-                        style: () => ({
-                          textAlign: "center",
-                          display: "none",
-                        }),
+                        style: () => ({ textAlign: "center", display: "none" }),
                       },
                     }}
                   />
@@ -227,11 +222,7 @@ export default function BasicInfo() {
 
           <Block
             width={["100%", "100%", "calc(100% - 220px)", "calc(100% - 220px)"]}
-            // width={"100%"}
-            className={css({
-              display: "flex",
-              flexDirection: "column",
-            })}
+            className={css({ display: "flex", flexDirection: "column" })}
           >
             <FormControl label="Username">
               <Controller
@@ -281,13 +272,12 @@ export default function BasicInfo() {
                       //   placeholder="Choose one skill"
                       // />
                       <Select
-                        ref={field.ref}
                         value={field.value}
                         size={SIZE.compact}
                         options={skill}
-                        onChange={(params) => field.onChange(params.value[0])}
+                        onChange={(params) => field.onChange(params.value)}
                         isLoading={categoryQuery.isLoading}
-                        placeholder=""
+                        placeholder="Choose one skill"
                       />
                     )}
                   />
@@ -316,10 +306,7 @@ export default function BasicInfo() {
                             },
                           },
                           InputContainer: {
-                            style: {
-                              maxWidth: "100%",
-                              width: "min-content",
-                            },
+                            style: { maxWidth: "100%", width: "min-content" },
                           },
                         }}
                       />

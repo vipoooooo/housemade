@@ -42,7 +42,7 @@ export function NavBtn({ link, icon, title, active }: ActiveLinkProps) {
   const router = useRouter();
   const [css, theme] = useStyletron();
   return (
-    <Block width={"100%"}>
+    <Block width="100%">
       <Button
         onClick={() => router.push(link)}
         startEnhancer={icon}

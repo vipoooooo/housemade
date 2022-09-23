@@ -23,27 +23,5 @@ export const SmartHome = "/assets/icons/SmartHome.png";
 export const Solar = "/assets/icons/Solar.png";
 export const Windowsndoors = "/assets/icons/Windowsndoors.png";
 
-// Pfp
-export const Leangsuor = "/assets/pfp/Leangsuor.jpeg";
-export const Sambath = "/assets/pfp/Sambath.jpeg";
-export const Seyla = "/assets/pfp/Seyla.jpeg";
-export const Vichea = "/assets/pfp/Vichea.jpeg";
-export const Andrew = "/assets/pfp/andrew.jpg";
-export const cesarr = "/assets/pfp/cesarr.jpg";
-export const charles = "/assets/pfp/charles.jpg";
-export const haitham = "/assets/pfp/haitham.jpg";
-export const kimson = "/assets/pfp/kimson.jpg";
-export const mustafa = "/assets/pfp/mustafa.jpg";
-export const tyler = "/assets/pfp/tyler.jpg";
-export const zulmaury = "/assets/pfp/zulmaury.jpg";
-
-
-// Project Cover
-export const house1 = "/assets/projectCover/house1.jpg";
-export const house2 = "/assets/projectCover/house2.jpg";
-export const house3 = "/assets/projectCover/house3.jpg";
-export const house4 = "/assets/projectCover/house4.jpg";
-export const house5 = "/assets/projectCover/house5.jpg";
-
 // Landing Page
-export const CoverLanding = "/assets/landing/CoverLanding.jpg"
+export const CoverLanding = "/assets/landing/CoverLanding.jpg";

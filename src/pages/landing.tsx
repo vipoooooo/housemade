@@ -1,22 +1,14 @@
 import { useStyletron } from "baseui";
-import { Block } from "baseui/block";
 import { Button, KIND, SIZE } from "baseui/button";
-import { ButtonGroup } from "baseui/button-group";
-import { Filter } from "baseui/icon";
-import {
-  HeadingLarge,
-  HeadingMedium,
-  Paragraph4,
-  ParagraphLarge,
-  ParagraphSmall,
-} from "baseui/typography";
+import { HeadingLarge, Paragraph4, ParagraphLarge } from "baseui/typography";
 import { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
+
 import { CoverLanding, Logo } from "../constants/icon.const";
-import { image } from "./browse/components/profile/PortfolioCont";
+import { style } from "../styles/StyleObject";
 
 const Landing: NextPage = () => {
   const route = useRouter();
@@ -31,13 +23,11 @@ const Landing: NextPage = () => {
       </Head>
       <Image
         alt={"Landing Image"}
-        src={
-          "https://images.unsplash.com/photo-1509837295151-b8189b63bdba?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2076&q=80"
-        }
-        objectFit={"cover"}
+        src={CoverLanding}
+        objectFit="cover"
         priority
         layout="fill"
-        className={css(image)}
+        className={css(style.image)}
       />
       <div
         className={css({
@@ -47,6 +37,7 @@ const Landing: NextPage = () => {
           gap: "30px",
           width: "100vw",
           margin: "100px auto 0 auto",
+          padding: "0 20px",
           position: "absolute",
         })}
       >
@@ -114,21 +105,16 @@ const Landing: NextPage = () => {
           position: "absolute",
         })}
       >
-        <Paragraph4>Developed by po | suor | leng</Paragraph4>
-        <Paragraph4>&bull;</Paragraph4>
-        <Paragraph4>beta version | v1.0.0</Paragraph4>
+        <Paragraph4 color={theme.colors.contentInversePrimary}>
+          Developed by po | suor | leng
+        </Paragraph4>
+        <Paragraph4 color={theme.colors.contentInversePrimary}>
+          &bull;
+        </Paragraph4>
+        <Paragraph4 color={theme.colors.contentInversePrimary}>
+          beta version | v1.0.0
+        </Paragraph4>
       </div>
-      {/* </div> */}
-      {/* <Block
-        position={"absolute"}
-        bottom={"0"}
-        left={"46%"}
-        className={css({
-          transform: "translate(0%, -46%)",
-        })}
-      >
-        <ParagraphSmall>Made by noname</ParagraphSmall>
-      </Block> */}
     </main>
   );
 };

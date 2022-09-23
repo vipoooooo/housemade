@@ -2,12 +2,13 @@ import * as React from "react";
 import Layout from "../../layouts/Default";
 import { Block } from "baseui/block";
 import { useStyletron } from "baseui";
-import ProfileSide from "./components/ProfileSide";
-import ContentSide from "./components/ContentSide";
+import ProfileSide from "../../components/portfolio/ProfileSide";
+import ContentSide from "../../components/portfolio/ContentSide";
 import restricted from "../api/restricted";
 import Head from "next/head";
 import { useSession } from "next-auth/react";
 import { trpc } from "../../utils/trpc";
+import { style } from "../../styles/StyleObject";
 
 // FOR RESTRICTED AUTH PURPOSE
 export const getServerSideProps = restricted(async (ctx) => {
@@ -33,7 +34,7 @@ export default function Profile() {
       <Block
         display={"flex"}
         flexDirection={["column", "column", "column", "row"]}
-        className={css({ gap: "20px", flexWrap: "wrap" })}
+        className={css(style.profileDefaultLayout)}
       >
         {/* Profile */}
         <ProfileSide />

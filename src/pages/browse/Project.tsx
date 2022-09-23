@@ -5,7 +5,6 @@ import { useStyletron } from "baseui";
 import { useRouter } from "next/router";
 import { AspectRatioBox, AspectRatioBoxBody } from "baseui/aspect-ratio-box";
 import Image from "next/image";
-import { StyleObject } from "styletron-standard";
 import {
   DisplaySmall,
   DisplayXSmall,
@@ -14,12 +13,13 @@ import {
 } from "baseui/typography";
 import { trpc } from "../../utils/trpc";
 import Head from "next/head";
+import { style } from "../../styles/StyleObject";
 
 export default function Project() {
-  const [css, theme] = useStyletron();
+  const [css] = useStyletron();
   const router = useRouter();
   const { id } = router.query;
-  const { data, isLoading, isSuccess } = trpc.useQuery(
+  const { data, isLoading } = trpc.useQuery(
     ["project.project", { id: id as string }],
     { retry: false, enabled: Boolean(id) }
   );
@@ -38,23 +38,23 @@ export default function Project() {
         <>
           <AspectRatioBox aspectRatio={16 / 9}>
             <AspectRatioBoxBody
-              display={"flex"}
-              flexDirection={"column"}
-              width={"100%"}
-              className={css(imageContainer)}
+              display="flex"
+              flexDirection="column"
+              width="100%"
+              className={css(style.imageContainer)}
             >
               <Image
                 alt={proj.title}
                 src={proj.imageURL || ""}
-                objectFit={"cover"}
+                objectFit="cover"
                 priority
                 layout="fill"
-                className={css(image)}
+                className={css(style.image)}
               />
             </AspectRatioBoxBody>
           </AspectRatioBox>
           <Block
-            display={"flex"}
+            display="flex"
             flexDirection={["column", "column", "row", "row"]}
             padding={["20px 0", "30px 0", "40px 0", "50px 0"]}
             className={css({
@@ -62,9 +62,9 @@ export default function Project() {
             })}
           >
             <Block
-              flex={"0 30%"}
-              display={"flex"}
-              flexDirection={"column"}
+              flex="0 30%"
+              display="flex"
+              flexDirection="column"
               className={css({
                 gap: "10px",
               })}
@@ -94,17 +94,3 @@ export default function Project() {
     </Layout>
   );
 }
-
-const imageContainer: StyleObject = {
-  width: "100%",
-  ">div": {
-    position: "unset",
-  },
-};
-
-const image: StyleObject = {
-  objectFit: "contain",
-  width: "100% !important",
-  position: "relative",
-  height: "unset !important",
-};

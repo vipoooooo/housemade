@@ -2,13 +2,13 @@ import * as React from "react";
 import Layout from "../../layouts/Default";
 import { Block } from "baseui/block";
 import { useStyletron } from "baseui";
-import { wrap } from "module";
-import ProfileSide from "./components/profile/ProfileSide";
-import ContentSide from "./components/profile/ContentSide";
+import ProfileSide from "../../components/browse/profile/ProfileSide";
+import ContentSide from "../../components/browse/profile/ContentSide";
 import restricted from "../api/restricted";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { trpc } from "../../utils/trpc";
+import { style } from "../../styles/StyleObject";
 
 // FOR RESTRICTED AUTH PURPOSE
 export const getServerSideProps = restricted(async (ctx) => {
@@ -16,14 +16,13 @@ export const getServerSideProps = restricted(async (ctx) => {
 });
 
 export default function Profile() {
-  const [css, theme] = useStyletron();
+  const [css] = useStyletron();
   const router = useRouter();
   const { id } = router.query;
 
-  const { data, isLoading } = trpc.useQuery(
-    ["worker.profile", { id: id as string }],
-    { retry: false }
-  );
+  const { data } = trpc.useQuery(["worker.profile", { id: id as string }], {
+    retry: false,
+  });
   return (
     <Layout hasHeader={true}>
       <Head>
@@ -34,7 +33,7 @@ export default function Profile() {
       <Block
         display={"flex"}
         flexDirection={["column", "column", "column", "row"]}
-        className={css({ gap: "20px", flexWrap: "wrap" })}
+        className={css(style.profileDefaultLayout)}
       >
         {/* Profile */}
         <ProfileSide />

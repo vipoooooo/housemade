@@ -1,14 +1,6 @@
 import * as React from "react";
 import { useStyletron } from "baseui";
-import {
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  ModalButton,
-  // SIZE,
-  ROLE,
-} from "baseui/modal";
+import { Modal, ModalBody, ROLE } from "baseui/modal";
 import { Button, KIND, SHAPE, SIZE } from "baseui/button";
 import { HeadingModalTitle } from "../components/shared/HeadingTitle";
 import { Block } from "baseui/block";
@@ -29,9 +21,10 @@ export default function ModalW({
   hasModal: boolean;
   onSubmit?: React.FormEventHandler<HTMLFormElement>;
 }) {
-  const [css, theme] = useStyletron();
+  const [css] = useStyletron();
   return (
     <Modal
+      unstable_ModalBackdropScroll={true}
       onClose={() => setIsOpen(false)}
       isOpen={isOpen}
       animate
@@ -41,19 +34,13 @@ export default function ModalW({
       overrides={{
         Dialog: {
           style: () => ({
-            // borderRadius: 0,
             borderTopLeftRadius: 0,
             borderTopRightRadius: 0,
             borderBottomLeftRadius: 0,
             borderBottomRightRadius: 0,
-            // padding: 0
           }),
         },
-        Close: {
-          style: () => ({
-            display: "none",
-          }),
-        },
+        Close: { style: () => ({ display: "none" }) },
       }}
     >
       <ModalBody display={"flex"} flexDirection={"column"}>

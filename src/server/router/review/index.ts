@@ -35,12 +35,12 @@ export const reviewRouter = createRouter()
         })
       );
 
-      if (!reviews.length) {
-        throw new trpc.TRPCError({
-          code: "NOT_FOUND",
-          message: "review not found.",
-        });
-      }
+      // if (!reviews.length) {
+      //   throw new trpc.TRPCError({
+      //     code: "NOT_FOUND",
+      //     message: "review not found.",
+      //   });
+      // }
 
       return {
         status: 200,

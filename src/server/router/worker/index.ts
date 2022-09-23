@@ -36,22 +36,6 @@ export const workerRouter = createRouter()
         },
       });
 
-      // const theworker = await Promise.all(
-      //   workers.map(async (worker) => {
-      //     let imageURL = "";
-      //     try {
-      //       imageURL = await getFile({
-      //         id: worker?.user?.image as string,
-      //         folderId: "housemade-user-pfp",
-      //       });
-      //     } catch (err: any) {
-      //       console.log(err.message);
-      //     }
-
-      //     return { ...worker, imageURL };
-      //   })
-      // );
-
       if (!workers.length) {
         throw new trpc.TRPCError({
           code: "NOT_FOUND",
@@ -146,7 +130,7 @@ export const workerRouter = createRouter()
     input: registerWorkerSchema,
     resolve: async ({ ctx, input }) => {
       // WORKER
-      const subcategory = input.subcategoryId;
+      const subcategory = input.subcategoryId[0];
       const subCategory: SubCategory | null =
         await ctx.prisma.subCategory.findFirst({
           where: { id: subcategory.id },

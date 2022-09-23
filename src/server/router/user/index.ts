@@ -82,7 +82,7 @@ export const userRouter = createRouter()
       });
 
       // WORKER
-      const subcategory = input.subcategoryId;
+      const subcategory = input.subcategoryId[0];
       if (input.role === "worker") {
         const subCategory: SubCategory | null =
           await ctx.prisma.subCategory.findFirst({

@@ -1,6 +1,5 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
 import { useCallback, useState } from "react";
 import { signIn, SignInResponse, useSession } from "next-auth/react";
 import { Controller, useForm } from "react-hook-form";
@@ -15,6 +14,7 @@ import { Button, SIZE } from "baseui/button";
 import { ParagraphMedium, ParagraphXSmall } from "baseui/typography";
 import { StyledLink } from "baseui/link";
 import { Notification, KIND } from "baseui/notification";
+import { style } from "../../styles/StyleObject";
 
 const LogIn: NextPage = () => {
   const router = useRouter();
@@ -62,24 +62,8 @@ const LogIn: NextPage = () => {
           hasForm={true}
           onSubmit={handleSubmit(onSubmit)}
         >
-          <div
-            className={css({
-              width: "100%",
-              display: "flex",
-              flexDirection: "column",
-              gap: "20px",
-            })}
-          >
-            <div
-              className={css({
-                width: "100%",
-                display: "flex",
-                flexDirection: "column",
-
-                padding: "20px",
-                border: "2px solid #EEEEEE",
-              })}
-            >
+          <div className={css(style.formWrapper)}>
+            <div className={css(style.cardWrapper)}>
               {error && (
                 <Notification kind={KIND.negative}>
                   {() => "Authenticaion Error"}
@@ -88,7 +72,7 @@ const LogIn: NextPage = () => {
               <FormControl
                 label="Email"
                 caption=""
-                positive={!errors.email}
+                positive={!errors.email ? errors.email : undefined}
                 error={errors.email ? errors.email.message : null}
               >
                 <Controller
@@ -103,7 +87,7 @@ const LogIn: NextPage = () => {
               <FormControl
                 label="Password"
                 caption=""
-                positive={!errors.password}
+                positive={!errors.password ? errors.password : undefined}
                 error={errors.password ? errors.password.message : null}
               >
                 <Controller
@@ -124,10 +108,7 @@ const LogIn: NextPage = () => {
                 type="submit"
                 overrides={{
                   BaseButton: {
-                    style: () => ({
-                      marginBottom: "20px",
-                      width: "100%",
-                    }),
+                    style: () => ({ marginBottom: "20px", width: "100%" }),
                   },
                 }}
               >
@@ -146,17 +127,7 @@ const LogIn: NextPage = () => {
                 </StyledLink>
               </ParagraphXSmall>
             </div>
-            <div
-              className={css({
-                width: "100%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: "20px",
-                padding: "10px 20px",
-                border: "2px solid #EEEEEE",
-              })}
-            >
+            <div className={css(style.footWrapper)}>
               <ParagraphMedium margin={0}>
                 <span>
                   New to housemade?{" "}

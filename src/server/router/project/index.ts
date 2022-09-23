@@ -12,7 +12,6 @@ import {
   writeProjectSchema,
 } from "./project.type";
 import { v4 as uuidv4 } from "uuid";
-import { Project } from "@prisma/client";
 
 export const projectRouter = createRouter()
   .query("projects", {
@@ -63,7 +62,7 @@ export const projectRouter = createRouter()
       if (!project) {
         throw new trpc.TRPCError({
           code: "NOT_FOUND",
-          message: "project not found.",
+          message: "a specific project not found.",
         });
       }
 
@@ -134,7 +133,7 @@ export const projectRouter = createRouter()
       if (!result) {
         throw new trpc.TRPCError({
           code: "NOT_FOUND",
-          message: "project not found.",
+          message: "project cannot be deleted.",
         });
       }
       try {

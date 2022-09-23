@@ -1,18 +1,18 @@
 import { Block } from "baseui/block";
 import { FlexGrid, FlexGridItem } from "baseui/flex-grid";
-import { Paragraph1, Paragraph3, ParagraphSmall } from "baseui/typography";
+import { Paragraph3, ParagraphSmall } from "baseui/typography";
 import Image from "next/image";
 import * as React from "react";
 import { useStyletron } from "baseui";
 import { useRouter } from "next/router";
 import { AspectRatioBox, AspectRatioBoxBody } from "baseui/aspect-ratio-box";
-import { StyleObject } from "styletron-standard";
-import { HeadingTitle } from "../../../../components/shared/HeadingTitle";
-import { trpc } from "../../../../utils/trpc";
-import { Skeleton } from "baseui/skeleton";
-import { ProjectSkeleton } from "../../../../components/common/Skeleton";
 
-export default function PortfolioCont() {
+import { HeadingTitle } from "../../shared/HeadingTitle";
+import { trpc } from "../../../utils/trpc";
+import { ProjectSkeleton } from "../../common/Skeleton";
+import { style } from "../../../styles/StyleObject";
+
+export default function ProjectCont() {
   const [css, theme] = useStyletron();
   const router = useRouter();
   const { id } = router.query;
@@ -49,15 +49,11 @@ export default function PortfolioCont() {
           {/* Spacer */}
           {!data?.projects.length ? (
             <Block
-              width={"100%"}
+              width="100%"
               backgroundColor={theme.colors.backgroundSecondary}
-              padding={"5px 20px"}
+              padding="5px 20px"
             >
-              <Paragraph3
-                className={css({
-                  textAlign: "center",
-                })}
-              >
+              <Paragraph3 className={css({ textAlign: "center" })}>
                 This worker has not upload a project yet
               </Paragraph3>
             </Block>
@@ -74,29 +70,23 @@ export default function PortfolioCont() {
                       onClick={() => {
                         router.push(`/browse/Project?id=${project.id}`);
                       }}
-                      display={"flex"}
-                      flexDirection={"column"}
-                      width={"100%"}
-                      className={css(imageContainer)}
-                      overrides={{
-                        Block: {
-                          style: {
-                            cursor: "pointer",
-                          },
-                        },
-                      }}
+                      display="flex"
+                      flexDirection="column"
+                      width="100%"
+                      className={css(style.imageContainer)}
+                      overrides={{ Block: { style: { cursor: "pointer" } } }}
                     >
                       <Image
                         alt={project?.title}
                         src={project.imageURL || ""}
-                        objectFit={"cover"}
+                        objectFit="cover"
                         priority
                         layout="fill"
-                        className={css(image)}
+                        className={css(style.image)}
                       />
                     </AspectRatioBoxBody>
                   </AspectRatioBox>
-                  <ParagraphSmall margin={"10px 0 0 0"}>
+                  <ParagraphSmall margin="10px 0 0 0">
                     {project?.title}
                   </ParagraphSmall>
                 </FlexGridItem>
@@ -108,17 +98,3 @@ export default function PortfolioCont() {
     </>
   );
 }
-
-export const imageContainer: StyleObject = {
-  width: "100%",
-  ">div": {
-    position: "unset",
-  },
-};
-
-export const image: StyleObject = {
-  objectFit: "contain",
-  width: "100% !important",
-  position: "relative",
-  height: "unset !important",
-};

@@ -16,7 +16,8 @@ import { Alert } from "baseui/icon";
 import { ParagraphMedium } from "baseui/typography";
 import { StyledLink } from "baseui/link";
 import { Button, SIZE } from "baseui/button";
-import { StyleObject } from "styletron-standard";
+
+import { style } from "../../styles/StyleObject";
 
 const SignUp: NextPage = () => {
   const router = useRouter();
@@ -64,12 +65,12 @@ const SignUp: NextPage = () => {
           hasForm={true}
           onSubmit={handleSubmit(onSubmit)}
         >
-          <div className={css(style.formWrapper as StyleObject)}>
-            <div className={css(style.cardWrapper as StyleObject)}>
+          <div className={css(style.formWrapper)}>
+            <div className={css(style.cardWrapper)}>
               <FormControl
                 label="Username"
                 caption=""
-                positive={!errors.username}
+                positive={!errors.username ? errors.username : undefined}
                 error={errors.username ? errors.username.message : null}
               >
                 <Controller
@@ -84,7 +85,7 @@ const SignUp: NextPage = () => {
               <FormControl
                 label="Email"
                 caption=""
-                positive={!errors.email}
+                positive={!errors.email ? errors.email : undefined}
                 error={errors.email ? errors.email.message : null}
               >
                 <Controller
@@ -118,15 +119,12 @@ const SignUp: NextPage = () => {
               </FormControl>
               <Button
                 type="submit"
-                // disabled={}
-                overrides={{
-                  BaseButton: { style: () => ({ width: "100%" }) },
-                }}
+                overrides={{ BaseButton: { style: () => ({ width: "100%" }) } }}
               >
                 Sign up
               </Button>
             </div>
-            <div className={css(style.footWrapper as StyleObject)}>
+            <div className={css(style.footWrapper)}>
               <ParagraphMedium margin={0}>
                 <span>
                   Already have an account?{" "}
@@ -164,30 +162,5 @@ export function Negative() {
     </div>
   );
 }
-
-const style = {
-  formWrapper: {
-    width: "100%",
-    display: "flex",
-    flexDirection: "column",
-    gap: "20px",
-  },
-  cardWrapper: {
-    width: "100%",
-    display: "flex",
-    flexDirection: "column",
-    padding: "20px",
-    border: "2px solid #EEEEEE",
-  },
-  footWrapper: {
-    width: "100%",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: "20px",
-    padding: "10px 20px",
-    border: "2px solid #EEEEEE",
-  },
-};
 
 export default SignUp;

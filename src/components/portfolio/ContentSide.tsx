@@ -8,8 +8,8 @@ export default function ContentSide() {
   const [css] = useStyletron();
   return (
     <Block
-      display={"flex"}
-      flexDirection={"column"}
+      display="flex"
+      flexDirection="column"
       flex={["0 calc(100% - 360px - 20px)"]}
       // width={"100%"}
       className={css({ gap: "50px" })}

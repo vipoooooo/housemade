@@ -59,7 +59,7 @@ export const ScheduleWrapper = ({
 
 export default function Schedule() {
   const { data: session } = useSession();
-  const { data, isLoading } = trpc.useQuery(
+  const { data } = trpc.useQuery(
     ["schedule.appointments", { userId: session?.id as string }],
     { retry: false }
   );

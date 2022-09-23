@@ -12,14 +12,14 @@ import { IoCheckmarkCircle, IoStar } from "react-icons/io5";
 import { StyledLink } from "baseui/link";
 import { Button, KIND, SHAPE, SIZE } from "baseui/button";
 import { useSession } from "next-auth/react";
-import { trpc } from "../../../utils/trpc";
-import { SkeletonPortfolioCont } from "../../../components/common/Skeleton";
+import { trpc } from "../../utils/trpc";
+import { SkeletonPortfolioCont } from "../common/Skeleton";
 
 export default function ProfileSide() {
   const [css, $theme] = useStyletron();
   const router = useRouter();
   const { data: session } = useSession();
-  const { data, error, isLoading } = trpc.useQuery(
+  const { data, isLoading } = trpc.useQuery(
     ["worker.profile", { id: session?.id as string }],
     {
       retry: false,
@@ -35,7 +35,7 @@ export default function ProfileSide() {
           top={[0, 0, 0, "68px"]}
           flex={["0 360px"]}
           width={["100%", "100%", "360px", "360px"]}
-          margin={"0 auto"}
+          margin="0 auto"
           className={css({
             alignSelf: "flex-start",
             display: "flex",
@@ -113,13 +113,7 @@ export default function ProfileSide() {
               kind={KIND.secondary}
               shape={SHAPE.square}
               size={SIZE.compact}
-              overrides={{
-                Root: {
-                  style: () => ({
-                    width: "100%",
-                  }),
-                },
-              }}
+              overrides={{ Root: { style: () => ({ width: "100%" }) } }}
             >
               Edit Profile
             </Button>
@@ -142,10 +136,7 @@ export default function ProfileSide() {
             <StyledLink
               href={data?.profile.link || ""}
               target="_blank"
-              style={{
-                //   textDecoration: "none",
-                color: $theme.colors.accent,
-              }}
+              style={{ color: $theme.colors.accent }}
             >
               {data?.profile.link}
             </StyledLink>

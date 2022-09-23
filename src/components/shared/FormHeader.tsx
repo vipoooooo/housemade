@@ -15,7 +15,7 @@ export default function FormHeader({ title }: { title: string }) {
         gap: "15px",
       })}
     >
-      <Image src={Logo} height={30} width={30} objectFit={"contain"} />
+      <Image src={Logo} height={30} width={30} objectFit="contain" />
       <HeadingXSmall margin={0}>{title}</HeadingXSmall>
     </div>
   );

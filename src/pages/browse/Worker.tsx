@@ -32,7 +32,6 @@ export default function Worker() {
     ["worker.workers", { id: (skillId as string) || (id as string) }],
     { retry: false }
   );
-  console.log(data?.workers.length);
 
   return (
     <Layout hasHeader={true}>
@@ -42,7 +41,7 @@ export default function Worker() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <HeadingTitle title={cate.data?.category?.title || ""} />
-      <Block marginBottom={"20px"}>
+      <Block marginBottom="20px">
         {!subcategoryQuery.data?.subcategories.length ? (
           <></>
         ) : (

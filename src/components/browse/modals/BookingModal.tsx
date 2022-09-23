@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useStyletron } from "baseui";
-import ModalW from "../../../../layouts/ModalW";
+import ModalW from "../../../layouts/ModalW";
 import { Textarea } from "baseui/textarea";
 import { Button, KIND } from "baseui/button";
 import { Input } from "baseui/input";
@@ -12,9 +12,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   bookingSchema,
   IBooking,
-} from "../../../../server/router/schedule/schedule.type";
+} from "../../../server/router/schedule/schedule.type";
 import { useSession } from "next-auth/react";
-import { trpc } from "../../../../utils/trpc";
+import { trpc } from "../../../utils/trpc";
 import { useRouter } from "next/router";
 import { hide } from "./ReportModal";
 
@@ -37,11 +37,11 @@ export default function BookingModal({
     resolver: zodResolver(bookingSchema),
   });
 
-  const { mutateAsync, error } = trpc.useMutation(["schedule.Booking"]);
+  const { mutateAsync } = trpc.useMutation(["schedule.Booking"]);
 
   const onSubmit = React.useCallback(async (data: IBooking) => {
     try {
-      const result = await mutateAsync(data);
+      await mutateAsync(data);
       setIsOpenB(false);
     } catch (err) {}
   }, []);
@@ -54,12 +54,7 @@ export default function BookingModal({
       hasModal={true}
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div
-        className={css({
-          display: "flex",
-          flexDirection: "column",
-        })}
-      >
+      <div className={css({ display: "flex", flexDirection: "column" })}>
         <FormControl overrides={hide}>
           <Controller
             name="clientId"
@@ -140,10 +135,7 @@ export default function BookingModal({
                     },
                   },
                   InputContainer: {
-                    style: {
-                      maxWidth: "100%",
-                      width: "min-content",
-                    },
+                    style: { maxWidth: "100%", width: "min-content" },
                   },
                 }}
               />

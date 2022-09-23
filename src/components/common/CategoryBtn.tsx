@@ -34,12 +34,7 @@ export default function CategoryBtn({ id, title, icon }: ActiveLinkProps) {
         height={["45px", "45px", "60px", "60px"]}
         width={["45px", "45px", "60px", "60px"]}
       >
-        <Image
-          src={icon}
-          height={"100%"}
-          width={"100%"}
-          objectFit={"contain"}
-        />
+        <Image src={icon} height="100%" width="100%" objectFit="contain" />
       </Block>
       <ParagraphMedium margin={0} display={["none", "none", "block", "block"]}>
         {title}

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useStyletron } from "baseui";
-import ModalW from "../../../../layouts/ModalW";
+import ModalW from "../../../layouts/ModalW";
 import { Block } from "baseui/block";
 import { ParagraphMedium } from "baseui/typography";
 import { Textarea } from "baseui/textarea";
@@ -12,10 +12,10 @@ import { useRouter } from "next/router";
 import {
   IWriteReview,
   writeReviewSchema,
-} from "../../../../server/router/review/review.type";
+} from "../../../server/router/review/review.type";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { trpc } from "../../../../utils/trpc";
+import { trpc } from "../../../utils/trpc";
 import { hide } from "./ReportModal";
 import { Input } from "baseui/input";
 
@@ -80,16 +80,12 @@ export default function ReviewModal({
       hasModal={true}
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div
-        className={css({
-          display: "flex",
-          flexDirection: "column",
-        })}
-      >
+      <div className={css({ display: "flex", flexDirection: "column" })}>
         <div
           className={css({
             display: "flex",
             flexDirection: "column",
+            marginTop: "10px",
           })}
         >
           <FormControl overrides={hide}>
@@ -164,10 +160,7 @@ export default function ReviewModal({
                       },
                     },
                     InputContainer: {
-                      style: {
-                        maxWidth: "100%",
-                        width: "min-content",
-                      },
+                      style: { maxWidth: "100%", width: "min-content" },
                     },
                   }}
                 />

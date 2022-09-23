@@ -3,20 +3,15 @@ import { AspectRatioBox, AspectRatioBoxBody } from "baseui/aspect-ratio-box";
 import { Block } from "baseui/block";
 import { Skeleton } from "baseui/skeleton";
 import * as React from "react";
-import { imageContainer } from "../../pages/browse/components/profile/PortfolioCont";
+
+import { style } from "../../styles/StyleObject";
 
 export function SkeletonText() {
   return (
     <Skeleton
       width="60px"
       height="15px"
-      overrides={{
-        Root: {
-          style: {
-            borderRadius: "15px",
-          },
-        },
-      }}
+      overrides={{ Root: { style: { borderRadius: "15px" } } }}
       animation
     />
   );
@@ -27,7 +22,7 @@ export function SkeletonBtn() {
 }
 
 export function SkeletonProfileCont() {
-  const [css, $theme] = useStyletron();
+  const [css] = useStyletron();
   return (
     <Block
       position={["relative", "relative", "relative", "sticky"]}
@@ -50,7 +45,7 @@ export function SkeletonProfileCont() {
 }
 
 export function SkeletonPortfolioCont() {
-  const [css, $theme] = useStyletron();
+  const [css] = useStyletron();
   return (
     <Block
       position={["relative", "relative", "relative", "sticky"]}
@@ -76,23 +71,13 @@ function ProfileInfo() {
   const [css] = useStyletron();
   return (
     <div
-      className={css({
-        display: "flex",
-        alignItems: "center",
-        gap: "10px",
-      })}
+      className={css({ display: "flex", alignItems: "center", gap: "10px" })}
     >
       <Skeleton
         width="100px"
         height="100px"
         animation
-        overrides={{
-          Root: {
-            style: {
-              borderRadius: "50%",
-            },
-          },
-        }}
+        overrides={{ Root: { style: { borderRadius: "50%" } } }}
       />
       <div
         className={css({
@@ -104,25 +89,13 @@ function ProfileInfo() {
         <Skeleton
           width="100px"
           height="15px"
-          overrides={{
-            Root: {
-              style: {
-                borderRadius: "15px",
-              },
-            },
-          }}
+          overrides={{ Root: { style: { borderRadius: "15px" } } }}
           animation
         />
         <Skeleton
           width="75px"
           height="15px"
-          overrides={{
-            Root: {
-              style: {
-                borderRadius: "15px",
-              },
-            },
-          }}
+          overrides={{ Root: { style: { borderRadius: "15px" } } }}
           animation
         />
       </div>
@@ -131,20 +104,12 @@ function ProfileInfo() {
 }
 
 function ProfileContent() {
-  const [css] = useStyletron();
   return (
     <Skeleton
       rows={3}
       width="200px"
       animation
-      overrides={{
-        Row: {
-          style: {
-            height: "20px",
-            marginBottom: "15px",
-          },
-        },
-      }}
+      overrides={{ Row: { style: { height: "20px", marginBottom: "15px" } } }}
     />
   );
 }
@@ -201,14 +166,8 @@ export function ProjectSkeleton() {
           flexDirection={"column"}
           width={"100%"}
           marginBottom="20px"
-          className={css(imageContainer)}
-          overrides={{
-            Block: {
-              style: {
-                cursor: "pointer",
-              },
-            },
-          }}
+          className={css(style.imageContainer)}
+          overrides={{ Block: { style: { cursor: "pointer" } } }}
         >
           <Skeleton rows={0} height="100%" width="100%" animation />
         </AspectRatioBoxBody>
@@ -216,13 +175,7 @@ export function ProjectSkeleton() {
       <Skeleton
         width="100px"
         height="15px"
-        overrides={{
-          Root: {
-            style: {
-              borderRadius: "15px",
-            },
-          },
-        }}
+        overrides={{ Root: { style: { borderRadius: "15px" } } }}
         animation
       />
     </>
@@ -230,36 +183,16 @@ export function ProjectSkeleton() {
 }
 
 export function SkeletonReview() {
-  const [css, theme] = useStyletron();
+  const [css] = useStyletron();
   return (
-    <Block
-      width={"100%"}
-      // className={css({ flex: 1})}
-      marginBottom="20px"
-    >
-      <div
-        className={css({
-          display: "flex",
-          flexDirection: "column",
-        })}
-      >
-        <div
-          className={css({
-            display: "flex",
-            gap: "10px",
-          })}
-        >
+    <Block width="100%" marginBottom="20px">
+      <div className={css({ display: "flex", flexDirection: "column" })}>
+        <div className={css({ display: "flex", gap: "10px" })}>
           <Skeleton
             width="40px"
             height="40px"
             animation
-            overrides={{
-              Root: {
-                style: {
-                  borderRadius: "50%",
-                },
-              },
-            }}
+            overrides={{ Root: { style: { borderRadius: "50%" } } }}
           />
           <div
             className={css({
@@ -268,35 +201,18 @@ export function SkeletonReview() {
               gap: "5px",
             })}
           >
-            <div
-              className={css({
-                display: "flex",
-                gap: "10px",
-              })}
-            >
+            <div className={css({ display: "flex", gap: "10px" })}>
               <Skeleton
                 width="50px"
                 height="15px"
-                overrides={{
-                  Root: {
-                    style: {
-                      borderRadius: "15px",
-                    },
-                  },
-                }}
+                overrides={{ Root: { style: { borderRadius: "15px" } } }}
                 animation
               />
             </div>
             <Skeleton
               width="100px"
               height="15px"
-              overrides={{
-                Root: {
-                  style: {
-                    borderRadius: "15px",
-                  },
-                },
-              }}
+              overrides={{ Root: { style: { borderRadius: "15px" } } }}
               animation
             />
           </div>

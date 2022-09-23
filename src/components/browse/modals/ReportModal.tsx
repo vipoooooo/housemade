@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useStyletron } from "baseui";
-import ModalW from "../../../../layouts/ModalW";
+import ModalW from "../../../layouts/ModalW";
 import { Textarea } from "baseui/textarea";
 import { Button, KIND, SIZE } from "baseui/button";
 import { FormControl, FormControlOverrides } from "baseui/form-control";
@@ -9,11 +9,11 @@ import { useRouter } from "next/router";
 import {
   IWriteReport,
   writeReportSchema,
-} from "../../../../server/router/report/report.type";
+} from "../../../server/router/report/report.type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "baseui/input";
 import { useSession } from "next-auth/react";
-import { trpc } from "../../../../utils/trpc";
+import { trpc } from "../../../utils/trpc";
 
 export default function ReportModal({
   isOpen,
@@ -34,11 +34,11 @@ export default function ReportModal({
     resolver: zodResolver(writeReportSchema),
   });
 
-  const { mutateAsync, error } = trpc.useMutation(["report.report"]);
+  const { mutateAsync } = trpc.useMutation(["report.report"]);
 
   const onSubmit = React.useCallback(async (data: IWriteReport) => {
     try {
-      const result = await mutateAsync(data);
+      await mutateAsync(data);
       setIsOpen(false);
     } catch (err) {}
   }, []);
@@ -98,10 +98,7 @@ export default function ReportModal({
                     },
                   },
                   InputContainer: {
-                    style: {
-                      maxWidth: "100%",
-                      width: "min-content",
-                    },
+                    style: { maxWidth: "100%", width: "min-content" },
                   },
                 }}
               />

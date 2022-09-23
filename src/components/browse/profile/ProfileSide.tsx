@@ -8,17 +8,16 @@ import {
   ParagraphXSmall,
   ParagraphSmall,
 } from "baseui/typography";
-import { IoAdd, IoCheckmark, IoCheckmarkCircle, IoStar } from "react-icons/io5";
+import { IoAdd, IoCheckmarkCircle, IoStar } from "react-icons/io5";
 import { StyledLink } from "baseui/link";
 import { Button, KIND, SHAPE, SIZE } from "baseui/button";
 import ReportModal from "../modals/ReportModal";
 import BookingModal from "../modals/BookingModal";
-import { trpc } from "../../../../utils/trpc";
-import { SkeletonProfileCont } from "../../../../components/common/Skeleton";
-import { IBookmark } from "../../../../server/router/worker/work.type";
+import { trpc } from "../../../utils/trpc";
+import { SkeletonProfileCont } from "../../common/Skeleton";
+import { IBookmark } from "../../../server/router/worker/work.type";
 import { toaster } from "baseui/toast";
-import { Toaster } from "../../../../components/common/Toaster";
-import { useSession } from "next-auth/react";
+import { Toaster } from "../../common/Toaster";
 
 export default function ProfileSide() {
   const [css, $theme] = useStyletron();
@@ -34,11 +33,11 @@ export default function ProfileSide() {
     { retry: false }
   );
 
-  const { mutateAsync, error } = trpc.useMutation(["worker.bookmark"]);
+  const { mutateAsync } = trpc.useMutation(["worker.bookmark"]);
 
   const onBookmark = async (data: IBookmark) => {
     try {
-      const result = await mutateAsync(data, {
+      await mutateAsync(data, {
         onSuccess: () => {
           utils.invalidateQueries(["worker.profile"]);
           setIsBookmark(!isBookmarked);
@@ -46,7 +45,6 @@ export default function ProfileSide() {
       });
     } catch (err) {
       toaster.warning("Bookmark unsuccessfully", {});
-      console.log(err);
     }
   };
 
@@ -62,7 +60,7 @@ export default function ProfileSide() {
             top={[0, 0, 0, "68px"]}
             flex={["0 360px"]}
             width={["100%", "100%", "360px", "360px"]}
-            margin={"0 auto"}
+            margin="0 auto"
             className={css({
               alignSelf: "flex-start",
               display: "flex",
@@ -89,7 +87,7 @@ export default function ProfileSide() {
                   gap: "5px",
                 })}
               >
-                <Block display={"flex"} alignItems={"center"}>
+                <Block display="flex" alignItems="center">
                   <HeadingXSmall margin={"0 5px 0 0"}>
                     {data?.profile?.user?.username}
                   </HeadingXSmall>
@@ -108,10 +106,10 @@ export default function ProfileSide() {
                 >
                   {data?.profile?.subcategory?.title}
                 </ParagraphSmall>
-                <Block display={"flex"}>
-                  <Block marginRight={"5px"}>
+                <Block display="flex">
+                  <Block marginRight="5px">
                     <IoStar
-                      size={"15px"}
+                      size="15px"
                       color={$theme.colors.backgroundWarning}
                     />
                   </Block>

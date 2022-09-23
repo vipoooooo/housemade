@@ -1,8 +1,7 @@
 import * as React from "react";
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useCallback, useState } from "react";
-import { signIn, SignInResponse, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/router";
@@ -11,9 +10,6 @@ import Form from "../../layouts/Form";
 import { FormControl } from "baseui/form-control";
 import { Input } from "baseui/input";
 import { Button, SIZE } from "baseui/button";
-import { ParagraphMedium, ParagraphXSmall } from "baseui/typography";
-import { StyledLink } from "baseui/link";
-import { Notification, KIND } from "baseui/notification";
 import { trpc } from "../../utils/trpc";
 import { Select } from "baseui/select";
 import {
@@ -22,7 +18,6 @@ import {
 } from "../../server/router/worker/work.type";
 import { Textarea } from "baseui/textarea";
 import { toaster } from "baseui/toast";
-import { hide } from "../browse/components/modals/ReportModal";
 import { Toaster } from "../../components/common/Toaster";
 
 const RegisterWorker: NextPage = () => {
@@ -35,11 +30,9 @@ const RegisterWorker: NextPage = () => {
     handleSubmit,
     formState: { errors },
     setValue,
-    setError,
   } = useForm<IRegisterWorker>({
     resolver: zodResolver(registerWorkerSchema),
   });
-  console.log(errors);
 
   React.useEffect(() => {
     if (data) setValue("userId", data.id as string);
@@ -62,7 +55,6 @@ const RegisterWorker: NextPage = () => {
   const onSubmit = React.useCallback(
     async (data: IRegisterWorker) => {
       try {
-        // console.log(data);
         await userMutation.mutateAsync(data, {
           onSuccess: () => {
             toaster.info("Saved", {});
@@ -70,7 +62,7 @@ const RegisterWorker: NextPage = () => {
           },
         });
       } catch (err) {
-        console.log(err);
+        toaster.warning("Register unsuccessfully", {});
       }
     },
     [data]
@@ -122,7 +114,7 @@ const RegisterWorker: NextPage = () => {
                       value={field.value}
                       size={SIZE.compact}
                       options={skill}
-                      onChange={(params) => field.onChange(params.value[0])}
+                      onChange={(params) => field.onChange(params.value)}
                       isLoading={categoryQuery.isLoading}
                       placeholder=""
                     />
@@ -179,13 +171,7 @@ const RegisterWorker: NextPage = () => {
               </FormControl>
               <Button
                 type="submit"
-                overrides={{
-                  BaseButton: {
-                    style: () => ({
-                      width: "100%",
-                    }),
-                  },
-                }}
+                overrides={{ BaseButton: { style: () => ({ width: "100%" }) } }}
               >
                 Register
               </Button>
