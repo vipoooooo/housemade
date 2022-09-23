@@ -22,10 +22,9 @@ const LogIn: NextPage = () => {
   const {
     control,
     handleSubmit,
-    formState: { errors },
-  } = useForm<ILogin>({
-    resolver: zodResolver(loginSchema),
-  });
+    formState: { errors, isSubmitting },
+  } = useForm<ILogin>({ resolver: zodResolver(loginSchema) });
+
   const [error, setError] = useState<SignInResponse["error"]>();
 
   const { status } = useSession();
@@ -34,19 +33,21 @@ const LogIn: NextPage = () => {
     router.push("/browse/Browse");
   }
 
-  const onSubmit = useCallback(async (data: ILogin) => {
-    await signIn("credentials", {
-      ...data,
-      callbackUrl: "/browse/Browse",
-      redirect: false,
-    }).then((res) => {
-      if (res?.ok) {
-        router.push("/browse/Browse");
-      } else {
-        setError("Invalid credentials!");
+  const onSubmit = useCallback(
+    async (data: ILogin) => {
+      if (!isSubmitting) {
+        await signIn("credentials", {
+          ...data,
+          callbackUrl: "/browse/Browse",
+          redirect: false,
+        }).then((res) => {
+          if (res?.ok) router.push("/browse/Browse");
+          else setError("Invalid credentials!");
+        });
       }
-    });
-  }, []);
+    },
+    [router, signIn]
+  );
 
   return (
     <div>
@@ -66,7 +67,7 @@ const LogIn: NextPage = () => {
             <div className={css(style.cardWrapper)}>
               {error && (
                 <Notification kind={KIND.negative}>
-                  {() => "Authenticaion Error"}
+                  Invalid email or password
                 </Notification>
               )}
               <FormControl
@@ -111,6 +112,8 @@ const LogIn: NextPage = () => {
                     style: () => ({ marginBottom: "20px", width: "100%" }),
                   },
                 }}
+                isLoading={isSubmitting}
+                disabled={isSubmitting}
               >
                 Log in
               </Button>

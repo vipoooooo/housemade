@@ -22,7 +22,7 @@ const Landing: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Image
-        alt={"Landing Image"}
+        alt="Landing Image"
         src={CoverLanding}
         objectFit="cover"
         priority
@@ -49,20 +49,10 @@ const Landing: NextPage = () => {
             gap: "10px",
           })}
         >
-          <HeadingLarge
-            margin={0}
-            className={css({
-              textAlign: "center",
-            })}
-          >
+          <HeadingLarge margin={0} className={css({ textAlign: "center" })}>
             Find a house repairman with ease
           </HeadingLarge>
-          <ParagraphLarge
-            margin={0}
-            className={css({
-              textAlign: "center",
-            })}
-          >
+          <ParagraphLarge margin={0} className={css({ textAlign: "center" })}>
             We help you connect with all type of repairman ever exists
           </ParagraphLarge>
         </div>
@@ -71,11 +61,7 @@ const Landing: NextPage = () => {
             Open App
           </Button>
         ) : (
-          <div
-            className={css({
-              display: "flex",
-            })}
-          >
+          <div className={css({ display: "flex" })}>
             <Button
               type="submit"
               kind={KIND.tertiary}
