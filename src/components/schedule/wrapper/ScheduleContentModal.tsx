@@ -1,21 +1,12 @@
 import { useStyletron } from "baseui";
-import { Button, KIND, SIZE } from "baseui/button";
+import { SIZE } from "baseui/button";
 import * as React from "react";
-import { IoClose, IoHandRight } from "react-icons/io5";
-import {
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  ModalButton,
-  ROLE,
-} from "baseui/modal";
+import { Modal, ModalBody, ROLE } from "baseui/modal";
 import { Block } from "baseui/block";
 import { ParagraphSmall, ParagraphXSmall } from "baseui/typography";
 
 export default function ScheduleContentModal({
   scheduleData,
-  button,
   isOpen,
   setIsOpen,
 }: {
@@ -35,20 +26,11 @@ export default function ScheduleContentModal({
       size={SIZE.default}
       role={ROLE.dialog}
       overrides={{
-        Dialog: {
-          style: () => ({
-            borderRadius: 0,
-            // padding: 0
-          }),
-        },
-        Close: {
-          style: () => ({
-            display: "none",
-          }),
-        },
+        Dialog: { style: () => ({ borderRadius: 0 }) },
+        Close: { style: () => ({ display: "none" }) },
       }}
     >
-      <ModalBody display={"flex"} flexDirection={"column"}>
+      <ModalBody display="flex" flexDirection="column">
         <div
           className={css({
             display: "flex",
@@ -56,13 +38,7 @@ export default function ScheduleContentModal({
             gap: "20px",
           })}
         >
-          <div
-            className={css({
-              display: "flex",
-              gap: "10px",
-              width: "100%",
-            })}
-          >
+          <div className={css({ display: "flex", gap: "10px", width: "100%" })}>
             <div
               className={css({
                 display: "inline-block",
@@ -75,17 +51,12 @@ export default function ScheduleContentModal({
               {scheduleData.icon}
             </div>
             <Block
-              display={"flex"}
-              flexDirection={"column"}
-              alignItems={"flex-start"}
-              width={"100%"}
+              display="flex"
+              flexDirection="column"
+              alignItems="flex-start"
+              width="100%"
             >
-              <ParagraphSmall
-                margin={0}
-                className={css({
-                  textAlign: "left",
-                })}
-              >
+              <ParagraphSmall margin={0} className={css({ textAlign: "left" })}>
                 {scheduleData.title}
               </ParagraphSmall>
               <ParagraphXSmall
@@ -96,22 +67,6 @@ export default function ScheduleContentModal({
               </ParagraphXSmall>
             </Block>
           </div>
-
-          {/* <Button
-            onClick={() => alert("click")}
-            kind={KIND.secondary}
-            size={SIZE.compact}
-            startEnhancer={<IoClose size={20} />}
-            overrides={{
-              BaseButton: {
-                style: ({ theme }) => ({
-                  width: "100%",
-                }),
-              },
-            }}
-          >
-            Cancel Booking
-          </Button> */}
           <ParagraphXSmall margin={0}>
             {scheduleData.workerName}
           </ParagraphXSmall>

@@ -30,7 +30,7 @@ export function UpcomingEndingAsWorker({
   const onDecline = React.useCallback(
     async (data: IDeleteUpcomingApprovalAppointment) => {
       try {
-        const result = await declineApp.mutateAsync(data, {
+        await declineApp.mutateAsync(data, {
           onSuccess: () => {
             utils.invalidateQueries(["schedule.appointments"]);
           },
@@ -43,7 +43,7 @@ export function UpcomingEndingAsWorker({
   const onAccept = React.useCallback(
     async (data: IUpdateUpcomingApprovalAppointment) => {
       try {
-        const result = await acceptApp.mutateAsync(data, {
+        await acceptApp.mutateAsync(data, {
           onSuccess: () => {
             utils.invalidateQueries(["schedule.appointments"]);
           },

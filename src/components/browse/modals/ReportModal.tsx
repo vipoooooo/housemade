@@ -29,7 +29,7 @@ export default function ReportModal({
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<IWriteReport>({
     resolver: zodResolver(writeReportSchema),
   });
@@ -37,10 +37,12 @@ export default function ReportModal({
   const { mutateAsync } = trpc.useMutation(["report.report"]);
 
   const onSubmit = React.useCallback(async (data: IWriteReport) => {
-    try {
-      await mutateAsync(data);
-      setIsOpen(false);
-    } catch (err) {}
+    if (!isSubmitting) {
+      try {
+        await mutateAsync(data);
+        setIsOpen(false);
+      } catch (err) {}
+    }
   }, []);
 
   return (
@@ -105,7 +107,12 @@ export default function ReportModal({
             )}
           />
         </FormControl>
-        <Button type="submit" kind={KIND.primary}>
+        <Button
+          type="submit"
+          kind={KIND.primary}
+          isLoading={isSubmitting}
+          disabled={isSubmitting}
+        >
           Submit
         </Button>
       </div>

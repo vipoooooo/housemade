@@ -32,7 +32,7 @@ export default function BookingModal({
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<IBooking>({
     resolver: zodResolver(bookingSchema),
   });
@@ -40,10 +40,12 @@ export default function BookingModal({
   const { mutateAsync } = trpc.useMutation(["schedule.Booking"]);
 
   const onSubmit = React.useCallback(async (data: IBooking) => {
-    try {
-      await mutateAsync(data);
-      setIsOpenB(false);
-    } catch (err) {}
+    if (!isSubmitting) {
+      try {
+        await mutateAsync(data);
+        setIsOpenB(false);
+      } catch (err) {}
+    }
   }, []);
 
   return (
@@ -142,7 +144,12 @@ export default function BookingModal({
             )}
           />
         </FormControl>
-        <Button type="submit" kind={KIND.primary}>
+        <Button
+          type="submit"
+          kind={KIND.primary}
+          isLoading={isSubmitting}
+          disabled={isSubmitting}
+        >
           Book
         </Button>
       </div>

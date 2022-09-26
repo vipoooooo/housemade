@@ -25,7 +25,7 @@ export function UpcomingDefaultAsClient({
   const onSubmit = React.useCallback(
     async (data: IUpdateUpcomingAppointment) => {
       try {
-        const result = await mutateAsync(data, {
+        await mutateAsync(data, {
           onSuccess: () => {
             utils.invalidateQueries(["schedule.appointments"]);
           },

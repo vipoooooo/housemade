@@ -5,7 +5,7 @@ export const RequestingWrapper = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [css, theme] = useStyletron();
+  const [css] = useStyletron();
   return (
     <div
       className={css({

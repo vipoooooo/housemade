@@ -25,7 +25,7 @@ export function UpcomingEndingRecieverAsClient({
   const onSubmit = React.useCallback(
     async (data: IDeleteUpcomingAppointment) => {
       try {
-        const result = await mutateAsync(data, {
+        await mutateAsync(data, {
           onSuccess: () => {
             utils.invalidateQueries(["schedule.appointments"]);
           },

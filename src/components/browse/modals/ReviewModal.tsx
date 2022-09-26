@@ -63,7 +63,7 @@ export default function ReviewModal({
 
   const onSubmit = React.useCallback(async (data: IWriteReview) => {
     try {
-      const result = await mutateAsync(data, {
+      await mutateAsync(data, {
         onSuccess: () => {
           utils.invalidateQueries(["review.reviews"]);
         },

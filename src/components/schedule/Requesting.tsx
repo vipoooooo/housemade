@@ -11,6 +11,8 @@ import { object } from "zod";
 import { djs } from "../../helpers/snipet";
 import ScheduleContent from "./wrapper/ScheduleContent";
 import { RequestingWrapper } from "./wrapper/RequestingWrapper";
+import { toaster } from "baseui/toast";
+import { Toaster } from "../common/Toaster";
 
 export function Requesting({ scheduleData }: { scheduleData: any }) {
   const [css, theme] = useStyletron();
@@ -22,15 +24,17 @@ export function Requesting({ scheduleData }: { scheduleData: any }) {
 
   const onSubmit = React.useCallback(async (data: IDeleteAppointment) => {
     try {
-      const result = await mutateAsync(data, {
+      await mutateAsync(data, {
         onSuccess: () => {
           utils.invalidateQueries(["schedule.appointments"]);
+          toaster.info("Cancel Appointment Successfully", {});
         },
       });
     } catch (err) {}
   }, []);
   return (
     <>
+      <Toaster />
       <RequestingWrapper>
         <ScheduleContent
           icon={

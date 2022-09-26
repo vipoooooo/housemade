@@ -1,11 +1,9 @@
 import * as React from "react";
-import { Theme, useStyletron } from "baseui";
+import { useStyletron } from "baseui";
 import { Block } from "baseui/block";
 import { ParagraphSmall, ParagraphXSmall } from "baseui/typography";
 import { StyledLink } from "baseui/link";
-import ScheduleContentModal from "./ScheduleContentModal";
 import { Button, KIND, SIZE } from "baseui/button";
-import { IoLocationOutline } from "react-icons/io5";
 
 interface ActiveProps {
   icon: React.ReactNode;
@@ -51,17 +49,12 @@ function ScheduleContent({
           {icon}
         </div>
         <Block
-          display={"flex"}
-          flexDirection={"column"}
-          alignItems={"flex-start"}
-          width={"100%"}
+          display="flex"
+          flexDirection="column"
+          alignItems="flex-start"
+          width="100%"
         >
-          <ParagraphSmall
-            margin={0}
-            className={css({
-              textAlign: "left",
-            })}
-          >
+          <ParagraphSmall margin={0} className={css({ textAlign: "left" })}>
             {title}
           </ParagraphSmall>
           <ParagraphXSmall

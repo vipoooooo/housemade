@@ -23,7 +23,7 @@ export function UpcomingEndingRecieverAsWorker({
   const onSubmit = React.useCallback(
     async (data: IDeleteUpcomingAppointment) => {
       try {
-        const result = await mutateAsync(data, {
+        await mutateAsync(data, {
           onSuccess: () => {
             utils.invalidateQueries(["schedule.appointments"]);
           },
@@ -44,10 +44,12 @@ export function UpcomingEndingRecieverAsWorker({
         }
         bg={theme.colors.backgroundInversePrimary}
         title={
-          "You have an appointment with " +
-          scheduleData.client.username +
-          " on " +
-          scheduleData.appointmentDate.toDateString()
+          <>
+            You have an appointment with
+            <b> {scheduleData.client.username} </b>
+            on
+            <b> {scheduleData.appointmentDate.toDateString()}</b>
+          </>
         }
         date={djs(scheduleData.createdAt).fromNow()}
         worker={scheduleData.worker.username}

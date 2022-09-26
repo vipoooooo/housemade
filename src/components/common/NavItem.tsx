@@ -24,7 +24,9 @@ export function Navlink({
         margin={0}
         color={active ? theme.colors.accent : theme.colors.primary}
       >
-        <Link href={herf}>{title}</Link>
+        <Link href={herf} prefetch={true}>
+          {title}
+        </Link>
       </ParagraphMedium>
     </StyledNavigationItem>
   );
@@ -57,7 +59,6 @@ export function NavBtn({ link, icon, title, active }: ActiveLinkProps) {
             }),
           },
         }}
-        //   colors={"black"}
       >
         {title}
       </Button>

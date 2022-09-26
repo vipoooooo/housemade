@@ -22,7 +22,7 @@ export function RequestBooking({ scheduleData }: { scheduleData: any }) {
 
   const onDecline = React.useCallback(async (data: IDeleteAppointment) => {
     try {
-      const result = await declineApp.mutateAsync(data, {
+      await declineApp.mutateAsync(data, {
         onSuccess: () => {
           utils.invalidateQueries(["schedule.appointments"]);
         },
@@ -32,7 +32,7 @@ export function RequestBooking({ scheduleData }: { scheduleData: any }) {
 
   const onAccept = React.useCallback(async (data: IUpdateAppointment) => {
     try {
-      const result = await acceptApp.mutateAsync(data, {
+      await acceptApp.mutateAsync(data, {
         onSuccess: () => {
           utils.invalidateQueries(["schedule.appointments"]);
         },
